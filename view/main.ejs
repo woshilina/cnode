@@ -1,0 +1,487 @@
+<%- include header%>
+  <div class="d-flex justify-content-center my-3 ">
+
+    <div class="col-8 card p-0 mr-3  border-0">
+
+      <ul class="nav nav-pills card-header py-1 my-0" id="pills-tab" role="tablist">
+        <li class="nav-item ">
+          <a class="nav-link active  " id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home"
+            aria-selected="true">全部</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-essence-tab" data-toggle="pill" href="#pills-essence" role="tab" aria-controls="pills-essence"
+            aria-selected="false">精华</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-share-tab" data-toggle="pill" href="#pills-share" role="tab" aria-controls="pills-share" aria-selected="false">分享</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-ask-tab" data-toggle="pill" href="#pills-ask" role="tab" aria-controls="pills-ask" aria-selected="false">问答</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-recruit-tab" data-toggle="pill" href="#pills-recruit" role="tab" aria-controls="pills-recruit"
+            aria-selected="false">招聘</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-dev-tab" data-toggle="pill" href="#pills-dev" role="tab" aria-controls="pills-dev" aria-selected="false">客户端测试</a>
+        </li>
+      </ul>
+
+      <div class="tab-content " id="pills-tabContent">
+        <!-- 全部 -->
+        <div class="tab-pane fade show active " id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+          <div class="list-group">
+            <%AllRows.forEach(function(res,index){%>
+              <div class="list-group-item list-group-item-action">
+                <div class="media">
+                  <img class="mr-3 " src="./images/3118295.jpg" width="40" height="40" alt="Generic placeholder image">
+                  <div class="media-body align-self-center d-flex  justify-content-between">
+                    <div>
+                      <%=res['replies']%>/
+                        <small>
+                          <%=res['clicks']%>
+                        </small>
+                        <span class="badge badge-secondary">
+                          <%=res['tabValue']%>
+                        </span>
+                        <a href="/topic/<%=res['id']%>">
+                          <%=res['title']%>
+                        </a>
+                    </div>
+                    <div class="col-2 d-flex  justify-content-between">
+                      <img src="./images/7081645.png" width="30" height="30" alt="Generic placeholder image">
+                      <small class="align-self-center">
+                        <%=retime[index]%>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <%})%>
+          </div>
+          <nav aria-label="Page navigation example" class="mt-3">
+            <div class="paginationall">
+
+              <ul id="data-pagination" class="pagination">
+
+                <li class="disabled">
+                  <a href="#">&laquo;</a>
+                </li>
+                <li class="active">
+                  <a href="#">1</a>
+                </li>
+                <li>
+                  <a href="#">2</a>
+                </li>
+                <li>
+                  <a href="#">3</a>
+                </li>
+                <li>
+                  <a href="#">4</a>
+                </li>
+                <li>
+                  <a href="#">5</a>
+                </li>
+                <li>
+                  <a href="#">&raquo;</a>
+                </li>
+              </ul>
+            </div>
+
+          </nav>
+        </div>
+        <!-- 精华 -->
+        <div class="tab-pane fade" id="pills-essence" role="tabpanel" aria-labelledby="pills-essence-tab">
+          <%topics.forEach(function(res,index){%>
+            <%if(res['clicks']>50){%>
+              <div class="list-group-item list-group-item-action">
+                <div class="media">
+                  <img class="mr-3 " src="./images/17892150.jpg" width="40" height="40" alt="Generic placeholder image">
+                  <div class="media-body align-self-center  d-flex  justify-content-between">
+                    <div>
+                      <%=res['replies']%>/
+                        <small>
+                          <%=res['clicks']%>
+                        </small>
+                        <span class="badge badge-primary">精华</span>
+                        <a href="/topic/<%=res['id']%>">
+                          <%=res['title']%>
+                        </a>
+                    </div>
+                    <div class="col-2 d-flex  justify-content-between">
+                      <img src="./images/7081645.png" width="30" height="30" alt="Generic placeholder image">
+                      <small class="align-self-center">
+                        <%=retime[index]%>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <%}%>
+                <%})%>
+                  <nav aria-label="Page navigation example" class="mt-3">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+        </div>
+        <!-- 分享 -->
+        <div class="tab-pane fade" id="pills-share" role="tabpanel" aria-labelledby="pills-share-tab">
+          <%topics.forEach(function(res,index){%>
+            <%if(res['tabValue']=='分享'){%>
+              <div class="list-group-item list-group-item-action">
+                <div class="media">
+                  <img class="mr-3 " src="./images/17892150.jpg" width="40" height="40" alt="Generic placeholder image">
+                  <div class="media-body align-self-center  d-flex  justify-content-between">
+                    <div>
+                      <%=res['replies']%>/
+                        <small>
+                          <%=res['clicks']%>
+                        </small>
+                        <a href="/topic/<%=res['id']%>">
+                          <%=res['title']%>
+                        </a>
+                    </div>
+                    <div class="col-2 d-flex  justify-content-between">
+                      <img src="./images/7081645.png" width="30" height="30" alt="Generic placeholder image">
+                      <small class="align-self-center">
+                        <%=retime[index]%>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <%}%>
+                <%})%>
+                  <nav aria-label="Page navigation example" class="mt-3">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+        </div>
+        <!-- 问答 -->
+        <div class="tab-pane fade" id="pills-ask" role="tabpanel" aria-labelledby="pills-ask-tab">
+          <%topics.forEach(function(res,index){%>
+            <%if(res['tabValue']=='问答'){%>
+              <div class="list-group-item list-group-item-action">
+                <div class="media">
+                  <img class="mr-3 " src="./images/17892150.jpg" width="40" height="40" alt="Generic placeholder image">
+                  <div class="media-body align-self-center  d-flex  justify-content-between">
+                    <div>
+                      <%=res['replies']%>/
+                        <small>
+                          <%=res['clicks']%>
+                        </small>
+                        <a href="/topic/<%=res['id']%>">
+                          <%=res['title']%>
+                        </a>
+                    </div>
+                    <div class="col-2 d-flex  justify-content-between">
+                      <img src="./images/7081645.png" width="30" height="30" alt="Generic placeholder image">
+                      <small class="align-self-center">
+                        <%=retime[index]%>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <%}%>
+                <%})%>
+                  <nav aria-label="Page navigation example" class="mt-3">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+        </div>
+        <!-- 招聘 -->
+        <div class="tab-pane fade" id="pills-recruit" role="tabpanel" aria-labelledby="pills-recruit-tab">
+          <%topics.forEach(function(res,index){%>
+            <%if(res['tabValue']=='招聘'){%>
+              <div class="list-group-item list-group-item-action">
+                <div class="media">
+                  <img class="mr-3 " src="./images/17892150.jpg" width="40" height="40" alt="Generic placeholder image">
+                  <div class="media-body align-self-center  d-flex  justify-content-between">
+                    <div>
+                      <%=res['replies']%>/
+                        <small>
+                          <%=res['clicks']%>
+                        </small>
+                        <a href="/topic/<%=res['id']%>">
+                          <%=res['title']%>
+                        </a>
+                    </div>
+                    <div class="col-2 d-flex  justify-content-between">
+                      <img src="./images/7081645.png" width="30" height="30" alt="Generic placeholder image">
+                      <small class="align-self-center">
+                        <%=retime[index]%>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <%}%>
+                <%})%>
+                  <nav aria-label="Page navigation example" class="mt-3">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+        </div>
+        <!-- 客户端测试 -->
+        <div class="tab-pane fade" id="pills-dev" role="tabpanel" aria-labelledby="pills-dev-tab">
+          <%topics.forEach(function(res,index){%>
+            <%if(res['tabValue']=='客户端测试'){%>
+              <div class="list-group-item list-group-item-action">
+                <div class="media">
+                  <img class="mr-3 " src="./images/17892150.jpg" width="40" height="40" alt="Generic placeholder image">
+                  <div class="media-body align-self-center  d-flex  justify-content-between">
+                    <div>
+                      <%=res['replies']%>/
+                        <small>
+                          <%=res['clicks']%>
+                        </small>
+                        <a href="/topic/<%=res['id']%>">
+                          <%=res['title']%>
+                        </a>
+                    </div>
+                    <div class="col-2 d-flex  justify-content-between">
+                      <img src="./images/7081645.png" width="30" height="30" alt="Generic placeholder image">
+                      <small class="align-self-center">
+                        <%=retime[index]%>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <%}%>
+                <%})%>
+                  <nav aria-label="Page navigation example" class="mt-3">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-2.5">
+      <% if(!session||!session.id){ %>
+        <div class="bg-white pt-3 pl-3 pb-1">
+          <p>CNode：Node.js专业中文社区 </p>
+          <p>
+            <small>您可以
+              <a href="/onload" class="text-muted">登录</a>或
+              <a href="/signin" class="text-muted">注册</a> , 也可以</small>
+            </br>
+            <a class="btn btn-primary" href="#" role="button">通过GitHub登陆</a>
+          </p>
+        </div>
+        <% } %>
+          <% if(session&&session.id){ %>
+            <div class='card bg-white '>
+              <div class='card-header  '>
+                个人信息
+              </div>
+              <div class='card-body'>
+                <div class='user_card'>
+                  <div>
+                    <a class='user_avatar' href="/user/<%=session.name%>">
+                      <img src="#" title="<%=session.name%>" />
+                    </a>
+                    <span class='user_name'>
+                      <a class='dark' href="/user/<%=session.name%>">
+                        <%=session.name%>
+                      </a>
+                    </span>
+
+                    <div class='board clearfix'>
+                      <div class='floor'>
+                        <span class='big'>积分:
+                          <%=session.integral%>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="space clearfix"></div>
+                    <%if(session.sign==null){%>
+                      <span class="signature">
+                        “这家伙很懒，什么个性签名都没有留下。”
+                      </span>
+                      <%}%>
+                        <%if(session.sign!=null){%>
+                          <span class="signature">
+                            <%=session.sign%>
+                          </span>
+                          <%}%>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class='inner bg-white p-3 mt-3'>
+                <a href='/topic/create' id='create_topic_btn'>
+                  <button type="button" class="btn btn-success">
+                    发布话题
+                  </button>
+                </a>
+              </div>
+            </div>
+            <% } %>
+              <div class="mt-3">
+                <a href="#">
+                  <img src="./images/FgQS-GQD" width="350" height="120">
+                </a>
+              </div>
+              <div class="mt-3">
+                <ul class="list-group">
+                  <li class="list-group-item">无人回复的话题</li>
+                  <%topics.forEach(function(res){%>
+                    <%if(res.replies===0){%>
+                      <li class="list-group-item">
+                        <a href="/topic/<%=res.id%>" class="text-muted">
+                          <%=res.title%>
+                        </a>
+                      </li>
+                      <%}})%>
+                </ul>
+              </div>
+    </div>
+  </div>
+  <script>
+     
+    var option = {
+      // currentPage: 1,
+      size: 'normal',
+      bootstrapMajorVertion: 3,
+      numberOfPages: 5,
+      totalPages:10,
+      itemTexts: function (type, page, current) {
+        switch (type) {
+          case "first":
+            return "首页";
+          case "prev":
+            return "上一页";
+          case "next":
+            return "下一页";
+          case "last":
+            return "末页";
+          case "page":
+            return page;
+        }
+      },
+      onPageClicked: function (event, originalEvent, type, page) {
+        $.ajax({
+          url: '/home/all/',
+          type: "POST",
+          data: {
+            page: page
+          },
+          dataType: 'json',
+          success: function (data) {
+
+          }
+        })
+      }
+    }
+    $('.paginationall').bootstrapPaginator(option);
+  </script>
+  <%- include footer%>

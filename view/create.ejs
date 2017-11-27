@@ -1,0 +1,160 @@
+<%-include header%>
+  <div class="d-flex justify-content-center">
+
+    <div class="col-9 pl-2">
+      <div class='header'>
+        <ol class='breadcrumb'>
+          <li>
+            <a href='/home'>主页</a>
+            <span class='divider'>/</span>
+          </li>
+          <li class='active'>发布话题</li>
+        </ol>
+      </div>
+      <div class='inner bg-white my-3'>
+        <form id='create_topic_form ' action="/topic/create" method="post">
+          <fieldset class="pl-3 py-3">
+            <span class="tab-selector">选择版块：</span>
+            <select name="tab" id="tab-value">
+              <option value="">请选择</option>
+              <option value="share">分享</option>
+              <option value="ask">问答</option>
+              <option value="job">招聘</option>
+              <option value="dev">客户端测试</option>
+            </select>
+            <span id="topic_create_warn"></span>
+            </br>
+            <textarea autofocus class='col-11' id='title' name='title' rows='1' placeholder="标题字数 10 字以上"></textarea>
+            <textarea class='col-11' id="text" name='t_content' rows='20' placeholder='文章支持 Markdown 语法, 请注意标记代码'></textarea>
+            <br>
+            <input type="button" class='span-primary submit_btn' data-loading-text="提交中" value="提交">
+            <span id="topic_create"></span>
+
+          </fieldset>
+        </form>
+      </div>
+
+    </div>
+    <div class="col-2.5">
+      <div class='panel   bg-white'>
+        <div class='header'>
+          <span class='col_fade'>Markdown 语法参考</span>
+        </div>
+        <div class='inner'>
+          <ol>
+            <li>
+              <tt>### 单行的标题</tt>
+            </li>
+            <li>
+              <tt>**粗体**</tt>
+            </li>
+            <li>
+              <tt>`console.log('行内代码')`</tt>
+            </li>
+            <li>
+              <tt>```js\n code \n```</tt> 标记代码块</li>
+            <li>
+              <tt>[内容](链接)</tt>
+            </li>
+            <li>
+              <tt>![文字说明](图片链接)</tt>
+            </li>
+          </ol>
+          <span>
+            <a href='https://segmentfault.com/markdown' target='_blank'>Markdown 文档</a>
+          </span>
+        </div>
+      </div>
+      <div class='panel  bg-white mt-2'>
+        <div class='header'>
+          <span class='col_fade'>话题发布指南</span>
+        </div>
+        <div class='inner'>
+          <ol>
+            <li>尽量把话题要点浓缩到标题里</li>
+            <li>代码含义和报错可在
+              <a href="http://segmentfault.com/t/node.js">SegmentFault</a> 提问</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- markdown editor -->
+
+
+  <script>
+    (function () {
+      // var editor = new Editor();
+      // editor.render($('.editor')[0]);
+
+      // 版块选择的检查，必须选择
+      $('#create_topic_form').on('submit', function (e) {
+        var tabValue = $('#tab-value').val();
+        if (!tabValue) {
+          alert('必须选择一个版块！');
+          $('.submit_btn').button('reset');
+          $('.tab-selector').css('color', 'red');
+          return false;
+        }
+      });
+      // END 版块选择的检查，必须选择
+
+      // 选择招聘版块时，给出提示
+      $('#tab-value').on('change', function () {
+        var $this = $(this);
+        var value = $this.val();
+        var warnMsg = '';
+        if (value === 'job') {
+          warnMsg =
+            '<strong>为避免被管理员删帖，发帖时请好好阅读<a href="http://cnodejs.org/topic/541ed2d05e28155f24676a12" target="_blank">《招聘帖规范》</a></strong>';
+        } else if (value === 'ask') {
+          warnMsg =
+            '<strong>提问时，请遵循 <a href="https://gist.github.com/alsotang/f654af8b1fff220e63fcb44846423e6d" target="_blank">《提问的智慧》</a>中提及的要点，以便您更接收到高质量回复。</strong>'
+        }
+        $('#topic_create_warn').html(warnMsg);
+      });
+      // END 选择招聘版块时，给出提示
+    })();
+  </script>
+  <script>
+    $(document).ready(function () {
+      $(".submit_btn").click(function () {
+        var tabValue = $("#tab-value option:selected").text();
+        var title = $("#title").val();
+        var text = $("#text").val();
+        var data = {
+          tabValue: tabValue,
+          title: title,
+          text: text
+        };
+        if (!tabValue) {
+          alert("请选择版块")
+        } else if (!title) {
+          alert("请输入标题")
+        } else if (!text) {
+          alert("请输入内容")
+        } else {
+        $.ajax({
+          url: '/topic/create',
+          type: 'post',
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          success: function (data, status) {
+            if (status == 'success') {
+              $("#topic_create").html("提交成功");
+              setTimeout(() => {
+                window.location.href = "/topic/"+data;
+              }, 1000)
+            }
+          },
+          error: function (data, status) {
+            if (status == 'error') {
+              $("#topic_create").html("内容不能为空");
+            }
+          }
+        });
+      }
+      });
+    });
+  </script>
+  <%-include footer%>

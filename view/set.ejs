@@ -1,0 +1,223 @@
+<!-- 个人设置 -->
+<%-include header%>
+  <div class="d-flex justify-content-center">
+    <div class="col-8">
+      <div class="bg-white  card mt-3">
+        <div class="card-header breadcrumb">
+          <span>
+            <a href="/home">主页</a>
+            <span class="divider">/</span>
+          </span>
+          <span class="active">设置</span>
+        </div>
+        <div class="card-body  pl-5">
+          <div class="alert alert-success set  " role="alert" style="display:none">
+            保存成功！
+          </div>
+          <div class="alert alert-danger passerror  " role="alert" style="display:none">
+            当前密码不正确!
+          </div>
+          <div class="alert alert-success passright  " role="alert" style="display:none">
+            更改密码成功！请重新登录！
+          </div>
+          <form>
+            <div class="form-group row">
+              <label class="col-2 col-form-label">用户名</label>
+              <div class="col-4">
+                <input type="text" class="form-control" id="Name" placeholder="<%=session.name%>">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-2 col-form-label">电子邮箱</label>
+              <div class="col-4">
+                <input type="text" class="form-control" id="Email" placeholder="<%session.Email%>">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-2 col-form-label">个人网站</label>
+              <div class="col-4">
+                <input type="text" class="form-control" id="web" placeholder="<%session.web%>">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-2 col-form-label">所在地点</label>
+              <div class="col-4">
+                <input type="text" class="form-control" id="city" placeholder="<%session.city%>">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-2 col-form-label">微博</label>
+              <div class="col-4">
+                <input type="text" class="form-control" id="weibo" placeholder="e.g.: HTTP:weibo.com/cnode.js">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-2 col-form-label">GitHub</label>
+              <div class="col-4">
+                <input type="text" class="form-control" id="GitHub" placeholder="<%session.GitHub%>">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-2 col-form-label">个性签名</label>
+              <div class="col-4">
+                <input type="text" class="form-control" id="sign" placeholder="<%session.sign%>">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-2 col-form-label"></label>
+              <div class="col-3">
+                <button type="button" class="btn btn-primary form-control" id="inputset">保存设置</button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <div class="card bg-white  mt-3 ">
+        <div class="card-header ">设置密码</div>
+        <div class="card-body pl-5">
+          <form>
+            <div class="form-group row">
+              <label class="col-2 col-form-label">当前密码</label>
+              <div class="col-4">
+                <input type="password" class="form-control" id="opass">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-2 col-form-label">新密码</label>
+              <div class="col-4">
+                <input type="password" class="form-control" id="npass">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-2 col-form-label"> </label>
+              <div class="col-2">
+                <button type="button" class="btn btn-primary form-control" id="inputpass">提交</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="card bg-white  my-3">
+        <div class="card-header">Access Token</div>
+        <div class="card-body  pl-4">字符串： c9069108-630a-4670-8c20-7adc6c3fa9ec</div>
+      </div>
+    </div>
+    <div class="col-2.5">
+      <div class='card bg-white mt-3'>
+        <div class='card-header  '>
+          个人信息
+        </div>
+        <div class='card-body'>
+          <div class='user_card'>
+            <div>
+              <a class='user_avatar' href="/user/<%=session.name%>">
+                <img src="#" title="<%=session.name%>" />
+              </a>
+              <span class='user_name'>
+                <a class='dark' href="/user/<%=session.name%>">
+                  <%=session.name%>
+                </a>
+              </span>
+
+              <div class='board clearfix'>
+                <div class='floor'>
+                  <span class='big'>积分:
+                    <%=session.integral%>
+                  </span>
+                </div>
+              </div>
+              <div class="space clearfix"></div>
+              <%if(session.sign==null){%>
+                <span class="signature">
+                  “这家伙很懒，什么个性签名都没有留下。”
+                </span>
+                <%}%>
+                  <%if(session.sign!=null){%>
+                    <span class="signature">
+                      <%=session.sign%>
+                    </span>
+                    <%}%>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class='inner bg-white p-3 mt-3'>
+          <a href='/topic/create' id='create_topic_btn'>
+            <button type="button" class="btn btn-success">
+              发布话题
+            </button>
+          </a>
+        </div>
+      </div>
+      <div class="mt-3">
+        <a href="#">
+          <img src="./images/FgQS-GQD" width="350" height="120">
+        </a>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function () {
+      // 设置
+      $("#inputset").click(function () {
+        var name = $("#name").val();
+        var Email = $("#Email").val();
+        var weibo = $("#weibo").val();
+        var web = $("#web").val();
+        var city = $("#city").val();
+        var GitHub = $("#GitHub").val();
+        var sign = $("#sign").val();
+        var data = {
+          name: name,
+          Email: Email,
+          weibo: weibo,
+          web: web,
+          city: city,
+          GitHub: GitHub,
+          sign: sign
+        };
+        $.ajax({
+          url: '/setting',
+          type: 'post',
+          contentType: "json",
+          data: JSON.stringify(data),
+          success: function (data, status) {
+            $(".set").show();
+          },
+        });
+      });
+    });
+
+
+    //  更改密码
+    $("#inputpass").click(function () {
+      var opass = $("#opass").val();
+      var npass = $("#npass").val();
+      var data = {
+        oldpass: opass,
+        newpass: npass
+      };
+      $.ajax({
+        url: '/setting/pass',
+        type: 'POST',
+        dataType: "json",
+        data: data,
+        success: function (data, status) {
+          if (data.result == 'right') {
+            $(".passerror").hide();
+            $(".passright").show();
+            setTimeout(() => {
+              location.href = "/onload"
+            }, 1000);
+          } else if (data.result == 'error') {
+            $(".passerror").show();
+          }
+
+        },
+      });
+    })
+  </script>
+
+  <%-include footer%>

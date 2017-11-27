@@ -1,0 +1,103 @@
+<%-include header%>
+  <div class="d-flex justify-content-center">
+
+    <div class="col-9 pl-2">
+      <div class='header'>
+        <ol class='breadcrumb'>
+          <li>
+            <a href='/home'>主页</a>
+            <span class='divider'>/</span>
+          </li>
+          <li class='active'>编辑回复</li>
+        </ol>
+      </div>
+      <div class='inner bg-white my-3'>
+        <form id='create_topic_form ' action="/reply/<%=replies.id%>/edit" method="post">
+          <fieldset class="pl-3 py-3">
+
+            <textarea class='col-11' id="text" name='t_content' rows='20' placeholder="<%=replies.content%>"></textarea>
+            <br>
+            <input type="button" class='span-primary submit_btn' data-loading-text="提交中" value="提交">
+            <span id="reply_edit"></span>
+
+          </fieldset>
+        </form>
+      </div>
+
+    </div>
+    <div class="col-2.5">
+      <div class='panel   bg-white'>
+        <div class='header'>
+          <span class='col_fade'>Markdown 语法参考</span>
+        </div>
+        <div class='inner'>
+          <ol>
+            <li>
+              <tt>### 单行的标题</tt>
+            </li>
+            <li>
+              <tt>**粗体**</tt>
+            </li>
+            <li>
+              <tt>`console.log('行内代码')`</tt>
+            </li>
+            <li>
+              <tt>```js\n code \n```</tt> 标记代码块</li>
+            <li>
+              <tt>[内容](链接)</tt>
+            </li>
+            <li>
+              <tt>![文字说明](图片链接)</tt>
+            </li>
+          </ol>
+          <span>
+            <a href='https://segmentfault.com/markdown' target='_blank'>Markdown 文档</a>
+          </span>
+        </div>
+      </div>
+      <div class='panel  bg-white mt-2'>
+        <div class='header'>
+          <span class='col_fade'>话题发布指南</span>
+        </div>
+        <div class='inner'>
+          <ol>
+            <li>尽量把话题要点浓缩到标题里</li>
+            <li>代码含义和报错可在
+              <a href="http://segmentfault.com/t/node.js">SegmentFault</a> 提问</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      $(".submit_btn").click(function () {
+        var te = $("#text").val();
+        if (!text) {
+          alert("请输入内容")
+        } else {
+          $.ajax({
+            url: document.url,
+            type: 'POST',
+            dataType: "json",
+            data: {
+              text: te
+            },
+            success: function (data, status) {
+              $("#reply_edit").html("提交成功");
+              setTimeout(() => {
+                window.location.href = "/topic/" + data;
+              }, 1000)
+            },
+            error: function (data, status) {
+              if (status == 'error') {
+                $("#reply_edit").html("内容不能为空");
+              }
+            }
+          })
+        }
+      })
+    })
+  </script>
+  <%-include footer%>
