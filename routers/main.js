@@ -6,8 +6,6 @@ const router = require('koa-router')();
 const koaBody = require('koa-body');
 const moment = require('moment');
 const sequelize = require('../database/sequelize');
-// const Sequelize = require('sequelize');
-// const Op = Sequelize.Op;
 moment().format();
 moment.locale('zh-cn');
 
