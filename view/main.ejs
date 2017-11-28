@@ -60,34 +60,8 @@
               <%})%>
           </div>
           <nav aria-label="Page navigation example" class="mt-3">
-            <div class="paginationall">
-
-              <ul id="data-pagination" class="pagination">
-
-                <li class="disabled">
-                  <a href="#">&laquo;</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li>
-                  <a href="#">&raquo;</a>
-                </li>
-              </ul>
-            </div>
-
+            <ul class="paginationall" id="pageUl">
+            </ul>
           </nav>
         </div>
         <!-- 精华 -->
@@ -447,41 +421,52 @@
     </div>
   </div>
   <script>
-     
-    var option = {
-      // currentPage: 1,
-      size: 'normal',
-      bootstrapMajorVertion: 3,
-      numberOfPages: 5,
-      totalPages:10,
-      itemTexts: function (type, page, current) {
-        switch (type) {
-          case "first":
-            return "首页";
-          case "prev":
-            return "上一页";
-          case "next":
-            return "下一页";
-          case "last":
-            return "末页";
-          case "page":
-            return page;
-        }
-      },
-      onPageClicked: function (event, originalEvent, type, page) {
-        $.ajax({
-          url: '/home/all/',
-          type: "POST",
-          data: {
-            page: page
-          },
-          dataType: 'json',
-          success: function (data) {
+    $(document).ready(
+    function paging(page) {
+      $.ajax({
+        type: "GET",
+        url: '/home/all/' + (page - 1),
+        dataType: "json",
+        success: function (msg) {
 
+        }
+      });
+
+      var option = {
+        currentPage: 1,
+        size: 'normal',
+        bootstrapMajorVertion: 3,
+        numberOfPages: 5,
+        totalPages: 10,
+        itemTexts: function (type, page, current) {
+          switch (type) {
+            case "first":
+              return "首页";
+            case "prev":
+              return "上一页";
+            case "next":
+              return "下一页";
+            case "last":
+              return "末页";
+            case "page":
+              return page;
           }
-        })
+        },
+        onPageClicked: function (event, originalEvent, type, page) {
+          $.ajax({
+            url: '/home/all',
+            type: "POST",
+            data: {
+              "page": page
+            },
+            dataType: 'json',
+            success: function (data) {
+
+            }
+          })
+        }
       }
-    }
-    $('.paginationall').bootstrapPaginator(option);
+      $('.paginationall').bootstrapPaginator(option);
+      })
   </script>
   <%- include footer%>
