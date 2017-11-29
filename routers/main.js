@@ -11,7 +11,7 @@ moment.locale('zh-cn');
 
 // 首页
 router.get('/home', async ctx => {
- var tres=await Topic.findAll();
+  var tres = await Topic.findAll();
   // 全部
   await Topic.findAndCountAll({
     where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
@@ -20,7 +20,6 @@ router.get('/home', async ctx => {
     (AllRow = result.rows), (AllCount = result.count);
   });
 
-  console.log(AllRow);
   var Atime = [];
 
   await AllRow.forEach(function(res, index) {
@@ -33,29 +32,129 @@ router.get('/home', async ctx => {
     });
   });
 
-  // 精华
-  // 分享
-  // 问答
-  // 客户端测试
-
-  await ctx.render('./main', {
+  await ctx.render('/main', {
     session: ctx.session,
-    AllRows: AllRow,
-    topics: tres,
+    // AllRows: AllRow,
+    topics: AllRow,
     retime: Atime
   });
 });
 
-// 分页
-router.post('/home/all',async ctx => {
-  await Topic.findAndCountAll({
-    where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
-    order: [[sequelize.literal('createdAt DESC')]]
-  }).then(result => {
-    (AllRow = result.rows), (AllCount = result.count);
+// 导航栏点击获取
+
+router.get('/home/:tab', async ctx => {
+  console.log(ctx.params);
+  if (ctx.params.tab == 'all') {
+    await Topic.findAndCountAll({
+      where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
+      order: [[sequelize.literal('createdAt DESC')]]
+    }).then(result => {
+      (AllRow = result.rows), (AllCount = result.count);
+    });
+    var Atime = [];
+    await AllRow.forEach(function(res, index) {
+      Reply.findById(res['lastid']).then(re => {
+        if (re) {
+          Atime[index] = moment(re.createdAt).fromNow();
+        } else {
+          Atime[index] = moment(res['createdAt']).fromNow();
+        }
+      });
+    });
+  } else if (ctx.params.tab == 'essence') {
+    await Topic.findAndCountAll({
+      where: {clicks:{$gte: 50}},
+      order: [[sequelize.literal('createdAt DESC')]]
+    }).then(result => {
+      (AllRow = result.rows), (AllCount = result.count);
+    });
+    var Atime = [];
+    await AllRow.forEach(function(res, index) {
+      Reply.findById(res['lastid']).then(re => {
+        if (re) {
+          Atime[index] = moment(re.createdAt).fromNow();
+        } else {
+          Atime[index] = moment(res['createdAt']).fromNow();
+        }
+      });
+    });
+  }else if (ctx.params.tab == 'share') {
+    await Topic.findAndCountAll({
+      where: { tabValue: '分享' },
+      order: [[sequelize.literal('createdAt DESC')]]
+    }).then(result => {
+      (AllRow = result.rows), (AllCount = result.count);
+    });
+    var Atime = [];
+    await AllRow.forEach(function(res, index) {
+      Reply.findById(res['lastid']).then(re => {
+        if (re) {
+          Atime[index] = moment(re.createdAt).fromNow();
+        } else {
+          Atime[index] = moment(res['createdAt']).fromNow();
+        }
+      });
+    });
+  }else if (ctx.params.tab == 'ask') {
+    await Topic.findAndCountAll({
+      where: { tabValue: '问答' },
+      order: [[sequelize.literal('createdAt DESC')]]
+    }).then(result => {
+      (AllRow = result.rows), (AllCount = result.count);
+    });
+    var Atime = [];
+    await AllRow.forEach(function(res, index) {
+      Reply.findById(res['lastid']).then(re => {
+        if (re) {
+          Atime[index] = moment(re.createdAt).fromNow();
+        } else {
+          Atime[index] = moment(res['createdAt']).fromNow();
+        }
+      });
+    });
+  }
+  else if (ctx.params.tab == 'job') {
+    await Topic.findAndCountAll({
+      where: { tabValue: '招聘' },
+      order: [[sequelize.literal('createdAt DESC')]]
+    }).then(result => {
+      (AllRow = result.rows), (AllCount = result.count);
+    });
+    var Atime = [];
+    await AllRow.forEach(function(res, index) {
+      Reply.findById(res['lastid']).then(re => {
+        if (re) {
+          Atime[index] = moment(re.createdAt).fromNow();
+        } else {
+          Atime[index] = moment(res['createdAt']).fromNow();
+        }
+      });
+    });
+  }else if (ctx.params.tab == 'dev') {
+    await Topic.findAndCountAll({
+      where: { tabValue: '客户端测试' },
+      order: [[sequelize.literal('createdAt DESC')]]
+    }).then(result => {
+      (AllRow = result.rows), (AllCount = result.count);
+    });
+    var Atime = [];
+    await AllRow.forEach(function(res, index) {
+      Reply.findById(res['lastid']).then(re => {
+        if (re) {
+          Atime[index] = moment(re.createdAt).fromNow();
+        } else {
+          Atime[index] = moment(res['createdAt']).fromNow();
+        }
+      });
+    });
+  }
+  await ctx.render('/main', {
+    session: ctx.session,
+    topics: AllRow,
+    retime: Atime
   });
-  ctx.body={all:AllRow,total:AllCount}
 });
+
 // 退出
 router.get('/signout', async ctx => {
   ctx.session = null;
