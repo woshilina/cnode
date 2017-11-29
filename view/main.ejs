@@ -3,12 +3,12 @@
 
     <div class="col-8 card p-0 mr-3  border-0">
       <div class="card-header">
-        <button type="button" class="btn btn-success" id="tab" value="all">全部</button>
-        <button type="button" class="btn btn-success" id="tab" value="essence">精华</button>
-        <button type="button" class="btn btn-success" id="tab" value="share">分享</button>
-        <button type="button" class="btn btn-success" id="tab" value="ask">问答</button>
-        <button type="button" class="btn btn-success" id="tab" value="job">招聘</button>
-        <button type="button" class="btn btn-success" id="tab" value="dev">客户端测试</button>
+        <button type="button" class="btn btn-success"   value="all">全部</button>
+        <button type="button" class="btn btn-success"   value="essence">精华</button>
+        <button type="button" class="btn btn-success"   value="share">分享</button>
+        <button type="button" class="btn btn-success"   value="ask">问答</button>
+        <button type="button" class="btn btn-success"   value="job">招聘</button>
+        <button type="button" class="btn btn-success"   value="dev">客户端测试</button>
       </div>
 
       <%topics.forEach(function(res,index){%>
@@ -152,7 +152,7 @@
   <script>
     $(document).ready(function () {
       // 导航栏的切换
-      $('button[id="tab"]').each(function () {
+      $('button').each(function () {
         $(this).on('click', function () {
           var value = $(this).attr('value');
           var page = 1;
