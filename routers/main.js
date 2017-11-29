@@ -42,7 +42,7 @@ router.get('/home', async ctx => {
 
 // 导航栏点击获取
 
-router.get('/home/:tab', async ctx => {
+router.get('/home/tab/:tab', async ctx => {
   console.log(ctx.params);
   if (ctx.params.tab == 'all') {
     await Topic.findAndCountAll({
@@ -148,11 +148,13 @@ router.get('/home/:tab', async ctx => {
       });
     });
   }
+  ctx.body={total:AllCount};
   await ctx.render('/main', {
     session: ctx.session,
     topics: AllRow,
     retime: Atime
   });
+ 
 });
 
 // 退出

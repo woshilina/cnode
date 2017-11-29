@@ -12,7 +12,7 @@
       </div>
 
       <%topics.forEach(function(res,index){%>
-        <div class="list-group-item list-group-item-action"  id="list">
+        <div class="list-group-item list-group-item-action" id="<%=res['id']%>">
           <div class="media">
             <img class="mr-3 " src="/images/3118295.jpg" width="40" height="40" alt="Generic placeholder image">
             <div class="media-body align-self-center d-flex  justify-content-between">
@@ -38,6 +38,31 @@
           </div>
         </div>
         <%})%>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">1</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">2</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">3</a>
+              </li>
+              <li class="page-item" id="next">
+                <a class="page-link" href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
     </div>
 
 
@@ -126,16 +151,18 @@
   </div>
   <script>
     $(document).ready(function () {
+      // 导航栏的切换
       $('button[id="tab"]').each(function () {
         $(this).on('click', function () {
           var value = $(this).attr('value');
           var page = 1;
           $.ajax({
-            url: '/home/' + value,
+            url: '/home/tab/' + value,
             type: "GET",
             cache: false,
             success: function (msg) {
-              location.href = "/home/" + value
+              total = msg.total;
+              location.href = "/home/tab/" + value
             },
             error: function () {
               alert('异常');
@@ -143,15 +170,26 @@
           })
         })
       })
-      // var currentpage = 1;
-      // $.ajax({
-      //   url: '/home/all',
-      //   type: 'get',
-      //   dataType: 'json',
-      //   success: function (data) {
 
-      //   }
-      // })
+      function page(total) {
+        var page = (total % 5 == 0) ? (total / 5) : (total / 5 + 1);
+
+        if (page < 5) {
+          for (var i = 1; i <= page; i++) {
+            var text=document.createElement('li');
+            $('#next').before('')
+          }
+        }
+      }
+      var currentpage = 1;
+      $.ajax({
+        url: '/home/all',
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+
+        }
+      })
 
 
     })
