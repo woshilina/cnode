@@ -47,15 +47,6 @@
               <span class="sr-only">Previous</span>
             </a>
           </li>
-          <li class="page-item">
-            <a class="page-link" href="#">1</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">2</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">3</a>
-          </li>
           <li class="page-item" id="next">
             <a class="page-link" href="#" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
@@ -89,7 +80,7 @@
                 <div class='user_card'>
                   <div>
                     <a class='user_avatar' href="/user/<%=session.name%>">
-                      <img src="/images/7081645.png"  width="30" height="30" alt="Generic placeholder image"  />
+                      <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image" />
                     </a>
                     <span class='user_name'>
                       <a class='dark' href="/user/<%=session.name%>">
@@ -152,6 +143,22 @@
   </div>
   <script>
     $(document).ready(function () {
+      // 设置首页分页按钮
+
+      $.ajax({
+        url: '/home',
+        type: "GET",
+        cache: false,
+        dataType: 'json',
+        success: function (msg) {
+          total = msg.total;
+          $('.pagination').empty();
+          paging(total);
+        },
+        error: function () {
+          alert('异常');
+        }
+      });
 
       // 导航栏的切换
 
@@ -167,7 +174,6 @@
             success: function (msg) {
               total = msg.total;
               $('#text').empty();
-              console.log(msg.topics);
               $.each(msg.topics, function (index, item) {
                 $('#text').append(
                   '<div class="list-group-item list-group-item-action" id=' + item.id + '>' +
@@ -175,11 +181,13 @@
                   item.replies + '/<small>' + item.clicks +
                   '</small><span class="badge badge-secondary">' + item.tabValue +
                   '</span><a href="/topic/' + item.id + '">' + item.title +
-                  '</a>'+'</div><div class="col-2 d-flex  justify-content-between"><img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image"><small class="align-self-center">' +
-                   item.lastreplyfromnow+ '</small></div></div></div></div>'
+                  '</a>' +
+                  '</div><div class="col-2 d-flex  justify-content-between"><img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image"><small class="align-self-center">' +
+                  item.lastreplyfromnow + '</small></div></div></div></div>'
                 );
-                $('#text').trigger("create");
-              })
+              });
+              $('.pagination').empty();
+              paging(total);
             },
             error: function () {
               alert('异常');
@@ -188,14 +196,31 @@
         })
       })
 
-      function page(total) {
-        var page = (total % 5 == 0) ? (total / 5) : (total / 5 + 1);
-
-        if (page < 5) {
+      function paging(total) {
+        console.log(total);
+        var page = (total % 5 == 0) ? (total / 5) : (Math.ceil(total / 5));
+        console.log(page);
+        var html =
+          '<li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>';
+        if (page <= 5 && page >= 1) {
           for (var i = 1; i <= page; i++) {
-            var text = document.createElement('li');
-            $('#next').before('')
-          }
+            html += '<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>';
+          };
+          html +=
+            '<li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>';
+          $('.pagination').html(html);
+        } else if (page >= 6) {
+          for (var i = 1; i <= 5; i++) {
+            html += '<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>';
+          };
+          html += '<li class="page-item"><a class="page-link" href="#">' + '...' + '</a></li>';
+          for (var i = 6; i <= page; i++) {
+            html += '<li class="page-item" style="display:none"><a class="page-link" href="#">' + i +
+              '</a></li>';
+          };
+          html +=
+            '<li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>';
+          $('.pagination').html(html);
         }
       }
       var currentpage = 1;

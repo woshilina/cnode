@@ -26,13 +26,12 @@ router.get('/home', async ctx => {
 
   var AllRow = result.rows;
   var AllCount = result.count;
-
-  var Atime = [];
+  ctx.body={total:AllCount};
   await ctx.render('/main', {
     session: ctx.session,
-    topics: AllRow,
-    retime: Atime
+    topics: AllRow
   });
+ 
 });
 
 // 导航栏点击获取
@@ -89,6 +88,7 @@ router.get('/home/tab/:tab', async ctx => {
     AllCount = result.count;
   }
   ctx.body = { total: AllCount, topics: AllRow };
+  console.log(AllCount);
 });
 
 // 退出
