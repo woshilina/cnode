@@ -20,7 +20,7 @@ router.get('/topic/create', async ctx => {
 //发表文章
 
 router.post('/topic/create', koaBody(), async ctx => {
-  let date =new Date();
+  let date = new Date();
   var q = {
     tabValue: ctx.request.body.tabValue,
     title: ctx.request.body.title,
@@ -32,6 +32,7 @@ router.post('/topic/create', koaBody(), async ctx => {
   let user = await User.findById(ctx.session.id);
   user.integral += 5;
   user.update({ integral: user.integral });
+  ctx.session.integral = user.integral;
   await Topic.create(q);
   let max = await Topic.max('id');
   ctx.body = max;
