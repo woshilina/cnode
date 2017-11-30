@@ -1,4 +1,5 @@
-//导入数据库模型user.ejs
+//导入数据库模型user.js
+
 const User = require('../database/models/user');
 const router = require('koa-router')();
 const koaBody = require('koa-body');

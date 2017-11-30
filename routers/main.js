@@ -1,4 +1,5 @@
 //引入数据库的模板topic.ejs
+
 const Topic = require('../database/models/topic');
 const Reply = require('../database/models/reply');
 const User = require('../database/models/user');
@@ -10,6 +11,7 @@ moment().format();
 moment.locale('zh-cn');
 
 // 首页
+
 router.get('/home', async ctx => {
   var tres = await Topic.findAll();
   // 全部
@@ -25,13 +27,13 @@ router.get('/home', async ctx => {
   var Atime = [];
   await ctx.render('/main', {
     session: ctx.session,
-    // AllRows: AllRow,
     topics: AllRow,
     retime: Atime
   });
 });
 
 // 导航栏点击获取
+
 router.get('/home/tab/:tab', async ctx => {
   if (ctx.params.tab == 'all') {
     let resule = await Topic.findAndCountAll({
@@ -40,7 +42,6 @@ router.get('/home/tab/:tab', async ctx => {
     });
     let AllRow = result.rows;
     let AllCount = result.count;
-    var Atime = [];
   } 
   else if (ctx.params.tab == 'essence') {
     let result = await Topic.findAndCountAll({
@@ -80,18 +81,20 @@ router.get('/home/tab/:tab', async ctx => {
       order: [[sequelize.literal('lastreplytime DESC')]]
     });
     let AllRow = result.rows;
-    const AllCount = result.count;
+    let AllCount = result.count;
   }
   ctx.body = { total: AllCount, topics: AllRow };
 });
 
 // 退出
+
 router.get('/signout', async ctx => {
   ctx.session = null;
   ctx.body = { result: 'true' };
 });
 
 // 设置页
+
 router.get('/setting', async ctx => {
   await ctx.render('/set', {
     session: ctx.session
@@ -99,6 +102,7 @@ router.get('/setting', async ctx => {
 });
 
 // 设置个人信息
+
 router.post('/setting', koaBody(), async ctx => {
   console.log(ctx.request.body);
   var set = {
@@ -119,6 +123,7 @@ router.post('/setting', koaBody(), async ctx => {
 });
 
 // 更改密码
+
 router.post('/setting/pass', koaBody(), async ctx => {
   var pass = {
     oldpass: ctx.request.body.oldpass,
@@ -143,4 +148,5 @@ router.post('/setting/pass', koaBody(), async ctx => {
     }
   });
 });
+
 module.exports = router;

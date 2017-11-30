@@ -10,6 +10,7 @@ moment().format();
 moment.locale('zh-cn');
 
 //发表文章首页
+
 router.get('/topic/create', async ctx => {
   await ctx.render('./create', {
     session: ctx.session
@@ -17,6 +18,7 @@ router.get('/topic/create', async ctx => {
 });
 
 //发表文章
+
 router.post('/topic/create', koaBody(), async ctx => {
   let date = moment().fromNow();
   var q = {
@@ -36,6 +38,7 @@ router.post('/topic/create', koaBody(), async ctx => {
 });
 
 //单篇文章页
+
 router.get('/topic/:id', async (ctx, next) => {
   var Id = ctx.params.id;
   let topic = await Topic.findById(Id);
@@ -92,6 +95,7 @@ router.get('/topic/:id', async (ctx, next) => {
 });
 
 //删除单篇文章页
+
 router.get('/topic/:id/delete', async (ctx, next) => {
   var i = ctx.params.id;
   console.log(i);
@@ -108,6 +112,7 @@ router.get('/topic/:id/delete', async (ctx, next) => {
 });
 
 //编辑单篇文章页面
+
 router.get('/topic/:id/edit', async (ctx, next) => {
   var Id = ctx.params.id;
   let topic = await Topic.findById(Id);
@@ -119,6 +124,7 @@ router.get('/topic/:id/edit', async (ctx, next) => {
 });
 
 //编辑单篇文章
+
 router.post('/topic/:id/edit', koaBody(), async ctx => {
   var Id = ctx.params.id;
   let date = moment().fromNow();
@@ -134,6 +140,7 @@ router.post('/topic/:id/edit', koaBody(), async ctx => {
 });
 
 //发表回复
+
 router.post('/topic/:id', koaBody(), async (ctx, next) => {
   console.log(ctx.request.body);
   var cont = ctx.request.body.content;
@@ -158,6 +165,7 @@ router.post('/topic/:id', koaBody(), async (ctx, next) => {
 });
 
 //点赞
+
 router.post('/topic/:id/like', koaBody(), async ctx => {
   var id = ctx.params.id;
   var Id = ctx.request.body.att;
@@ -178,6 +186,7 @@ router.post('/topic/:id/like', koaBody(), async ctx => {
 });
 
 //取消赞
+
 router.post('/topic/:id/unlike', koaBody(), async ctx => {
   var id = ctx.params.id;
   var Id = ctx.request.body.att;
@@ -198,6 +207,7 @@ router.post('/topic/:id/unlike', koaBody(), async ctx => {
 });
 
 // 编辑回复页面
+
 router.get('/reply/:id/edit', koaBody(), async ctx => {
   var Id = ctx.params.id;
   let reply = await Reply.findById(Id);
@@ -209,18 +219,20 @@ router.get('/reply/:id/edit', koaBody(), async ctx => {
 });
 
 // 编辑回复提交
+
 router.post('/reply/:id/edit', koaBody(), async ctx => {
   var id = ctx.params.id;
   var text = ctx.request.body.text;
   let reply = await Reply.findById(id);
   reply.update({ content: text });
-  let topic=await Topic.findById(id);
+  let topic = await Topic.findById(id);
   let date = moment().fromNow();
-  topic.update({lastreplytime:date})
+  topic.update({ lastreplytime: date });
   ctx.body = reply.topicId;
 });
 
 // 删除评论
+
 router.get('/reply/:id/delete', koaBody(), async ctx => {
   var id = ctx.params.id;
   console.log(ctx.params);
