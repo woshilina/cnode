@@ -25,69 +25,62 @@ router.post('/topic/create', koaBody(), async ctx => {
     userid: ctx.session.id,
     username: ctx.session.name
   };
-  await User.findById(ctx.session.id).then(user => {
-    user.integral += 5;
-    user.update({ integral: user.integral });
-  });
+  let user = await User.findById(ctx.session.id);
+  user.integral += 5;
+  user.update({ integral: user.integral });
   await Topic.create(q);
-
-  await Topic.max('id').then(max => {
-    ctx.body = max;
-  });
+  let max = await Topic.max('id');
+  ctx.body = max;
 });
 
 //单篇文章页
 router.get('/topic/:id', async (ctx, next) => {
   var Id = ctx.params.id;
-  await Topic.findById(Id).then(topic => {
-    res = topic;
-    tc_time = moment(topic.createdAt).fromNow();
-    tu_time = moment(topic.updatedAt).fromNow();
-    res_clicks = topic.clicks;
-    res_clicks++;
-    topic.update({
-      clicks: res_clicks
-    });
+  let topic = await Topic.findById(Id);
+  let tc_time = moment(topic.createdAt).fromNow();
+  let tu_time = moment(topic.updatedAt).fromNow();
+  let res_clicks = topic.clicks;
+  res_clicks++;
+  await topic.update({
+    clicks: res_clicks
   });
 
-  await Topic.findAll({
+  let top = await Topic.findAll({
     where: {
       userid: res.userid
     }
-  }).then(topic => {
-    top = topic;
   });
 
-  await Reply.findAll({
+  let reply = await Reply.findAll({
     where: {
       topicId: Id
     }
-  }).then(reply => {
-    if (reply) {
-      reply_res = reply;
-      like_res = [];
-      rtime = []; //回复时间数组
-      reply_res.forEach(function(res, index) {
-        var res_id = res['id'];
-        rtime[index] = moment(res.createdAt).fromNow();
-        Like.findOne({
-          where: { nameId: ctx.session.id, replyId: res_id }
-        }).then(like => {
-          if (like == null) {
-            like_res[index] = 0;
-          } else {
-            like_res[index] = like;
-          }
-        });
-      });
-    } else if (reply == null) {
-      reply_res = 0;
-    }
   });
+
+  if (reply) {
+    reply_res = reply;
+    like_res = [];
+    rtime = []; //回复时间数组
+    reply_res.forEach(function(res, index) {
+      var res_id = res['id'];
+      rtime[index] = moment(res.createdAt).fromNow();
+      Like.findOne({
+        where: { nameId: ctx.session.id, replyId: res_id }
+      }).then(like => {
+        if (like == null) {
+          like_res[index] = 0;
+        } else {
+          like_res[index] = like;
+        }
+      });
+    });
+  } else if (reply == null) {
+    reply_res = 0;
+  }
 
   await ctx.render('/stopic', {
     session: ctx.session,
-    topics: res,
+    topics: topic,
     ttime: [tc_time, tu_time],
     stopics: top,
     replys: reply_res,
@@ -100,27 +93,26 @@ router.get('/topic/:id', async (ctx, next) => {
 router.get('/topic/:id/delete', async (ctx, next) => {
   var i = ctx.params.id;
   console.log(i);
-  await Topic.findById(i).then(topic => {
-    topic.destroy({
-      where: {
-        id: i
-      }
-    });
-    ctx.body = {
-      result: 'success'
-    };
+  let topic = await Topic.findById(i);
+
+  topic.destroy({
+    where: {
+      id: i
+    }
   });
+  ctx.body = {
+    result: 'success'
+  };
 });
 
 //编辑单篇文章页面
 router.get('/topic/:id/edit', async (ctx, next) => {
   var Id = ctx.params.id;
-  await Topic.findById(Id).then(topic => {
-    res = topic;
-  });
+  let topic = await Topic.findById(Id);
+
   await ctx.render('/edit', {
     session: ctx.session,
-    topics: res
+    topics: topic
   });
 });
 
@@ -132,10 +124,9 @@ router.post('/topic/:id/edit', koaBody(), async ctx => {
     title: ctx.request.body.title,
     text: ctx.request.body.text
   };
-  await Topic.findById(Id).then(topic => {
-    topic.update(q);
-    ctx.body = Id;
-  });
+  let topic = await Topic.findById(Id);
+  topic.update(q);
+  ctx.body = Id;
 });
 
 //发表回复
@@ -148,20 +139,19 @@ router.post('/topic/:id', koaBody(), async (ctx, next) => {
     topicId: ctx.params.id
   };
   await Reply.create(re);
-  await Reply.findAll().then(rep => {
-    lastid = rep[rep.length - 1].id;
-  });
+  let rep = await Reply.findAll();
+  let lastid = rep[rep.length - 1].id;
 
-  await Topic.findById(re.topicId).then(topic => {
-    var re = topic.replies + 1;
-    topic.update({
-      replies: re,
-      lastId: lastid
-    });
-    ctx.body = {
-      result: 'success'
-    };
+  let topic = await Topic.findById(re.topicId);
+
+  var re = topic.replies + 1;
+  topic.update({
+    replies: re,
+    lastId: lastid
   });
+  ctx.body = {
+    result: 'success'
+  };
 });
 
 //点赞
@@ -221,20 +211,19 @@ router.get('/reply/:id/edit', koaBody(), async ctx => {
 router.post('/reply/:id/edit', koaBody(), async ctx => {
   var id = ctx.params.id;
   var text = ctx.request.body.text;
-  await Reply.findById(id).then(reply => {
-    reply.update({ content: text });
-    ctx.body = reply.topicId;
-  });
+  let reply = await Reply.findById(id);
+  reply.update({ content: text });
+  ctx.body = reply.topicId;
 });
 
 // 删除评论
 router.get('/reply/:id/delete', koaBody(), async ctx => {
   var id = ctx.params.id;
   console.log(ctx.params);
-  await Reply.findById(id).then(reply => {
-    reply.destroy();
-    ctx.body = reply.topicId;
-  });
+  let reply = await Reply.findById(id);
+  reply.destroy();
+  ctx.body = reply.topicId;
   await Like.destroy({ where: { replyId: id } });
 });
+
 module.exports = router;
