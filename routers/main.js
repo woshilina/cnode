@@ -35,53 +35,50 @@ router.get('/home', async ctx => {
 // 导航栏点击获取
 
 router.get('/home/tab/:tab', async ctx => {
+  var AllCount;
+  var AllRow;
   if (ctx.params.tab == 'all') {
-    let resule = await Topic.findAndCountAll({
+    let result = await Topic.findAndCountAll({
       where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
       order: [[sequelize.literal('lastreplytime DESC')]]
     });
-    let AllRow = result.rows;
-    let AllCount = result.count;
-  } 
-  else if (ctx.params.tab == 'essence') {
+    AllRow = result.rows;
+    AllCount = result.count;
+  } else if (ctx.params.tab == 'essence') {
     let result = await Topic.findAndCountAll({
       where: { clicks: { $gte: 50 } },
       order: [[sequelize.literal('lastreplytime DESC')]]
     });
-    let AllRow = result.rows;
-    let AllCount = result.count;
-  } 
-  else if (ctx.params.tab == 'share') {
+    AllRow = result.rows;
+    AllCount = result.count;
+  } else if (ctx.params.tab == 'share') {
     let result = await Topic.findAndCountAll({
       where: { tabValue: '分享' },
       order: [[sequelize.literal('lastreplytime DESC')]]
     });
-    let AllRow = result.rows;
-    let AllCount = result.count;
-  } 
-  else if (ctx.params.tab == 'ask') {
+    AllRow = result.rows;
+    AllCount = result.count;
+  } else if (ctx.params.tab == 'ask') {
     let result = await Topic.findAndCountAll({
       where: { tabValue: '问答' },
       order: [[sequelize.literal('lastreplytime DESC')]]
     });
-    let AllRow = result.rows;
-    let AllCount = result.count;
-  }
-   else if (ctx.params.tab == 'job') {
+    AllRow = result.rows;
+    AllCount = result.count;
+  } else if (ctx.params.tab == 'job') {
     let result = await Topic.findAndCountAll({
       where: { tabValue: '招聘' },
       order: [[sequelize.literal('lastreplytime DESC')]]
     });
-    let AllRow = result.rows;
-    let AllCount = result.count;
-  } 
-  else if (ctx.params.tab == 'dev') {
+    AllRow = result.rows;
+    AllCount = result.count;
+  } else if (ctx.params.tab == 'dev') {
     let result = await Topic.findAndCountAll({
       where: { tabValue: '客户端测试' },
       order: [[sequelize.literal('lastreplytime DESC')]]
     });
-    let AllRow = result.rows;
-    let AllCount = result.count;
+    AllRow = result.rows;
+    AllCount = result.count;
   }
   ctx.body = { total: AllCount, topics: AllRow };
 });
@@ -119,7 +116,7 @@ router.post('/setting', koaBody(), async ctx => {
   var user = await User.findById(Id);
   await user.update(set);
   ctx.session = user;
-  ctx.body = {'sign':set.sign};
+  ctx.body = { sign: set.sign };
 });
 
 // 更改密码
