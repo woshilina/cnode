@@ -123,7 +123,7 @@ router.post('/setting', koaBody(), async ctx => {
   var Id = ctx.session.id;
   var user = await User.findById(Id);
   await user.update(set);
-  ctx.session = user;
+  ctx.session.sign =set.sign;
   ctx.body = { sign: set.sign };
 });
 

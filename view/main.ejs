@@ -14,7 +14,7 @@
         <%topics.forEach(function(res,index){%>
           <div class="list-group-item list-group-item-action" id="<%=res['id']%>">
             <div class="media">
-              <img class="mr-3 " src="/images/3118295.jpg" width="40" height="40" alt="Generic placeholder image">
+              <img class="mr-3 " src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image">
               <div class="media-body align-self-center d-flex  justify-content-between">
                 <div>
                   <%=res['replies']%>/
@@ -89,7 +89,7 @@
                 <div class='user_card'>
                   <div>
                     <a class='user_avatar' href="/user/<%=session.name%>">
-                      <img src="#" title="<%=session.name%>" />
+                      <img src="/images/7081645.png"  width="30" height="30" alt="Generic placeholder image"  />
                     </a>
                     <span class='user_name'>
                       <a class='dark' href="/user/<%=session.name%>">
@@ -171,7 +171,7 @@
               $.each(msg.topics, function (index, item) {
                 $('#text').append(
                   '<div class="list-group-item list-group-item-action" id=' + item.id + '>' +
-                  '<div class="media"><img class="mr-3" src="/images/3118295.jpg" width="40" height="40" alt="Generic placeholder image"><div class="media-body align-self-center d-flex  justify-content-between"><div>' +
+                  '<div class="media"><img class="mr-3" src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image"><div class="media-body align-self-center d-flex  justify-content-between"><div>' +
                   item.replies + '/<small>' + item.clicks +
                   '</small><span class="badge badge-secondary">' + item.tabValue +
                   '</span><a href="/topic/' + item.id + '">' + item.title +
