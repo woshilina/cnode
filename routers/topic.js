@@ -20,7 +20,7 @@ router.get('/topic/create', async ctx => {
 //发表文章
 
 router.post('/topic/create', koaBody(), async ctx => {
-  let date = moment().fromNow();
+  let date =new Date();
   var q = {
     tabValue: ctx.request.body.tabValue,
     title: ctx.request.body.title,
@@ -127,7 +127,7 @@ router.get('/topic/:id/edit', async (ctx, next) => {
 
 router.post('/topic/:id/edit', koaBody(), async ctx => {
   var Id = ctx.params.id;
-  let date = moment().fromNow();
+  let date = new Date();
   var q = {
     tabValue: ctx.request.body.tabValue,
     title: ctx.request.body.title,
@@ -154,7 +154,7 @@ router.post('/topic/:id', koaBody(), async (ctx, next) => {
   let topic = await Topic.findById(res.topicId);
 
   var re = topic.replies + 1;
-  let date = moment().fromNow();
+  let date = new Date();
   topic.update({
     replies: re,
     lastreplytime: date
@@ -226,7 +226,7 @@ router.post('/reply/:id/edit', koaBody(), async ctx => {
   let reply = await Reply.findById(id);
   reply.update({ content: text });
   let topic = await Topic.findById(id);
-  let date = moment().fromNow();
+  let date = new Date();
   topic.update({ lastreplytime: date });
   ctx.body = reply.topicId;
 });

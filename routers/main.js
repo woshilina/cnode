@@ -15,7 +15,10 @@ moment.locale('zh-cn');
 router.get('/home', async ctx => {
   var tres = await Topic.findAll();
   // 全部
-
+  for (var i of tres) {
+    var time = i.lastreplytime;
+    await i.update({ lastreplyfromnow: moment(time).fromNow() });
+  }
   var result = await Topic.findAndCountAll({
     where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
     order: [[sequelize.literal('lastreplytime DESC')]]
@@ -35,8 +38,13 @@ router.get('/home', async ctx => {
 // 导航栏点击获取
 
 router.get('/home/tab/:tab', async ctx => {
+  var tres = await Topic.findAll();
   var AllCount;
   var AllRow;
+  for (var i of tres) {
+    var time = i.lastreplytime;
+    await i.update({ lastreplyfromnow: moment(time).fromNow() });
+  }
   if (ctx.params.tab == 'all') {
     let result = await Topic.findAndCountAll({
       where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
