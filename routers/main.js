@@ -13,23 +13,24 @@ moment.locale('zh-cn');
 router.get('/home', async ctx => {
   var tres = await Topic.findAll();
   // 全部
-  await Topic.findAndCountAll({
+
+  var result = await Topic.findAndCountAll({
     where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
     order: [[sequelize.literal('createdAt DESC')]]
-  }).then(result => {
-    (AllRow = result.rows), (AllCount = result.count);
   });
+
+  var AllRow = result.rows;
+  var AllCount = result.count;
 
   var Atime = [];
 
-  await AllRow.forEach(function(res, index) {
-    Reply.findById(res['lastid']).then(re => {
+   AllRow.forEach(function(res, index) {
+    let re=await Reply.findById(res['lastid']);
       if (re) {
         Atime[index] = moment(re.createdAt).fromNow();
       } else {
         Atime[index] = moment(res['createdAt']).fromNow();
       }
-    });
   });
 
   await ctx.render('/main', {
@@ -41,34 +42,41 @@ router.get('/home', async ctx => {
 });
 
 // 导航栏点击获取
-
 router.get('/home/tab/:tab', async ctx => {
+
   console.log(ctx.params);
+
   if (ctx.params.tab == 'all') {
-    await Topic.findAndCountAll({
+  let resule=  await Topic.findAndCountAll({
       where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
       order: [[sequelize.literal('createdAt DESC')]]
-    }).then(result => {
-      (AllRow = result.rows), (AllCount = result.count);
-    });
-    var Atime = [];
-    await AllRow.forEach(function(res, index) {
-      Reply.findById(res['lastid']).then(re => {
+    });  
+
+  let AllRow = result.rows;
+  let AllCount = result.count;
+  var Atime = [];
+    
+  AllRow.forEach(function(res, index) {
+     let re= await Reply.findById(res['lastid']);    
         if (re) {
           Atime[index] = moment(re.createdAt).fromNow();
         } else {
           Atime[index] = moment(res['createdAt']).fromNow();
-        }
-      });
+        }   
     });
   } else if (ctx.params.tab == 'essence') {
-    await Topic.findAndCountAll({
-      where: {clicks:{$gte: 50}},
+
+   let result= await Topic.findAndCountAll({
+      where: { clicks: { $gte: 50 } },
       order: [[sequelize.literal('createdAt DESC')]]
-    }).then(result => {
-      (AllRow = result.rows), (AllCount = result.count);
     });
+ 
+  let AllRow = result.rows;
+  let AllCount = result.count;
+   
+
     var Atime = [];
+
     await AllRow.forEach(function(res, index) {
       Reply.findById(res['lastid']).then(re => {
         if (re) {
@@ -78,83 +86,85 @@ router.get('/home/tab/:tab', async ctx => {
         }
       });
     });
-  }else if (ctx.params.tab == 'share') {
-    await Topic.findAndCountAll({
+  } else if (ctx.params.tab == 'share') {
+   let result= await Topic.findAndCountAll({
       where: { tabValue: '分享' },
       order: [[sequelize.literal('createdAt DESC')]]
-    }).then(result => {
-      (AllRow = result.rows), (AllCount = result.count);
     });
+    
+      let AllRow = result.rows;
+      let AllCount = result.count;
+  
     var Atime = [];
-    await AllRow.forEach(function(res, index) {
-      Reply.findById(res['lastid']).then(re => {
+      AllRow.forEach(function(res, index) {
+      let re=await Reply.findById(res['lastid']);     
         if (re) {
           Atime[index] = moment(re.createdAt).fromNow();
         } else {
           Atime[index] = moment(res['createdAt']).fromNow();
         }
-      });
     });
-  }else if (ctx.params.tab == 'ask') {
-    await Topic.findAndCountAll({
+  } else if (ctx.params.tab == 'ask') {
+   let result= await Topic.findAndCountAll({
       where: { tabValue: '问答' },
       order: [[sequelize.literal('createdAt DESC')]]
-    }).then(result => {
-      (AllRow = result.rows), (AllCount = result.count);
     });
+ 
+      let AllRow = result.rows;
+      let AllCount = result.count;
+  
     var Atime = [];
-    await AllRow.forEach(function(res, index) {
-      Reply.findById(res['lastid']).then(re => {
-        if (re) {
+
+     AllRow.forEach(function(res, index) {
+
+     let re= await Reply.findById(res['lastid']);
+      if (re) {
           Atime[index] = moment(re.createdAt).fromNow();
         } else {
           Atime[index] = moment(res['createdAt']).fromNow();
-        }
-      });
+        }     
     });
-  }
-  else if (ctx.params.tab == 'job') {
-    await Topic.findAndCountAll({
+  } else if (ctx.params.tab == 'job') {
+
+    let result= await Topic.findAndCountAll({
       where: { tabValue: '招聘' },
       order: [[sequelize.literal('createdAt DESC')]]
-    }).then(result => {
-      (AllRow = result.rows), (AllCount = result.count);
     });
+  
+    let AllRow = result.rows;
+    let AllCount = result.count;
+  
     var Atime = [];
-    await AllRow.forEach(function(res, index) {
-      Reply.findById(res['lastid']).then(re => {
+
+     AllRow.forEach(function(res, index) {
+     let re= await Reply.findById(res['lastid']);    
         if (re) {
           Atime[index] = moment(re.createdAt).fromNow();
         } else {
           Atime[index] = moment(res['createdAt']).fromNow();
-        }
-      });
+        } 
     });
-  }else if (ctx.params.tab == 'dev') {
-    await Topic.findAndCountAll({
+  } else if (ctx.params.tab == 'dev') {
+   let result= await Topic.findAndCountAll({
       where: { tabValue: '客户端测试' },
       order: [[sequelize.literal('createdAt DESC')]]
-    }).then(result => {
-      (AllRow = result.rows), (AllCount = result.count);
     });
+ 
+    let AllRow = result.rows;
+    let AllCount = result.count;
+     
     var Atime = [];
-    await AllRow.forEach(function(res, index) {
-      Reply.findById(res['lastid']).then(re => {
+
+     AllRow.forEach(function(res, index) {
+    let re=  await  Reply.findById(res['lastid']);   
         if (re) {
           Atime[index] = moment(re.createdAt).fromNow();
         } else {
           Atime[index] = moment(res['createdAt']).fromNow();
-        }
-      });
+        }      
     });
   }
-  ctx.body={total:AllCount};
-  await ctx.render('/main', {
-    session: ctx.session,
-    topics: AllRow,
-    retime: Atime
-  });
- 
+  ctx.body = { total: AllCount, topics: AllRow, time: Atime };
 });
 
 // 退出
@@ -172,6 +182,7 @@ router.get('/setting', async ctx => {
 
 // 设置个人信息
 router.post('/setting', koaBody(), async ctx => {
+  console.log(ctx.request.body);
   var set = {
     name: ctx.request.body.name,
     Email: ctx.request.body.Email,
@@ -181,11 +192,12 @@ router.post('/setting', koaBody(), async ctx => {
     sign: ctx.request.body.sign,
     GitHub: ctx.request.body.GitHub
   };
+  console.log(set);
   var Id = ctx.session.id;
-  await User.findById(Id).then(user => {
-    user.update(set);
-    ctx.body = 'success';
-  });
+  var user = await User.findById(Id);
+ await user.update(set);
+  ctx.session= user;
+  ctx.body = 'success';
 });
 
 // 更改密码

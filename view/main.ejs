@@ -3,66 +3,67 @@
 
     <div class="col-8 card p-0 mr-3  border-0">
       <div class="card-header">
-        <button type="button" class="btn btn-success"   value="all">全部</button>
-        <button type="button" class="btn btn-success"   value="essence">精华</button>
-        <button type="button" class="btn btn-success"   value="share">分享</button>
-        <button type="button" class="btn btn-success"   value="ask">问答</button>
-        <button type="button" class="btn btn-success"   value="job">招聘</button>
-        <button type="button" class="btn btn-success"   value="dev">客户端测试</button>
+        <button type="button" class="btn btn-success" value="all">全部</button>
+        <button type="button" class="btn btn-success" value="essence">精华</button>
+        <button type="button" class="btn btn-success" value="share">分享</button>
+        <button type="button" class="btn btn-success" value="ask">问答</button>
+        <button type="button" class="btn btn-success" value="job">招聘</button>
+        <button type="button" class="btn btn-success" value="dev">客户端测试</button>
       </div>
-
-      <%topics.forEach(function(res,index){%>
-        <div class="list-group-item list-group-item-action" id="<%=res['id']%>">
-          <div class="media">
-            <img class="mr-3 " src="/images/3118295.jpg" width="40" height="40" alt="Generic placeholder image">
-            <div class="media-body align-self-center d-flex  justify-content-between">
-              <div>
-                <%=res['replies']%>/
-                  <small>
-                    <%=res['clicks']%>
+      <div id="text">
+        <%topics.forEach(function(res,index){%>
+          <div class="list-group-item list-group-item-action" id="<%=res['id']%>">
+            <div class="media">
+              <img class="mr-3 " src="/images/3118295.jpg" width="40" height="40" alt="Generic placeholder image">
+              <div class="media-body align-self-center d-flex  justify-content-between">
+                <div>
+                  <%=res['replies']%>/
+                    <small>
+                      <%=res['clicks']%>
+                    </small>
+                    <span class="badge badge-secondary">
+                      <%=res['tabValue']%>
+                    </span>
+                    <a href="/topic/<%=res['id']%>">
+                      <%=res['title']%>
+                    </a>
+                </div>
+                <div class="col-2 d-flex  justify-content-between">
+                  <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image">
+                  <small class="align-self-center">
+                    <%=retime[index]%>
                   </small>
-                  <span class="badge badge-secondary">
-                    <%=res['tabValue']%>
-                  </span>
-                  <a href="/topic/<%=res['id']%>">
-                    <%=res['title']%>
-                  </a>
-              </div>
-              <div class="col-2 d-flex  justify-content-between">
-                <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image">
-                <small class="align-self-center">
-                  <%=retime[index]%>
-                </small>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <%})%>
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">1</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">2</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">3</a>
-              </li>
-              <li class="page-item" id="next">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <%})%>
+      </div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">1</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">2</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">3</a>
+          </li>
+          <li class="page-item" id="next">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
 
 
@@ -160,9 +161,12 @@
             url: '/home/tab/' + value,
             type: "GET",
             cache: false,
+            dataType: 'json',
             success: function (msg) {
               total = msg.total;
-              location.href = "/home/tab/" + value
+              time = msg.time;
+              $('#text').empty();
+      
             },
             error: function () {
               alert('异常');
@@ -176,21 +180,13 @@
 
         if (page < 5) {
           for (var i = 1; i <= page; i++) {
-            var text=document.createElement('li');
+            var text = document.createElement('li');
             $('#next').before('')
           }
         }
       }
       var currentpage = 1;
-      $.ajax({
-        url: '/home/all',
-        type: 'get',
-        dataType: 'json',
-        success: function (data) {
-
-        }
-      })
-
+     
 
     })
   </script>

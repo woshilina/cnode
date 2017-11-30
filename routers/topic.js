@@ -173,15 +173,15 @@ router.post('/topic/:id/like', koaBody(), async ctx => {
     nameId: ctx.session.id
   };
   await Like.create(li);
-  await Reply.findById(Id).then(reply => {
-    reply.likes++;
-    reply.update({
-      likes: reply.likes
-    });
-    ctx.body = {
-      result: id
-    };
+  let reply = await Reply.findById(Id);
+
+  reply.likes++;
+  reply.update({
+    likes: reply.likes
   });
+  ctx.body = {
+    result: id
+  };
 });
 
 //取消赞
@@ -189,34 +189,31 @@ router.post('/topic/:id/unlike', koaBody(), async ctx => {
   var id = ctx.params.id;
   var Id = ctx.request.body.att;
 
-  await Like.findOne({
+  let like = await Like.findOne({
     where: { replyId: Id, nameId: ctx.session.id }
-  }).then(like => {
-    like.destroy();
   });
 
-  await Reply.findById(Id).then(reply => {
-    reply.likes--;
-    reply.update({
-      likes: reply.likes
-    });
-    ctx.body = {
-      result: id
-    };
+  like.destroy();
+
+  let reply = await Reply.findById(Id);
+
+  reply.likes--;
+  reply.update({
+    likes: reply.likes
   });
+  ctx.body = {
+    result: id
+  };
 });
 
 // 编辑回复页面
 router.get('/reply/:id/edit', koaBody(), async ctx => {
   var Id = ctx.params.id;
-  console.log(ctx.params);
-  await Reply.findById(Id).then(reply => {
-    res = reply;
-    console.log(res);
-  });
+  let reply = await Reply.findById(Id);
+
   await ctx.render('/replyedit', {
     session: ctx.session,
-    replies: res
+    replies: reply
   });
 });
 

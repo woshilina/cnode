@@ -10,25 +10,22 @@ router.get('/onload', async ctx => {
 router.post('/onload', koaBody(), async ctx => {
   var uname = ctx.request.body.uname;
   var pass = ctx.request.body.upwd;
-  await User.findOne({ where: { name: uname, password: pass } })
-    .then(user => {
-      if (uname === user.name && pass === user.password) {
-        ctx.body = { result: 'true' };
-        ctx.session = {
-          name: uname,
-          id: user.id,
-          sign: user.sign,
-          integral: user.integral
-        };
-        console.log('session', ctx.session);
-        console.log('登录成功');
-      }
-    })
-    .catch(err => {
-      console.log(ctx.body);
-      console.log('用户名或密码错误!');
-      ctx.redirect('/onload');
-    });
-});
+  let user = await User.findOne({ where: { name: uname, password: pass } });
 
+  if (uname === user.name && pass === user.password) {
+    ctx.body = { result: 'true' };
+    ctx.session = {
+      name: uname,
+      id: user.id,
+      sign: user.sign,
+      integral: user.integral
+    };
+    console.log('session', ctx.session);
+    console.log('登录成功');
+  } else {
+    console.log(ctx.body);
+    console.log('用户名或密码错误!');
+    ctx.redirect('/onload');
+  }
+});
 module.exports = router;

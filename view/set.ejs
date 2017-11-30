@@ -30,19 +30,19 @@
             <div class="form-group row">
               <label class="col-2 col-form-label">电子邮箱</label>
               <div class="col-4">
-                <input type="text" class="form-control" id="Email" placeholder="<%session.Email%>">
+                <input type="text" class="form-control" id="Email" placeholder="<%=session.Email%>">
               </div>
             </div>
             <div class="form-group row">
               <label class="col-2 col-form-label">个人网站</label>
               <div class="col-4">
-                <input type="text" class="form-control" id="web" placeholder="<%session.web%>">
+                <input type="text" class="form-control" id="web" placeholder="<%=session.web%>">
               </div>
             </div>
             <div class="form-group row">
               <label class="col-2 col-form-label">所在地点</label>
               <div class="col-4">
-                <input type="text" class="form-control" id="city" placeholder="<%session.city%>">
+                <input type="text" class="form-control" id="city" placeholder="<%=session.city%>">
               </div>
             </div>
             <div class="form-group row">
@@ -54,13 +54,13 @@
             <div class="form-group row">
               <label class="col-2 col-form-label">GitHub</label>
               <div class="col-4">
-                <input type="text" class="form-control" id="GitHub" placeholder="<%session.GitHub%>">
+                <input type="text" class="form-control" id="GitHub" placeholder="<%=session.GitHub%>">
               </div>
             </div>
             <div class="form-group row">
               <label class="col-2 col-form-label">个性签名</label>
               <div class="col-4">
-                <input type="text" class="form-control" id="sign" placeholder="<%session.sign%>">
+                <input type="text" class="form-control" id="sign" placeholder="<%=session.sign%>">
               </div>
             </div>
             <div class="form-group row">
@@ -169,7 +169,7 @@
         var city = $("#city").val();
         var GitHub = $("#GitHub").val();
         var sign = $("#sign").val();
-        var data = {
+        var dat = {
           name: name,
           Email: Email,
           weibo: weibo,
@@ -180,10 +180,11 @@
         };
         $.ajax({
           url: '/setting',
-          type: 'post',
-          contentType: "json",
-          data: JSON.stringify(data),
+          type: 'POST',
+          contentType: "application/json",
+          data: JSON.stringify(dat),
           success: function (data, status) {
+           
             $(".set").show();
           },
         });
