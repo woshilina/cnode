@@ -28,4 +28,5 @@ router.post('/onload', koaBody(), async ctx => {
     ctx.redirect('/onload');
   }
 });
+
 module.exports = router;
