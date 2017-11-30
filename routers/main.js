@@ -16,23 +16,13 @@ router.get('/home', async ctx => {
 
   var result = await Topic.findAndCountAll({
     where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
-    order: [[sequelize.literal('createdAt DESC')]]
+    order: [[sequelize.literal('lastreplytime DESC')]]
   });
 
   var AllRow = result.rows;
   var AllCount = result.count;
 
   var Atime = [];
-
-   AllRow.forEach(function(res, index) {
-    let re=await Reply.findById(res['lastid']);
-      if (re) {
-        Atime[index] = moment(re.createdAt).fromNow();
-      } else {
-        Atime[index] = moment(res['createdAt']).fromNow();
-      }
-  });
-
   await ctx.render('/main', {
     session: ctx.session,
     // AllRows: AllRow,
@@ -43,128 +33,56 @@ router.get('/home', async ctx => {
 
 // 导航栏点击获取
 router.get('/home/tab/:tab', async ctx => {
-
-  console.log(ctx.params);
-
   if (ctx.params.tab == 'all') {
-  let resule=  await Topic.findAndCountAll({
+    let resule = await Topic.findAndCountAll({
       where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
-      order: [[sequelize.literal('createdAt DESC')]]
-    });  
-
-  let AllRow = result.rows;
-  let AllCount = result.count;
-  var Atime = [];
-    
-  AllRow.forEach(function(res, index) {
-     let re= await Reply.findById(res['lastid']);    
-        if (re) {
-          Atime[index] = moment(re.createdAt).fromNow();
-        } else {
-          Atime[index] = moment(res['createdAt']).fromNow();
-        }   
+      order: [[sequelize.literal('lastreplytime DESC')]]
     });
-  } else if (ctx.params.tab == 'essence') {
-
-   let result= await Topic.findAndCountAll({
+    let AllRow = result.rows;
+    let AllCount = result.count;
+    var Atime = [];
+  } 
+  else if (ctx.params.tab == 'essence') {
+    let result = await Topic.findAndCountAll({
       where: { clicks: { $gte: 50 } },
-      order: [[sequelize.literal('createdAt DESC')]]
+      order: [[sequelize.literal('lastreplytime DESC')]]
     });
- 
-  let AllRow = result.rows;
-  let AllCount = result.count;
-   
-
-    var Atime = [];
-
-    await AllRow.forEach(function(res, index) {
-      Reply.findById(res['lastid']).then(re => {
-        if (re) {
-          Atime[index] = moment(re.createdAt).fromNow();
-        } else {
-          Atime[index] = moment(res['createdAt']).fromNow();
-        }
-      });
-    });
-  } else if (ctx.params.tab == 'share') {
-   let result= await Topic.findAndCountAll({
+    let AllRow = result.rows;
+    let AllCount = result.count;
+  } 
+  else if (ctx.params.tab == 'share') {
+    let result = await Topic.findAndCountAll({
       where: { tabValue: '分享' },
-      order: [[sequelize.literal('createdAt DESC')]]
+      order: [[sequelize.literal('lastreplytime DESC')]]
     });
-    
-      let AllRow = result.rows;
-      let AllCount = result.count;
-  
-    var Atime = [];
-      AllRow.forEach(function(res, index) {
-      let re=await Reply.findById(res['lastid']);     
-        if (re) {
-          Atime[index] = moment(re.createdAt).fromNow();
-        } else {
-          Atime[index] = moment(res['createdAt']).fromNow();
-        }
-    });
-  } else if (ctx.params.tab == 'ask') {
-   let result= await Topic.findAndCountAll({
+    let AllRow = result.rows;
+    let AllCount = result.count;
+  } 
+  else if (ctx.params.tab == 'ask') {
+    let result = await Topic.findAndCountAll({
       where: { tabValue: '问答' },
-      order: [[sequelize.literal('createdAt DESC')]]
+      order: [[sequelize.literal('lastreplytime DESC')]]
     });
- 
-      let AllRow = result.rows;
-      let AllCount = result.count;
-  
-    var Atime = [];
-
-     AllRow.forEach(function(res, index) {
-
-     let re= await Reply.findById(res['lastid']);
-      if (re) {
-          Atime[index] = moment(re.createdAt).fromNow();
-        } else {
-          Atime[index] = moment(res['createdAt']).fromNow();
-        }     
-    });
-  } else if (ctx.params.tab == 'job') {
-
-    let result= await Topic.findAndCountAll({
-      where: { tabValue: '招聘' },
-      order: [[sequelize.literal('createdAt DESC')]]
-    });
-  
     let AllRow = result.rows;
     let AllCount = result.count;
-  
-    var Atime = [];
-
-     AllRow.forEach(function(res, index) {
-     let re= await Reply.findById(res['lastid']);    
-        if (re) {
-          Atime[index] = moment(re.createdAt).fromNow();
-        } else {
-          Atime[index] = moment(res['createdAt']).fromNow();
-        } 
-    });
-  } else if (ctx.params.tab == 'dev') {
-   let result= await Topic.findAndCountAll({
-      where: { tabValue: '客户端测试' },
-      order: [[sequelize.literal('createdAt DESC')]]
-    });
- 
-    let AllRow = result.rows;
-    let AllCount = result.count;
-     
-    var Atime = [];
-
-     AllRow.forEach(function(res, index) {
-    let re=  await  Reply.findById(res['lastid']);   
-        if (re) {
-          Atime[index] = moment(re.createdAt).fromNow();
-        } else {
-          Atime[index] = moment(res['createdAt']).fromNow();
-        }      
-    });
   }
-  ctx.body = { total: AllCount, topics: AllRow, time: Atime };
+   else if (ctx.params.tab == 'job') {
+    let result = await Topic.findAndCountAll({
+      where: { tabValue: '招聘' },
+      order: [[sequelize.literal('lastreplytime DESC')]]
+    });
+    let AllRow = result.rows;
+    let AllCount = result.count;
+  } 
+  else if (ctx.params.tab == 'dev') {
+    let result = await Topic.findAndCountAll({
+      where: { tabValue: '客户端测试' },
+      order: [[sequelize.literal('lastreplytime DESC')]]
+    });
+    let AllRow = result.rows;
+    const AllCount = result.count;
+  }
+  ctx.body = { total: AllCount, topics: AllRow };
 });
 
 // 退出
@@ -195,8 +113,8 @@ router.post('/setting', koaBody(), async ctx => {
   console.log(set);
   var Id = ctx.session.id;
   var user = await User.findById(Id);
- await user.update(set);
-  ctx.session= user;
+  await user.update(set);
+  ctx.session = user;
   ctx.body = 'success';
 });
 

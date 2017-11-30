@@ -18,12 +18,14 @@ router.get('/topic/create', async ctx => {
 
 //发表文章
 router.post('/topic/create', koaBody(), async ctx => {
+  let date = moment().fromNow();
   var q = {
     tabValue: ctx.request.body.tabValue,
     title: ctx.request.body.title,
     text: ctx.request.body.text,
     userid: ctx.session.id,
-    username: ctx.session.name
+    username: ctx.session.name,
+    lastreplytime: date
   };
   let user = await User.findById(ctx.session.id);
   user.integral += 5;
@@ -47,7 +49,7 @@ router.get('/topic/:id', async (ctx, next) => {
 
   let top = await Topic.findAll({
     where: {
-      userid: res.userid
+      userid: topic.userid
     }
   });
 
@@ -119,10 +121,12 @@ router.get('/topic/:id/edit', async (ctx, next) => {
 //编辑单篇文章
 router.post('/topic/:id/edit', koaBody(), async ctx => {
   var Id = ctx.params.id;
+  let date = moment().fromNow();
   var q = {
     tabValue: ctx.request.body.tabValue,
     title: ctx.request.body.title,
-    text: ctx.request.body.text
+    text: ctx.request.body.text,
+    lastreplytime: date
   };
   let topic = await Topic.findById(Id);
   topic.update(q);
@@ -133,21 +137,20 @@ router.post('/topic/:id/edit', koaBody(), async ctx => {
 router.post('/topic/:id', koaBody(), async (ctx, next) => {
   console.log(ctx.request.body);
   var cont = ctx.request.body.content;
-  var re = {
+  var res = {
     name: ctx.session.name,
     content: cont,
     topicId: ctx.params.id
   };
-  await Reply.create(re);
+  await Reply.create(res);
   let rep = await Reply.findAll();
-  let lastid = rep[rep.length - 1].id;
-
-  let topic = await Topic.findById(re.topicId);
+  let topic = await Topic.findById(res.topicId);
 
   var re = topic.replies + 1;
+  let date = moment().fromNow();
   topic.update({
     replies: re,
-    lastId: lastid
+    lastreplytime: date
   });
   ctx.body = {
     result: 'success'
@@ -213,6 +216,9 @@ router.post('/reply/:id/edit', koaBody(), async ctx => {
   var text = ctx.request.body.text;
   let reply = await Reply.findById(id);
   reply.update({ content: text });
+  let topic=await Topic.findById(id);
+  let date = moment().fromNow();
+  topic.update({lastreplytime:date})
   ctx.body = reply.topicId;
 });
 
