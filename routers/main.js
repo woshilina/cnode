@@ -115,7 +115,7 @@ router.post('/setting', koaBody(), async ctx => {
   var user = await User.findById(Id);
   await user.update(set);
   ctx.session = user;
-  ctx.body = 'success';
+  ctx.body = {'sign':set.sign};
 });
 
 // 更改密码

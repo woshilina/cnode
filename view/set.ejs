@@ -184,7 +184,8 @@
           contentType: "application/json",
           data: JSON.stringify(dat),
           success: function (data, status) {
-           
+            $('.signature').empty();
+            $('.signature').text(data.sign);
             $(".set").show();
           },
         });

@@ -187,9 +187,7 @@ router.post('/topic/:id/unlike', koaBody(), async ctx => {
   });
 
   like.destroy();
-
   let reply = await Reply.findById(Id);
-
   reply.likes--;
   reply.update({
     likes: reply.likes
