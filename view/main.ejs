@@ -1,7 +1,7 @@
 <%- include header%>
   <div class="d-flex justify-content-center my-3 ">
 
-    <div class="col-8 card p-0 mr-3  border-0">
+    <div class="col-8 card p-0 mr-3  border-0 d-flex flex-column">
       <div class="card-header">
         <button type="button" class="btn btn-success tab" value="all">全部</button>
         <button type="button" class="btn btn-success tab" value="essence">精华</button>
@@ -39,22 +39,24 @@
           </div>
           <%})%>
       </div>
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-              <span class="sr-only">Previous</span>
-            </a>
-          </li>
-          <li class="page-item" id="next">
-            <a class="page-link" href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-              <span class="sr-only">Next</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <div class="mt-auto">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li class="page-item" id="next">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
 
 

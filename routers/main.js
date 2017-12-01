@@ -1,3 +1,4 @@
+
 //引入数据库的模板topic.ejs
 
 const Topic = require('../database/models/topic');
