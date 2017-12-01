@@ -17,21 +17,78 @@ router.get('/home', async ctx => {
   // 全部
   for (var i of tres) {
     var time = i.lastreplytime;
-    await i.update({ lastreplyfromnow: moment(time).fromNow() });
+    await i.update({
+      lastreplyfromnow: moment(time).fromNow()
+    });
   }
   var result = await Topic.findAndCountAll({
-    where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
-    order: [[sequelize.literal('lastreplytime DESC')]]
+    where: {
+      $or: [{
+        tabValue: '分享'
+      }, {
+        tabValue: '问答'
+      }]
+    },
+    order: [
+      [sequelize.literal('lastreplytime DESC')]
+    ]
   });
-
-  var AllRow = result.rows;
+ 
+  var AllRows = result.rows;
   var AllCount = result.count;
-  ctx.body={total:AllCount};
+  var AllRow = page(1,AllCount,AllRows);
+
   await ctx.render('/main', {
     session: ctx.session,
     topics: AllRow
   });
- 
+});
+
+// 每页话题获取函数
+
+function  page(page,AllCount,AllRows){
+  var onepagecount = 5;
+  var AllRow = [];
+  if (AllCount >= onepagecount) {
+    for (var j = page; j <= onepagecount*page; j++) {
+      AllRow.push(AllRows[j-1]);
+    }
+  }else{
+    for (var j = 0; j < AllCount; j++) {
+      AllRow.push(AllRows[j]);
+    }
+  };
+  return AllRow;
+};
+
+// 首页分页按钮
+
+router.get('/home/all', async ctx => {
+  var tres = await Topic.findAll();
+  // 全部
+  for (var i of tres) {
+    var time = i.lastreplytime;
+    await i.update({
+      lastreplyfromnow: moment(time).fromNow()
+    });
+  }
+  var result = await Topic.findAndCountAll({
+    where: {
+      $or: [{
+        tabValue: '分享'
+      }, {
+        tabValue: '问答'
+      }]
+    },
+    order: [
+      [sequelize.literal('lastreplytime DESC')]
+    ]
+  });
+  var AllRow = result.rows;
+  var AllCount = result.count;
+  ctx.body = {
+    total: AllCount
+  };
 });
 
 // 导航栏点击获取
@@ -39,55 +96,123 @@ router.get('/home', async ctx => {
 router.get('/home/tab/:tab', async ctx => {
   var tres = await Topic.findAll();
   var AllCount;
-  var AllRow;
+  var AllRows;
+  var AllRow=[];
+
+  // 更新最后回复时间距现在多久
+
   for (var i of tres) {
     var time = i.lastreplytime;
-    await i.update({ lastreplyfromnow: moment(time).fromNow() });
+    await i.update({
+      lastreplyfromnow: moment(time).fromNow()
+    });
   }
+
+  // 点击全部时首页的显示
+
   if (ctx.params.tab == 'all') {
     let result = await Topic.findAndCountAll({
-      where: { $or: [{ tabValue: '分享' }, { tabValue: '问答' }] },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      where: {
+        $or: [{
+          tabValue: '分享'
+        }, {
+          tabValue: '问答'
+        }]
+      },
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
-    AllRow = result.rows;
+    AllRows = result.rows;
     AllCount = result.count;
-  } else if (ctx.params.tab == 'essence') {
+    AllRow= page(1,AllCount,AllRows);
+  } 
+  
+  // 点击精华时首页的显示
+
+  else if (ctx.params.tab == 'essence') {
     let result = await Topic.findAndCountAll({
-      where: { clicks: { $gte: 50 } },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      where: {
+        clicks: {
+          $gte: 50
+        }
+      },
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
-    AllRow = result.rows;
+    AllRows = result.rows;
     AllCount = result.count;
-  } else if (ctx.params.tab == 'share') {
+    AllRow= page(1,AllCount,AllRows);
+  } 
+
+  // 点击分享时首页的显示
+
+  else if (ctx.params.tab == 'share') {
     let result = await Topic.findAndCountAll({
-      where: { tabValue: '分享' },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      where: {
+        tabValue: '分享'
+      },
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
-    AllRow = result.rows;
+    AllRows = result.rows;
     AllCount = result.count;
-  } else if (ctx.params.tab == 'ask') {
+    AllRow= page(1,AllCount,AllRows);
+  } 
+  
+  // 点击问答时首页的显示
+
+  else if (ctx.params.tab == 'ask') {
     let result = await Topic.findAndCountAll({
-      where: { tabValue: '问答' },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      where: {
+        tabValue: '问答'
+      },
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
-    AllRow = result.rows;
+    AllRows = result.rows;
     AllCount = result.count;
-  } else if (ctx.params.tab == 'job') {
+    AllRow= page(1,AllCount,AllRows);
+  } 
+  
+  // 点击招聘时首页的显示
+
+  else if (ctx.params.tab == 'job') {
     let result = await Topic.findAndCountAll({
-      where: { tabValue: '招聘' },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      where: {
+        tabValue: '招聘'
+      },
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
-    AllRow = result.rows;
+    AllRows = result.rows;
     AllCount = result.count;
-  } else if (ctx.params.tab == 'dev') {
-    let result = await Topic.findAndCountAll({
-      where: { tabValue: '客户端测试' },
-      order: [[sequelize.literal('lastreplytime DESC')]]
-    });
-    AllRow = result.rows;
-    AllCount = result.count;
+    AllRow= page(1,AllCount,AllRows);
   }
-  ctx.body = { total: AllCount, topics: AllRow };
+  
+  // 点击客户端测试时首页的显示
+
+  else if (ctx.params.tab == 'dev') {
+    let result = await Topic.findAndCountAll({
+      where: {
+        tabValue: '客户端测试'
+      },
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
+    });
+    AllRows = result.rows;
+    AllCount = result.count;
+    AllRow= page(1,AllCount,AllRows);
+  }
+  ctx.body = {
+    total: AllCount,
+    topics: AllRow
+  };
   console.log(AllCount);
 });
 
@@ -95,7 +220,9 @@ router.get('/home/tab/:tab', async ctx => {
 
 router.get('/signout', async ctx => {
   ctx.session = null;
-  ctx.body = { result: 'true' };
+  ctx.body = {
+    result: 'true'
+  };
 });
 
 // 设置页
@@ -123,8 +250,12 @@ router.post('/setting', koaBody(), async ctx => {
   var Id = ctx.session.id;
   var user = await User.findById(Id);
   await user.update(set);
-  ctx.session.sign =set.sign;
-  ctx.body = { sign: set.sign };
+
+  // 更新session的签名
+  ctx.session.sign = set.sign;
+  ctx.body = {
+    sign: set.sign
+  };
 });
 
 // 更改密码
