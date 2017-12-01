@@ -1,4 +1,3 @@
-
 //引入数据库的模板topic.ejs
 
 const Topic = require('../database/models/topic');
@@ -24,20 +23,21 @@ router.get('/home', async ctx => {
   }
   var result = await Topic.findAndCountAll({
     where: {
-      $or: [{
-        tabValue: '分享'
-      }, {
-        tabValue: '问答'
-      }]
+      $or: [
+        {
+          tabValue: '分享'
+        },
+        {
+          tabValue: '问答'
+        }
+      ]
     },
-    order: [
-      [sequelize.literal('lastreplytime DESC')]
-    ]
+    order: [[sequelize.literal('lastreplytime DESC')]]
   });
- 
+
   var AllRows = result.rows;
   var AllCount = result.count;
-  var AllRow = page(1,AllCount,AllRows);
+  var AllRow = page(1, AllCount, AllRows);
 
   await ctx.render('/main', {
     session: ctx.session,
@@ -47,20 +47,20 @@ router.get('/home', async ctx => {
 
 // 每页话题获取函数
 
-function  page(page,AllCount,AllRows){
-  var onepagecount = 5;
+function page(page, AllCount, AllRows) {
+  var one = 5; //设置每页最多多少条数据
   var AllRow = [];
-  if (AllCount >= onepagecount) {
-    for (var j = page; j <= onepagecount*page; j++) {
-      AllRow.push(AllRows[j-1]);
-    }
-  }else{
-    for (var j = 0; j < AllCount; j++) {
+  if (AllCount >= one * page) {
+    for (var j = (page - 1) * one; j < one * page; j++) {
       AllRow.push(AllRows[j]);
     }
-  };
+  } else {
+    for (var j = (page - 1) * one; j < AllCount; j++) {
+      AllRow.push(AllRows[j]);
+    }
+  }
   return AllRow;
-};
+}
 
 // 首页分页按钮
 
@@ -75,15 +75,16 @@ router.get('/home/all', async ctx => {
   }
   var result = await Topic.findAndCountAll({
     where: {
-      $or: [{
-        tabValue: '分享'
-      }, {
-        tabValue: '问答'
-      }]
+      $or: [
+        {
+          tabValue: '分享'
+        },
+        {
+          tabValue: '问答'
+        }
+      ]
     },
-    order: [
-      [sequelize.literal('lastreplytime DESC')]
-    ]
+    order: [[sequelize.literal('lastreplytime DESC')]]
   });
   var AllRow = result.rows;
   var AllCount = result.count;
@@ -94,11 +95,12 @@ router.get('/home/all', async ctx => {
 
 // 导航栏点击获取
 
-router.get('/home/tab/:tab', async ctx => {
+router.get('/home/tab/:tab/page/:page', async ctx => {
   var tres = await Topic.findAll();
+  var p = ctx.params.page;
   var AllCount;
   var AllRows;
-  var AllRow=[];
+  var AllRow = [];
 
   // 更新最后回复时间距现在多久
 
@@ -109,112 +111,92 @@ router.get('/home/tab/:tab', async ctx => {
     });
   }
 
-  // 点击全部时首页的显示
+  // 点击全部时的显示
 
   if (ctx.params.tab == 'all') {
     let result = await Topic.findAndCountAll({
       where: {
-        $or: [{
-          tabValue: '分享'
-        }, {
-          tabValue: '问答'
-        }]
+        $or: [
+          {
+            tabValue: '分享'
+          },
+          {
+            tabValue: '问答'
+          }
+        ]
       },
-      order: [
-        [sequelize.literal('lastreplytime DESC')]
-      ]
+      order: [[sequelize.literal('lastreplytime DESC')]]
     });
     AllRows = result.rows;
     AllCount = result.count;
-    AllRow= page(1,AllCount,AllRows);
-  } 
-  
-  // 点击精华时首页的显示
+    AllRow = page(p, AllCount, AllRows);
+  } else if (ctx.params.tab == 'essence') {
+    // 点击精华时的显示
 
-  else if (ctx.params.tab == 'essence') {
     let result = await Topic.findAndCountAll({
       where: {
         clicks: {
           $gte: 50
         }
       },
-      order: [
-        [sequelize.literal('lastreplytime DESC')]
-      ]
+      order: [[sequelize.literal('lastreplytime DESC')]]
     });
     AllRows = result.rows;
     AllCount = result.count;
-    AllRow= page(1,AllCount,AllRows);
-  } 
+    AllRow = page(p, AllCount, AllRows);
+  } else if (ctx.params.tab == 'share') {
+    // 点击分享时的显示
 
-  // 点击分享时首页的显示
-
-  else if (ctx.params.tab == 'share') {
     let result = await Topic.findAndCountAll({
       where: {
         tabValue: '分享'
       },
-      order: [
-        [sequelize.literal('lastreplytime DESC')]
-      ]
+      order: [[sequelize.literal('lastreplytime DESC')]]
     });
     AllRows = result.rows;
     AllCount = result.count;
-    AllRow= page(1,AllCount,AllRows);
-  } 
-  
-  // 点击问答时首页的显示
+    AllRow = page(p, AllCount, AllRows);
+  } else if (ctx.params.tab == 'ask') {
+    // 点击问答时的显示
 
-  else if (ctx.params.tab == 'ask') {
     let result = await Topic.findAndCountAll({
       where: {
         tabValue: '问答'
       },
-      order: [
-        [sequelize.literal('lastreplytime DESC')]
-      ]
+      order: [[sequelize.literal('lastreplytime DESC')]]
     });
     AllRows = result.rows;
     AllCount = result.count;
-    AllRow= page(1,AllCount,AllRows);
-  } 
-  
-  // 点击招聘时首页的显示
+    AllRow = page(p, AllCount, AllRows);
+  } else if (ctx.params.tab == 'job') {
+    // 点击招聘时的显示
 
-  else if (ctx.params.tab == 'job') {
     let result = await Topic.findAndCountAll({
       where: {
         tabValue: '招聘'
       },
-      order: [
-        [sequelize.literal('lastreplytime DESC')]
-      ]
+      order: [[sequelize.literal('lastreplytime DESC')]]
     });
     AllRows = result.rows;
     AllCount = result.count;
-    AllRow= page(1,AllCount,AllRows);
-  }
-  
-  // 点击客户端测试时首页的显示
+    AllRow = page(p, AllCount, AllRows);
+  } else if (ctx.params.tab == 'dev') {
+    // 点击客户端测试时的显示
 
-  else if (ctx.params.tab == 'dev') {
     let result = await Topic.findAndCountAll({
       where: {
         tabValue: '客户端测试'
       },
-      order: [
-        [sequelize.literal('lastreplytime DESC')]
-      ]
+      order: [[sequelize.literal('lastreplytime DESC')]]
     });
     AllRows = result.rows;
     AllCount = result.count;
-    AllRow= page(1,AllCount,AllRows);
+    AllRow = page(p, AllCount, AllRows);
   }
   ctx.body = {
     total: AllCount,
     topics: AllRow
   };
-  console.log(AllCount);
 });
 
 // 退出

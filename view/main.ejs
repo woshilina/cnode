@@ -42,18 +42,6 @@
       <div class="mt-auto">
         <nav aria-label="Page navigation example">
           <ul class="pagination">
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-              </a>
-            </li>
-            <li class="page-item" id="next">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-              </a>
-            </li>
           </ul>
         </nav>
       </div>
@@ -145,6 +133,7 @@
   </div>
   <script>
     $(document).ready(function () {
+
       // 设置首页分页按钮
 
       $.ajax({
@@ -167,9 +156,9 @@
       $(".tab").each(function () {
         $(this).on('click', function () {
           var value = $(this).attr('value');
-          var page = 1;
+          var page=1;
           $.ajax({
-            url: '/home/tab/' + value,
+            url: '/home/tab/' + value+'/page/'+page,
             type: "GET",
             cache: false,
             dataType: 'json',
@@ -188,8 +177,19 @@
                   item.lastreplyfromnow + '</small></div></div></div></div>'
                 );
               });
+
+              // 设置页码栏
               $('.pagination').empty();
               paging(total);
+
+              // 页码栏点击获取内容
+              $('a[class="page-link"]').each(function () {
+                $(this).on('click', function () {
+                  var page = $(this).text();
+                  getpagetext(value, page);
+                })
+              })
+
             },
             error: function () {
               alert('异常');
@@ -198,10 +198,10 @@
         })
       })
 
+      // 设置各导航按钮首页页码栏函数
+
       function paging(total) {
-        console.log(total);
         var page = (total % 5 == 0) ? (total / 5) : (Math.ceil(total / 5));
-        console.log(page);
         var html =
           '<li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>';
         if (page <= 5 && page >= 1) {
@@ -225,7 +225,33 @@
           $('.pagination').html(html);
         }
       }
-      var currentpage = 1;
+
+      function getpagetext(value, page) {
+        $.ajax({
+          url: '/home/tab/' + value + '/page/' + page,
+          type: "GET",
+          cache: false,
+          dataType: 'json',
+          success: function (msg) {
+            $('#text').empty();
+            $.each(msg.topics, function (index, item) {
+              $('#text').append(
+                '<div class="list-group-item list-group-item-action" id=' + item.id + '>' +
+                '<div class="media"><img class="mr-3" src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image"><div class="media-body align-self-center d-flex  justify-content-between"><div>' +
+                item.replies + '/<small>' + item.clicks +
+                '</small><span class="badge badge-secondary">' + item.tabValue +
+                '</span><a href="/topic/' + item.id + '">' + item.title +
+                '</a>' +
+                '</div><div class="col-2 d-flex  justify-content-between"><img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image"><small class="align-self-center">' +
+                item.lastreplyfromnow + '</small></div></div></div></div>'
+              );
+            });
+          },
+          error: function () {
+            alert('异常');
+          }
+        });
+      }
 
 
     })
