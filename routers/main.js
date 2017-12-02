@@ -273,4 +273,50 @@ router.post('/setting/pass', koaBody(), async ctx => {
   });
 });
 
+// 个人主页
+router.get('/user/:name', async ctx => {
+  var username = ctx.params.name;
+
+  // 从数据库获取用户信息
+  let user = await User.findOne({ where: { name: username } });
+  var signtime = user.createdAt;
+  await user.update({ signfromnow: moment(signtime).fromNow() });
+
+  // 从数据库获取用户创建的话题 并按创建时间排序(时间倒序)
+  let result = await Topic.findAndCountAll({
+    where: { username: username },
+    order: [[sequelize.literal('createdAt DESC')]]
+  });
+  var count = result.count;
+  var topics = result.rows;
+
+  // 更新最后回复时间
+  for (var i of topics) {
+    var time = i.lastreplytime;
+    await i.update({
+      lastreplyfromnow: moment(time).fromNow()
+    });
+  }
+
+  // 从数据库获得用户的评论,按时间倒序
+  let reply = await Reply.findAll({
+    where: { name: username },
+    order: [[sequelize.literal('createdAt DESC')]]
+  });
+
+  // 根据用户评论获取相关话题   ?如何去重
+  var parttopics = [];
+  for (var i of reply) {
+    var t = await Topic.findOne({ where: { id: i.topicId } });
+    parttopics.push(t);
+  }
+  var partcount = parttopics.length;
+  await ctx.render('/spage', {
+    session: ctx.session,
+    user: user,
+    topics: topics,
+    parttopics: parttopics
+  });
+});
+
 module.exports = router;

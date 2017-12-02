@@ -9,12 +9,13 @@ const User = sequelize.define('user', {
   // HeadPortriait: { type: Sequelize.BLOB, allowNULL: true },//头像
   integral: { type: Sequelize.INTEGER, allowNULL: false, defaultValue: 0 }, //积分
   TopicCloNum: { type: Sequelize.INTEGER, allowNULL: false, defaultValue: 0 }, //话题收藏个数
-  Email:{ type: Sequelize.STRING, allowNULL: true },
-  city:{ type: Sequelize.STRING, allowNULL: true },
-  sign:{ type: Sequelize.STRING, allowNULL: true },
-  web:{ type: Sequelize.STRING, allowNULL: true },
-  weibo:{ type: Sequelize.STRING, allowNULL: true },
-  GitHub: { type: Sequelize.STRING, allowNULL: true } //GitHub 链接
+  Email: { type: Sequelize.STRING, allowNULL: true },
+  city: { type: Sequelize.STRING, allowNULL: true },
+  sign: { type: Sequelize.STRING, allowNULL: true },
+  web: { type: Sequelize.STRING, allowNULL: true },
+  weibo: { type: Sequelize.STRING, allowNULL: true },
+  GitHub: { type: Sequelize.STRING, allowNULL: true }, //GitHub 链接
+  signfromnow: { type: Sequelize.STRING, allowNULL: false,defaultValue:Sequelize.now} //注册时间距现在的时间
 });
 
 module.exports = User;

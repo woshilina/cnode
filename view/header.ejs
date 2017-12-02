@@ -1,51 +1,91 @@
-
 <div id="header" class="bg-dark px-5 mb-3">
   <img src="/images/cnodejs_light.svg" width="100" height="50">
   <input class="ml-2">
-  
+
   <ul class="nav float-right text-white">
-      <%if(!session||!session.id){%>
-    <li class="nav-item">
-      <a class="nav-link  text-white" href="/home"><small>首页</small></a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link  text-white" href=""><small>新手入门</small></a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link  text-white" href=""><small>API</small></a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link  text-white" href=""><small>关于</small></a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link  text-white" href="/signin"><small>注册</small></a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link  text-white" href="/onload"><small>登陆</small></a>
-    </li>
-    <%}%>
-    <%if(session&&session.id){%>
+    <%if(!session||!session.id){%>
       <li class="nav-item">
-          <a class="nav-link  text-white" href="/home"><small>首页</small></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link  text-white" href=""><small>未读消息</small></a>
-          </li>
-        <li class="nav-item">
-          <a class="nav-link  text-white" href=""><small>新手入门</small></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link  text-white" href=""><small>API</small></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link  text-white" href=""><small>关于</small></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link  text-white" href="/setting"><small>设置</small></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link  text-white" href="/signout"><small>退出</small></a>
-        </li>
+        <a class="nav-link  text-white" href="/home">
+          <small>首页</small>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link  text-white" href="">
+          <small>新手入门</small>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link  text-white" href="">
+          <small>API</small>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link  text-white" href="">
+          <small>关于</small>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link  text-white" href="/signin">
+          <small>注册</small>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link  text-white" href="/onload">
+          <small>登陆</small>
+        </a>
+      </li>
       <%}%>
+        <%if(session&&session.id){%>
+          <li class="nav-item">
+            <a class="nav-link  text-white" href="/home">
+              <small>首页</small>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link  text-white" href="">
+              <small>未读消息</small>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link  text-white" href="">
+              <small>新手入门</small>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link  text-white" href="">
+              <small>API</small>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link  text-white" href="">
+              <small>关于</small>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link  text-white" href="/setting">
+              <small>设置</small>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link  text-white signout">
+              <small>退出</small>
+            </a>
+          </li>
+          <%}%>
   </ul>
 </div>
+<script>
+  $('.signout').on('click', function () {
+    $.ajax({
+      url: '/signout',
+      type: 'GET',
+      dataType: 'json',
+      success: function (msg) {
+        location.href = "/home"
+      },
+      error: function () {
+        alert('异常');
+      }
+    })
+  });
+</script>
