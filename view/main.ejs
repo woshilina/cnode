@@ -165,8 +165,8 @@
       $(".tab").each(function () {
         $(this).on('click', function () {
           var value = $(this).attr('value');
-          $(this).siblings().attr('class','btn btn-light tab')
-          $(this).attr('class','btn btn-success tab');
+          $(this).siblings().attr('class', 'btn btn-light tab')
+          $(this).attr('class', 'btn btn-success tab');
           var page = 1;
           $.ajax({
             url: '/home/tab/' + value + '/page/' + page,
@@ -214,6 +214,8 @@
         $('.page-link').each(function () {
           $(this).on('click', function () {
             console.log($(this));
+            $(this).css('color', 'green');
+            $(this).parent().siblings().find('a').css('color','blue');
             if ($(this).attr('aria-label') == 'Previous') {
               if (currentpage == 1) {
                 $('.hint').text('已经是第一页了');
@@ -241,9 +243,9 @@
         })
       };
 
-      // 页码点击时样式的切换
+      // 多页码时点击时样式的切换
 
-      function styleswitch(){
+      function styleswitch() {
 
       }
       // 设置各导航按钮首页页码栏函数
