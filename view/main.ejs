@@ -43,10 +43,13 @@
         <nav aria-label="Page navigation example">
           <ul class="pagination">
           </ul>
+          <span class="tabname" style="display:none"></span>
+          <span class="totalpage" style="display:none"></span>
+          <span class="hint"></span>
         </nav>
+
       </div>
     </div>
-
 
     <div class="col-2.5">
       <% if(!session||!session.id){ %>
@@ -142,9 +145,15 @@
         cache: false,
         dataType: 'json',
         success: function (msg) {
-          total = msg.total;
+          var total = msg.total;
+          var totalpage = (total % 5 == 0) ? (total / 5) : (Math.ceil(total / 5));
+          console.log(totalpage);
           $('.pagination').empty();
-          paging(total);
+          paging(totalpage);
+          $('.tabname').text('all');
+          $('.totalpage').text(totalpage);
+          var currentpage = 1;
+          pageswitch(currentpage);
         },
         error: function () {
           alert('异常');
@@ -156,14 +165,17 @@
       $(".tab").each(function () {
         $(this).on('click', function () {
           var value = $(this).attr('value');
-          var page=1;
+          var page = 1;
           $.ajax({
-            url: '/home/tab/' + value+'/page/'+page,
+            url: '/home/tab/' + value + '/page/' + page,
             type: "GET",
             cache: false,
             dataType: 'json',
             success: function (msg) {
-              total = msg.total;
+              var total = msg.total;
+              var totalpage = (total % 5 == 0) ? (total / 5) : (Math.ceil(total / 5));
+              var tabname = $('.tabname').text(value);
+              $('.totalpage').text(totalpage);
               $('#text').empty();
               $.each(msg.topics, function (index, item) {
                 $('#text').append(
@@ -180,43 +192,71 @@
 
               // 设置页码栏
               $('.pagination').empty();
-              paging(total);
+              paging(totalpage);
 
-              // 页码栏点击获取内容
-              $('a[class="page-link"]').each(function () {
-                $(this).on('click', function () {
-                  var page = $(this).text();
-                  getpagetext(value, page);
-                })
-              })
-
+              // 页码切换
+              var currentpage = 1;
+              pageswitch(currentpage);
             },
             error: function () {
               alert('异常');
             }
           })
         })
-      })
+      });
+
+      // 页码切换
+      function pageswitch(currentpage) {
+        var value = $('.tabname').text();
+        var totalpage = $('.totalpage').text();
+        $('.page-link').each(function () {
+          $(this).on('click', function () {
+            console.log($(this));
+            if ($(this).attr('aria-label') == 'Previous') {
+              if (currentpage == 1) {
+                $('.hint').text('已经是第一页了');
+              } else {
+                $('.hint').empty()
+                currentpage -= 1;
+                getpagetext(value, currentpage);
+              }
+            } else if ($(this).attr('aria-label') == 'Next') {
+              if (currentpage == totalpage) {
+                $('.hint').text('已经是最后一页了');
+              } else {
+                $('.hint').empty();
+                currentpage += 1;
+                getpagetext(value, currentpage);
+              }
+            } else {
+              $('.hint').empty()
+              var page = $(this).text();
+              console.log(page);
+              getpagetext(value, page);
+              currentpage = page;
+            }
+          })
+        })
+      };
 
       // 设置各导航按钮首页页码栏函数
 
-      function paging(total) {
-        var page = (total % 5 == 0) ? (total / 5) : (Math.ceil(total / 5));
+      function paging(totalpage) {
         var html =
           '<li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>';
-        if (page <= 5 && page >= 1) {
-          for (var i = 1; i <= page; i++) {
+        if (totalpage <= 5 && totalpage >= 1) {
+          for (var i = 1; i <= totalpage; i++) {
             html += '<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>';
           };
           html +=
             '<li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>';
           $('.pagination').html(html);
-        } else if (page >= 6) {
+        } else if (totalpage >= 6) {
           for (var i = 1; i <= 5; i++) {
             html += '<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>';
           };
           html += '<li class="page-item"><a class="page-link" href="#">' + '...' + '</a></li>';
-          for (var i = 6; i <= page; i++) {
+          for (var i = 6; i <= totalpage; i++) {
             html += '<li class="page-item" style="display:none"><a class="page-link" href="#">' + i +
               '</a></li>';
           };
@@ -225,6 +265,8 @@
           $('.pagination').html(html);
         }
       }
+
+      // 获取某导航下某页码的内容函数
 
       function getpagetext(value, page) {
         $.ajax({
