@@ -4,11 +4,11 @@
     <div class="col-8 card p-0 mr-3  border-0 d-flex flex-column">
       <div class="card-header">
         <button type="button" class="btn btn-success tab" value="all">全部</button>
-        <button type="button" class="btn btn-success tab" value="essence">精华</button>
-        <button type="button" class="btn btn-success tab" value="share">分享</button>
-        <button type="button" class="btn btn-success tab" value="ask">问答</button>
-        <button type="button" class="btn btn-success tab" value="job">招聘</button>
-        <button type="button" class="btn btn-success tab" value="dev">客户端测试</button>
+        <button type="button" class="btn btn-light tab" value="essence">精华</button>
+        <button type="button" class="btn btn-light tab" value="share">分享</button>
+        <button type="button" class="btn btn-light tab" value="ask">问答</button>
+        <button type="button" class="btn btn-light tab" value="job">招聘</button>
+        <button type="button" class="btn btn-light tab" value="dev">客户端测试</button>
       </div>
       <div id="text">
         <%topics.forEach(function(res,index){%>
@@ -165,6 +165,8 @@
       $(".tab").each(function () {
         $(this).on('click', function () {
           var value = $(this).attr('value');
+          $(this).siblings().attr('class','btn btn-light tab')
+          $(this).attr('class','btn btn-success tab');
           var page = 1;
           $.ajax({
             url: '/home/tab/' + value + '/page/' + page,
@@ -205,7 +207,7 @@
         })
       });
 
-      // 页码切换
+      // 页码切换函数
       function pageswitch(currentpage) {
         var value = $('.tabname').text();
         var totalpage = $('.totalpage').text();
@@ -239,6 +241,11 @@
         })
       };
 
+      // 页码点击时样式的切换
+
+      function styleswitch(){
+
+      }
       // 设置各导航按钮首页页码栏函数
 
       function paging(totalpage) {
