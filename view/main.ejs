@@ -145,8 +145,7 @@
         cache: false,
         dataType: 'json',
         success: function (msg) {
-          var total = msg.total;
-          var totalpage = (total % 5 == 0) ? (total / 5) : (Math.ceil(total / 5));
+          var totalpage = msg.total;
           console.log(totalpage);
           $('.pagination').empty();
           paging(totalpage);
@@ -174,11 +173,11 @@
             cache: false,
             dataType: 'json',
             success: function (msg) {
-              var total = msg.total;
-              var totalpage = (total % 5 == 0) ? (total / 5) : (Math.ceil(total / 5));
+              var totalpage = msg.total;
               var tabname = $('.tabname').text(value);
               $('.totalpage').text(totalpage);
               $('#text').empty();
+              $('.hint').empty();
               $.each(msg.topics, function (index, item) {
                 $('#text').append(
                   '<div class="list-group-item list-group-item-action" id=' + item.id + '>' +
@@ -215,13 +214,14 @@
           $(this).on('click', function () {
             console.log($(this));
             $(this).css('color', 'green');
-            $(this).parent().siblings().find('a').css('color','blue');
+            $(this).parent().siblings().find('a').css('color', 'blue');
             if ($(this).attr('aria-label') == 'Previous') {
               if (currentpage == 1) {
                 $('.hint').text('已经是第一页了');
               } else {
-                $('.hint').empty()
+                $('.hint').empty();
                 currentpage -= 1;
+                styleswitch(totalpage, currentpage);
                 getpagetext(value, currentpage);
               }
             } else if ($(this).attr('aria-label') == 'Next') {
@@ -230,14 +230,18 @@
               } else {
                 $('.hint').empty();
                 currentpage += 1;
+                styleswitch(totalpage, currentpage);
                 getpagetext(value, currentpage);
               }
+            } else if ($(this).text() === '...') {
+              $('.hint').empty();
             } else {
-              $('.hint').empty()
+              $('.hint').empty();
               var page = $(this).text();
               console.log(page);
+              currentpage = parseInt(page);
+              styleswitch(totalpage, currentpage);
               getpagetext(value, page);
-              currentpage = page;
             }
           })
         })
@@ -245,30 +249,79 @@
 
       // 多页码时点击时样式的切换
 
-      function styleswitch() {
-
+      function styleswitch(totalpage, page) {
+        if (totalpage >= 6) {
+           
+           if (totalpage - page == 0 && page > 5) {
+            $('.page-link').eq(1).text('...');
+            $('.page-link').eq(2).text(page - 4);
+            $('.page-link').eq(3).text(page - 3);
+            $('.page-link').eq(4).text(page - 2);
+            $('.page-link').eq(5).text(page - 1);
+            $('.page-link').eq(6).text(page);
+            $('.page-link').eq(6).css('color','green');
+            $('.page-link').eq(6).parent().siblings().find('a').css('color','blue');
+            $('.page-link').eq(7).hide();
+          } else if (totalpage - page == 1 && page > 4) {
+            $('.page-link').eq(1).text('...');
+            $('.page-link').eq(2).text(page - 3);
+            $('.page-link').eq(3).text(page - 2);
+            $('.page-link').eq(4).text(page - 1);
+            $('.page-link').eq(5).text(page);
+            $('.page-link').eq(5).css('color','green');
+            $('.page-link').eq(5).parent().siblings().find('a').css('color','blue');
+            $('.page-link').eq(6).text(page + 1);
+            $('.page-link').eq(7).hide();
+          } else if (totalpage - page == 2 && page > 3) {
+            $('.page-link').eq(1).text('...');
+            $('.page-link').eq(2).text(page - 2);
+            $('.page-link').eq(3).text(page - 1);
+            $('.page-link').eq(4).text(page);
+            $('.page-link').eq(4).css('color','green');
+            $('.page-link').eq(4).parent().siblings().find('a').css('color','blue');
+            $('.page-link').eq(5).text(page + 1);
+            $('.page-link').eq(6).text(page + 2);
+            $('.page-link').eq(7).hide();
+          } else if (totalpage - page > 2 && page > 3) {
+            $('.page-link').eq(1).text('...');
+            $('.page-link').eq(2).text(page - 2);
+            $('.page-link').eq(3).text(page - 1);
+            $('.page-link').eq(4).text(page);
+            $('.page-link').eq(4).css('color','green');
+            $('.page-link').eq(4).parent().siblings().find('a').css('color','blue');
+            $('.page-link').eq(5).text(page + 1);
+            $('.page-link').eq(6).text(page + 2);
+            $('.page-link').eq(7).text('...');
+            $('.page-link').eq(7).show();
+          }else if(page<4){
+            $('.page-link').eq(1).text(1);
+            $('.page-link').eq(2).text(2);
+            $('.page-link').eq(3).text(3);
+            $('.page-link').eq(4).text(4);
+            $('.page-link').eq(5).text(5);
+            $('.page-link').eq(page).css('color','green');
+            $('.page-link').eq(page).parent().siblings().find('a').css('color','blue');
+            $('.page-link').eq(7).show();
+          }
+        }
       }
       // 设置各导航按钮首页页码栏函数
 
       function paging(totalpage) {
         var html =
           '<li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>';
-        if (totalpage <= 5 && totalpage >= 1) {
+        if (totalpage <= 6 && totalpage >= 1) {
           for (var i = 1; i <= totalpage; i++) {
             html += '<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>';
           };
           html +=
             '<li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>';
           $('.pagination').html(html);
-        } else if (totalpage >= 6) {
-          for (var i = 1; i <= 5; i++) {
+        } else if (totalpage >= 7) {
+          for (var i = 1; i <= 6; i++) {
             html += '<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>';
           };
           html += '<li class="page-item"><a class="page-link" href="#">' + '...' + '</a></li>';
-          for (var i = 6; i <= totalpage; i++) {
-            html += '<li class="page-item" style="display:none"><a class="page-link" href="#">' + i +
-              '</a></li>';
-          };
           html +=
             '<li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>';
           $('.pagination').html(html);

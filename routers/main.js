@@ -48,7 +48,7 @@ router.get('/home', async ctx => {
 // 每页话题获取函数
 
 function page(page, AllCount, AllRows) {
-  var one = 5; //设置每页最多多少条数据
+  var one = 20; //设置每页最多多少条数据
   var AllRow = [];
   if (AllCount >= one * page) {
     for (var j = (page - 1) * one; j < one * page; j++) {
@@ -66,6 +66,7 @@ function page(page, AllCount, AllRows) {
 
 router.get('/home/all', async ctx => {
   var tres = await Topic.findAll();
+  var one = 20; //设置每页最多多少条数据
   // 全部
   for (var i of tres) {
     var time = i.lastreplytime;
@@ -88,8 +89,10 @@ router.get('/home/all', async ctx => {
   });
   var AllRow = result.rows;
   var AllCount = result.count;
+  var totalpage =
+    AllCount % one == 0 ? AllCount / one : Math.ceil(AllCount / one);
   ctx.body = {
-    total: AllCount
+    total: totalpage
   };
 });
 
@@ -101,7 +104,7 @@ router.get('/home/tab/:tab/page/:page', async ctx => {
   var AllCount;
   var AllRows;
   var AllRow = [];
-
+  var one = 20; //设置每页最多多少条数据
   // 更新最后回复时间距现在多久
 
   for (var i of tres) {
@@ -193,8 +196,10 @@ router.get('/home/tab/:tab/page/:page', async ctx => {
     AllCount = result.count;
     AllRow = page(p, AllCount, AllRows);
   }
+  var totalpage =
+    AllCount % one == 0 ? AllCount / one : Math.ceil(AllCount / one);
   ctx.body = {
-    total: AllCount,
+    total: totalpage,
     topics: AllRow
   };
 });
