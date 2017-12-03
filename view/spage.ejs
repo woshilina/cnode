@@ -3,14 +3,11 @@
     <div class="col-8">
       <div class="card mb-3">
         <div class='card-header breadcrumb'>
-
           <li>
             <a href='/home'>主页</a>
             <span class='divider'>/</span>
           </li>
-
         </div>
-
         <div class='card-body'>
           <div class='user_card'>
             <div>
@@ -22,7 +19,6 @@
                   <%= session.name %>
                 </a>
               </span>
-
               <div class='board clearfix'>
                 <div class='floor'>
                   <span class='big'>
@@ -71,7 +67,8 @@
       <div class="card mb-3">
         <div class="card-header">最近新建的话题</div>
         <div>
-          <%topics.forEach(function(res){%>
+
+          <%pretopics.forEach(function(res){%>
             <div class="list-group-item list-group-item-action ">
               <div class="media">
                 <img class="mr-3 " src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image">
@@ -95,13 +92,18 @@
               </div>
             </div>
             <%})%>
-
+              <%if(count>5){%>
+                <div class="list-group-item list-group-item-action ">
+                  <a href="/user/<%=session.name%>/topics">查看更多>></a>
+                </div>
+                <%}%>
         </div>
       </div>
       <div class="card mb-3">
         <div class="card-header">最近参与的话题</div>
         <div>
-          <%parttopics.forEach(function(res){%>
+
+          <%preparttopics.forEach(function(res){%>
             <div class="list-group-item list-group-item-action ">
               <div class="media">
                 <img class="mr-3 " src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image">
@@ -125,6 +127,11 @@
               </div>
             </div>
             <%})%>
+              <%if(partcount>5){%>
+                <div class="list-group-item list-group-item-action ">
+                  <a href="/user/<%=session.name%>/replies">查看更多>></a>
+                </div>
+                <%}%>
         </div>
       </div>
     </div>

@@ -280,6 +280,8 @@ router.get('/user/:name', async ctx => {
   // 从数据库获取用户信息
   let user = await User.findOne({ where: { name: username } });
   var signtime = user.createdAt;
+
+  // 更新用户注册时间
   await user.update({ signfromnow: moment(signtime).fromNow() });
 
   // 从数据库获取用户创建的话题 并按创建时间排序(时间倒序)
@@ -289,6 +291,19 @@ router.get('/user/:name', async ctx => {
   });
   var count = result.count;
   var topics = result.rows;
+
+  var pretopics = [];
+  if (count > 5) {
+    for (var i = 0; i < 5; i++) {
+      pretopics.push(topics[i]);
+    }
+  } else {
+    for (var i = 0; i < count; i++) {
+      for (var i = 0; i < 5; i++) {
+        pretopics.push(topics[i]);
+      }
+    }
+  }
 
   // 更新最后回复时间
   for (var i of topics) {
@@ -311,12 +326,84 @@ router.get('/user/:name', async ctx => {
     parttopics.push(t);
   }
   var partcount = parttopics.length;
+
+  var preparttopics = [];
+
+  if (partcount > 5) {
+    for (var i = 0; i < 5; i++) {
+      preparttopics.push(parttopics[i]);
+    }
+  } else {
+    for (var i = 0; i < partcount; i++) {
+      preparttopics.push(parttopics[i]);
+    }
+  }
   await ctx.render('/spage', {
     session: ctx.session,
     user: user,
+    pretopics: pretopics,
     topics: topics,
+    count: count,
+    partcount: partcount,
+    preparttopics: preparttopics,
     parttopics: parttopics
   });
 });
 
+// 个人创建话题页
+router.get('/user/:name/topics', async ctx => {
+  var username = ctx.params.name;
+  // 从数据库获取用户创建的话题 并按创建时间排序(时间倒序)
+  let result = await Topic.findAndCountAll({
+    where: { username: username },
+    order: [[sequelize.literal('createdAt DESC')]]
+  });
+  var count = result.count;
+  var topics = result.rows;
+
+  // 更新最后回复时间
+  for (var i of topics) {
+    var time = i.lastreplytime;
+    await i.update({
+      lastreplyfromnow: moment(time).fromNow()
+    });
+  }
+
+  await ctx.render('/spagetopics', {
+    session: ctx.session,
+    topics: topics
+  });
+});
+
+// 个人参与话题页
+
+router.get('/user/:name/replies', async ctx => {
+  var username = ctx.params.name;
+
+  // 从数据库获得用户的评论,按时间倒序
+  let reply = await Reply.findAll({
+    where: { name: username },
+    order: [[sequelize.literal('createdAt DESC')]]
+  });
+
+  // 根据用户评论获取相关话题   ?如何去重
+  var parttopics = [];
+  for (var i of reply) {
+    var t = await Topic.findOne({ where: { id: i.topicId } });
+    parttopics.push(t);
+  }
+
+ // 更新最后回复时间
+  for (var i of parttopics) {
+    var time = i.lastreplytime;
+    await i.update({
+      lastreplyfromnow: moment(time).fromNow()
+    });
+  }
+
+  await ctx.render('/spagereplies', {
+    session: ctx.session,
+    parttopics: parttopics
+  });
+});
 module.exports = router;
