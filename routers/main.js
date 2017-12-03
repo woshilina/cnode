@@ -319,12 +319,20 @@ router.get('/user/:name', async ctx => {
     order: [[sequelize.literal('createdAt DESC')]]
   });
 
-  // 根据用户评论获取相关话题   ?如何去重
+  // 根据用户评论获取相关话题
   var parttopics = [];
   for (var i of reply) {
     var t = await Topic.findOne({ where: { id: i.topicId } });
     parttopics.push(t);
   }
+  // 数组去重
+  var hash = {};
+  parttopics = parttopics.reduce(function(item, next) {
+    hash[next.id] ? '' : (hash[next.id] = true && item.push(next));
+    return item;
+  }, []);
+
+  console.log(parttopics);
   var partcount = parttopics.length;
 
   var preparttopics = [];
@@ -392,8 +400,14 @@ router.get('/user/:name/replies', async ctx => {
     var t = await Topic.findOne({ where: { id: i.topicId } });
     parttopics.push(t);
   }
+  // 数组去重
+  var hash = {};
+  parttopics = parttopics.reduce(function(item, next) {
+    hash[next.id] ? '' : (hash[next.id] = true && item.push(next));
+    return item;
+  }, []);
 
- // 更新最后回复时间
+  // 更新最后回复时间
   for (var i of parttopics) {
     var time = i.lastreplytime;
     await i.update({
