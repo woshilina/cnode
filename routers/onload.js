@@ -19,7 +19,11 @@ router.post('/onload', koaBody(), async ctx => {
       name: uname,
       id: user.id,
       sign: user.sign,
-      integral: user.integral
+      integral: user.integral,
+      city: user.city,
+      weibo: user.weibo,
+      GitHub: user.GitHub,
+      web: user.web
     };
     console.log('session', ctx.session);
     console.log('登录成功');

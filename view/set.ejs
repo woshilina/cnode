@@ -1,4 +1,4 @@
-<!-- 个人设置 -->
+<!-- 个人设置页 -->
 <%-include header%>
   <div class="d-flex justify-content-center">
     <div class="col-8">
@@ -11,13 +11,13 @@
           <span class="active">设置</span>
         </div>
         <div class="card-body  pl-5">
-          <div class="alert alert-success set  " role="alert" style="display:none">
+          <div class="alert alert-success set" role="alert" style="display:none">
             保存成功！
           </div>
-          <div class="alert alert-danger passerror  " role="alert" style="display:none">
+          <div class="alert alert-danger passerror" role="alert" style="display:none">
             当前密码不正确!
           </div>
-          <div class="alert alert-success passright  " role="alert" style="display:none">
+          <div class="alert alert-success passright" role="alert" style="display:none">
             更改密码成功！请重新登录！
           </div>
           <form>
@@ -48,7 +48,7 @@
             <div class="form-group row">
               <label class="col-2 col-form-label">微博</label>
               <div class="col-4">
-                <input type="text" class="form-control" id="weibo" placeholder="e.g.: HTTP:weibo.com/cnode.js">
+                <input type="text" class="form-control" id="weibo" placeholder="<%=session.weibo%>">
               </div>
             </div>
             <div class="form-group row">
@@ -74,7 +74,7 @@
         </div>
       </div>
       <div class="card bg-white  mt-3 ">
-        <div class="card-header ">设置密码</div>
+        <div class="card-header">设置密码</div>
         <div class="card-body pl-5">
           <form>
             <div class="form-group row">
@@ -104,15 +104,15 @@
       </div>
     </div>
     <div class="col-2.5">
-      <div class='card bg-white  '>
-        <div class='card-header  '>
+      <div class='card bg-white'>
+        <div class='card-header'>
           个人信息
         </div>
         <div class='card-body'>
           <div class='user_card'>
             <div>
               <a class='user_avatar' href="/user/<%=session.name%>">
-                <img src="/images/7081645.png"  width="30" height="30" alt="Generic placeholder image"  />
+                <img src="/images/7081645.png"  width="40" height="40" alt="Generic placeholder image"  />
               </a>
               <span class='user_name'>
                 <a class='dark' href="/user/<%=session.name%>">
@@ -162,13 +162,13 @@
     $(document).ready(function () {
       // 设置
       $("#inputset").click(function () {
-        var name = $("#name").val();
-        var Email = $("#Email").val();
-        var weibo = $("#weibo").val();
-        var web = $("#web").val();
-        var city = $("#city").val();
-        var GitHub = $("#GitHub").val();
-        var sign = $("#sign").val();
+        var name = $("#Name").val()==''?$('#Name').attr('placeholder'):$("#Name").val();
+        var Email = $("#Email").val()==''?$('#Email').attr('placeholder'):$("#Email").val();
+        var weibo = $("#weibo").val()==''?$('#weibo').attr('placeholder'):$("#weibo").val();
+        var web = $("#web").val()==''?$('#web').attr('placeholder'):$("#web").val();
+        var city = $("#city").val()==''?$('#city').attr('placeholder'):$("#city").val();
+        var GitHub = $("#GitHub").val()==''?$('#GitHub').attr('placeholder'):$("#GitHub").val();
+        var sign = $("#sign").val()==''?$('#sign').attr('placeholder'):$("#sign").val();
         var dat = {
           name: name,
           Email: Email,

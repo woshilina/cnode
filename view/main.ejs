@@ -1,8 +1,9 @@
+
+<!-- 首页 -->
 <%- include header%>
   <div class="d-flex justify-content-center my-3 ">
-
     <div class="col-8 card p-0 mr-3  border-0 d-flex flex-column">
-      <div class="card-header">
+      <div class="card-header border-0 py-2">
         <button type="button" class="btn btn-success tab" value="all">全部</button>
         <button type="button" class="btn btn-light tab" value="essence">精华</button>
         <button type="button" class="btn btn-light tab" value="share">分享</button>
@@ -73,7 +74,7 @@
                 <div class='user_card'>
                   <div>
                     <a class='user_avatar' href="/user/<%=session.name%>">
-                      <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image" />
+                      <img src="/images/7081645.png" width="40" height="40" alt="Generic placeholder image" />
                     </a>
                     <span class='user_name'>
                       <a class='dark' href="/user/<%=session.name%>">
@@ -89,7 +90,7 @@
                       </div>
                     </div>
                     <div class="space clearfix"></div>
-                    <%if(session.sign==null){%>
+                    <%if(session.sign==''){%>
                       <span class="signature">
                         “这家伙很懒，什么个性签名都没有留下。”
                       </span>
@@ -146,7 +147,6 @@
         dataType: 'json',
         success: function (msg) {
           var totalpage = msg.total;
-          console.log(totalpage);
           $('.pagination').empty();
           paging(totalpage);
           $('.tabname').text('all');

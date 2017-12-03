@@ -239,8 +239,21 @@ router.post('/setting', koaBody(), async ctx => {
   var user = await User.findById(Id);
   await user.update(set);
 
-  // 更新session的签名
-  ctx.session.sign = set.sign;
+  // 更新session
+
+  ctx.session = {
+    id: Id,
+    name: user.name,
+    Email: user.Email,
+    weibo: user.weibo,
+    web: user.web,
+    city: user.city,
+    sign: user.sign,
+    GitHub: user.GitHub
+  };
+
+  console.log(ctx.session);
+  
   ctx.body = {
     sign: set.sign
   };
@@ -420,4 +433,5 @@ router.get('/user/:name/replies', async ctx => {
     parttopics: parttopics
   });
 });
+
 module.exports = router;
