@@ -31,7 +31,9 @@ router.post('/topic/create', koaBody(), async ctx => {
   };
   let user = await User.findById(ctx.session.id);
   user.integral += 5;
-  user.update({ integral: user.integral });
+  user.update({
+    integral: user.integral
+  });
   ctx.session.integral = user.integral;
   await Topic.create(q);
   let max = await Topic.max('id');
@@ -39,58 +41,59 @@ router.post('/topic/create', koaBody(), async ctx => {
 });
 
 //单篇文章页
-
 router.get('/topic/:id', async (ctx, next) => {
   var Id = ctx.params.id;
-  let topic = await Topic.findById(Id);
-  let tc_time = moment(topic.createdAt).fromNow();
-  let tu_time = moment(topic.updatedAt).fromNow();
-  let res_clicks = topic.clicks;
-  res_clicks++;
+  //从数据库查询到当前话题
+  var topic = await Topic.findById(Id);
+  var tc_time = moment(topic.createdAt).fromNow(); //话题创建时间
+  var tu_time = moment(topic.updatedAt).fromNow(); //话题更新时间
+  var res_clicks = topic.clicks;
+  res_clicks++; //话题浏览数+1
   await topic.update({
     clicks: res_clicks
   });
 
-  let top = await Topic.findAll({
+  // 从数据库查询作者创建的的所有话题
+  var alltopics = await Topic.findAll({
     where: {
       userid: topic.userid
     }
   });
 
-  let reply = await Reply.findAll({
+  // 从数据库查询到当前话题所有的评论
+  var replies = await Reply.findAll({
     where: {
       topicId: Id
     }
   });
 
-  if (reply) {
-    reply_res = reply;
-    like_res = [];
-    rtime = []; //回复时间数组
-    reply_res.forEach(function(res, index) {
-      var res_id = res['id'];
-      rtime[index] = moment(res.createdAt).fromNow();
-      Like.findOne({
-        where: { nameId: ctx.session.id, replyId: res_id }
-      }).then(like => {
-        if (like == null) {
-          like_res[index] = 0;
-        } else {
-          like_res[index] = like;
-        }
-      });
+  // 更新回复距现在的时间
+  for (var i of replies) {
+    var time = i.replytime;
+    await i.update({
+      replyfromnow: moment(time).fromNow()
     });
-  } else if (reply == null) {
-    reply_res = 0;
+  }
+
+  var reply_res = replies;
+  var like_res = [];
+  for (var i of reply_res) {
+    var res_id = i['id'];
+    let like = await Like.findOne({
+      where: {
+        nameId: ctx.session.id,
+        replyId: res_id
+      }
+    });
+    like_res.push(like);
   }
 
   await ctx.render('/stopic', {
     session: ctx.session,
     topics: topic,
     ttime: [tc_time, tu_time],
-    stopics: top,
+    stopics: alltopics,
     replys: reply_res,
-    rtime: rtime,
     likes: like_res
   });
 });
@@ -141,22 +144,23 @@ router.post('/topic/:id/edit', koaBody(), async ctx => {
 });
 
 //发表回复
-
 router.post('/topic/:id', koaBody(), async (ctx, next) => {
   console.log(ctx.request.body);
   var cont = ctx.request.body.content;
+  let date = new Date();
   var res = {
     name: ctx.session.name,
     content: cont,
-    topicId: ctx.params.id
+    topicId: ctx.params.id,
+    replytime: date
   };
   await Reply.create(res);
-  let rep = await Reply.findAll();
+
   let topic = await Topic.findById(res.topicId);
 
   var re = topic.replies + 1;
-  let date = new Date();
-  topic.update({
+
+  await topic.update({
     replies: re,
     lastreplytime: date
   });
@@ -193,7 +197,10 @@ router.post('/topic/:id/unlike', koaBody(), async ctx => {
   var Id = ctx.request.body.att;
 
   let like = await Like.findOne({
-    where: { replyId: Id, nameId: ctx.session.id }
+    where: {
+      replyId: Id,
+      nameId: ctx.session.id
+    }
   });
 
   like.destroy();
@@ -225,10 +232,14 @@ router.post('/reply/:id/edit', koaBody(), async ctx => {
   var id = ctx.params.id;
   var text = ctx.request.body.text;
   let reply = await Reply.findById(id);
-  reply.update({ content: text });
+  reply.update({
+    content: text
+  });
   let topic = await Topic.findById(id);
   let date = new Date();
-  topic.update({ lastreplytime: date });
+  topic.update({
+    lastreplytime: date
+  });
   ctx.body = reply.topicId;
 });
 
@@ -240,7 +251,11 @@ router.get('/reply/:id/delete', koaBody(), async ctx => {
   let reply = await Reply.findById(id);
   reply.destroy();
   ctx.body = reply.topicId;
-  await Like.destroy({ where: { replyId: id } });
+  await Like.destroy({
+    where: {
+      replyId: id
+    }
+  });
 });
 
 module.exports = router;

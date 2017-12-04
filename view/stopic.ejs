@@ -57,10 +57,10 @@
                       <small class="text-primary">
                         <%=index+1%>楼</small>
                       <small class="text-primary">
-                        <%=rtime[index]%>
+                        <%=res['replyfromnow']%>
                       </small>
-                      <!-- 登陆且与评论作者为同一人 -->
-                      <% if(session && session.name ===  res['name']){ %>
+                      <!-- 登陆且与评论者为同一人 -->
+                      <% if(session && session.name == res['name']){ %>
                         <div class="float-right">
                           <button id='slike' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm"> 点赞</button>
                           <span>
@@ -85,6 +85,8 @@
                             <%}%> -->
                           <!-- 登陆但与作者不是同一个人 -->
                           <% if(session&&session.name != res['name']){ %>
+
+                            <!--如果登陆者对此评论点赞了  -->
                             <%if(likes[index]!=0){%>
                               <div class="float-right">
                                 <button id='like' type="button" value="<%=res['id']%>" class="btn btn-success  btn-sm">点赞</button>
@@ -95,6 +97,7 @@
                                   aria-expanded="false" aria-controls="srep<%=res['id']%>">回复</button>
                               </div>
                               <%}%>
+                              <!-- 如果登陆者没有对此评论点赞 -->
                                 <%if(likes[index]==0){%>
                                   <div class="float-right">
                                     <button id='like' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm">点赞</button>
@@ -110,8 +113,7 @@
                                       <br/>
                                       <%= res['content'] %>
                                         <div class="bg-white collapse" id="srep<%=res['id']%>">
-                                          <textarea class='w-100' id="stext" rows='7'>@
-                                            <%=res['name']%>
+                                          <textarea class='w-100' id="stext" rows='7'>@<%=res['name']%>                                           
                                           </textarea>
                                           <button id='sre' type="button" class="btn btn-info  btn-sm">回复</button>
                                           <span class="suc"></span>

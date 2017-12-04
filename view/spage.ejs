@@ -16,7 +16,7 @@
               </a>
               <span class='user_'>
                 <a class='dark' href="/user/<%=session.name%>">
-                  <%= session.name %>
+                  <%=session.name %>
                 </a>
               </span>
               <div class='board clearfix'>
@@ -67,7 +67,6 @@
       <div class="card mb-3">
         <div class="card-header">最近新建的话题</div>
         <div>
-
           <%pretopics.forEach(function(res){%>
             <div class="list-group-item list-group-item-action ">
               <div class="media">
@@ -92,17 +91,19 @@
               </div>
             </div>
             <%})%>
-              <%if(count>5){%>
+              <div class="list-group-item list-group-item-action ">
+                <a href="/user/<%=session.name%>/topics">查看更多>></a>
+              </div>
+              <%if(pretopics==null){%>
                 <div class="list-group-item list-group-item-action ">
-                  <a href="/user/<%=session.name%>/topics">查看更多>></a>
-                </div>
+                  无话题</div>
                 <%}%>
         </div>
       </div>
+
       <div class="card mb-3">
         <div class="card-header">最近参与的话题</div>
         <div>
-
           <%preparttopics.forEach(function(res){%>
             <div class="list-group-item list-group-item-action ">
               <div class="media">
@@ -126,14 +127,17 @@
                 </div>
               </div>
             </div>
+            <div class="list-group-item list-group-item-action ">
+              <a href="/user/<%=session.name%>/replies">查看更多>></a>
+            </div>
             <%})%>
-              <%if(partcount>5){%>
+              <%if(preparttopics==null){%>
                 <div class="list-group-item list-group-item-action ">
-                  <a href="/user/<%=session.name%>/replies">查看更多>></a>
-                </div>
+                  无话题</div>
                 <%}%>
         </div>
       </div>
+
     </div>
     <div class="col-2.5">
       <% if(!session||!session.id){ %>
