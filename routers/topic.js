@@ -2,6 +2,7 @@ const Topic = require('../database/models/topic');
 const Reply = require('../database/models/reply');
 const User = require('../database/models/user');
 const Like = require('../database/models/like');
+const Message = require('../database/models/message');
 const router = require('koa-router')();
 const koaBody = require('koa-body');
 const moment = require('moment');
@@ -85,14 +86,14 @@ router.get('/topic/:id', async (ctx, next) => {
         replyId: res_id
       }
     });
-    
+
     if (like === null) {
       like_res.push(0);
     } else {
       like_res.push(like);
     }
-  };
- 
+  }
+
   await ctx.render('/stopic', {
     session: ctx.session,
     topics: topic,
@@ -148,19 +149,69 @@ router.post('/topic/:id/edit', koaBody(), async ctx => {
   ctx.body = Id;
 });
 
-//发表回复
+//发表对文章的回复
 router.post('/topic/:id', koaBody(), async (ctx, next) => {
   console.log(ctx.request.body);
   var cont = ctx.request.body.content;
   let date = new Date();
   var res = {
     name: ctx.session.name,
+    userId:ctx.session.id,
     content: cont,
     topicId: ctx.params.id,
     replytime: date
   };
   await Reply.create(res);
+  var reply = await Reply.findOne({ where: res });
 
+  let topic = await Topic.findById(res.topicId);
+  var re = topic.replies + 1;
+
+  await topic.update({
+    replies: re,
+    lastreplytime: date
+  });
+
+  var msg = {
+    targetId: topic.userid,
+    topicId: ctx.params.id,
+    replyId: reply.id,
+    replierId: ctx.session.id,
+    content: cont
+  };
+
+  await Message.create(msg);
+
+  ctx.body = {
+    result: 'success'
+  };
+});
+
+//发表对评论的回复
+router.post('/topic/:id/reply', koaBody(), async (ctx, next) => {
+  console.log(ctx.request.body);
+  var cont = ctx.request.body.content;
+  var replyId = ctx.request.body.replyId;
+  let date = new Date();
+  var res = {
+    name: ctx.session.name,
+    userId:ctx.session.id,
+    content: cont,
+    topicId: ctx.params.id,
+    replytime: date
+  };
+  await Reply.create(res);
+  var reply = await Reply.findOne({ where: res });
+  var targetreply = await Reply.findById(replyId);
+  console.log(targetreply.userId);
+  var msg = {
+    targetId: targetreply.userId,
+    topicId: ctx.params.id,
+    replyId: reply.id,
+    replierId: ctx.session.id,
+    content: cont
+  };
+  await Message.create(msg);
   let topic = await Topic.findById(res.topicId);
 
   var re = topic.replies + 1;
@@ -173,7 +224,6 @@ router.post('/topic/:id', koaBody(), async (ctx, next) => {
     result: 'success'
   };
 });
-
 //点赞
 
 router.post('/topic/:id/like', koaBody(), async ctx => {

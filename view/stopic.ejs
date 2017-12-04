@@ -75,16 +75,16 @@
                         </div>
                         <%}%>
                           <!-- 如果没登陆 -->
-                          <!-- <%if(!session){%>
+                          <%if(!session.id){%>
                             <div class="float-right">
                               <button id='nlike' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm">点赞</button>
                               <span>
                                 <%=res['likes']%>
                               </span>
                             </div>
-                            <%}%> -->
+                            <%}%>
                           <!-- 登陆但与作者不是同一个人 -->
-                          <% if(session&&session.name != res['name']){ %>
+                          <% if(session.id&&session.name != res['name']){ %>
 
                             <!--如果登陆者对此评论点赞了  -->
                             <%if(likes[index]!=0){%>
@@ -112,7 +112,7 @@
                                     <%}%>
                                       <br/>
                                       <%= res['content'] %>
-                                        <div class="bg-white collapse" id="srep<%=res['id']%>">
+                                        <div class="bg-white collapse" id="srep<%=res['id']%>" value="<%=res['id']%>">
                                           <textarea class='w-100' id="stext" rows='7'>@<%=res['name']%>                                           
                                           </textarea>
                                           <button id='sre' type="button" class="btn btn-info  btn-sm">回复</button>
@@ -215,6 +215,7 @@
           }
         })
       });
+
       // 添加评论/回复
       $('#reply').click(function () {
         var cont = $('.reply').val();
@@ -321,12 +322,14 @@
       $(document).ready(function () {
         $("button[id='sre']").each(function () {
           $(this).on('click', function () {
+            var id=$(this).parent().attr('value');
             var text = $(this).prev().val();
             $.ajax({
-              url: document.url,
+              url: document.URL+'/reply',
               type: "POST",
               cache: false,
               data: {
+                replyId:id,
                 content: text
               },
               dataType: 'json',

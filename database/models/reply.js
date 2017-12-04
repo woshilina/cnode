@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 
 const Reply = sequelize.define('reply', {
   topicId: { type: Sequelize.INTEGER, allowNULL: false }, //标题ID
+  userId:{ type: Sequelize.INTEGER, allowNULL: false },//回复人的id
   name: { type: Sequelize.STRING, allownNULL: false }, //回复人--
   replytime: {
     type: Sequelize.DATE,
