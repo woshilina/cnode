@@ -85,9 +85,14 @@ router.get('/topic/:id', async (ctx, next) => {
         replyId: res_id
       }
     });
-    like_res.push(like);
-  }
-
+    
+    if (like === null) {
+      like_res.push(0);
+    } else {
+      like_res.push(like);
+    }
+  };
+ 
   await ctx.render('/stopic', {
     session: ctx.session,
     topics: topic,

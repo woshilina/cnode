@@ -11,18 +11,16 @@
         <div class='card-body'>
           <div class='user_card'>
             <div>
-              <a class='user_avatar' href="/user/<%=session.name%>">
+              <a class='user_avatar' href="/user/<%=user.name%>">
                 <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image" />
               </a>
-              <span class='user_'>
-                <a class='dark' href="/user/<%=session.name%>">
-                  <%=session.name %>
-                </a>
+              <span class='user_name'>
+                <%=user.name %>
               </span>
               <div class='board clearfix'>
                 <div class='floor'>
                   <span class='big'>
-                    <%=session.integral%>积分</span>
+                    <%=user.integral%>积分</span>
                 </div>
               </div>
               <div class="space clearfix">
@@ -67,74 +65,79 @@
       <div class="card mb-3">
         <div class="card-header">最近新建的话题</div>
         <div>
-          <%pretopics.forEach(function(res){%>
-            <div class="list-group-item list-group-item-action ">
-              <div class="media">
-                <img class="mr-3 " src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image">
-                <div class="media-body align-self-center d-flex  justify-content-between">
-                  <div>
-                    <%=res['replies']%>/
-                      <small>
-                        <%=res['clicks']%>
+          <%if(count!=0){%>
+            <%pretopics.forEach(function(res){%>
+              <div class="list-group-item list-group-item-action ">
+                <div class="media">
+                  <img class="mr-3 " src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image">
+                  <div class="media-body align-self-center d-flex  justify-content-between">
+                    <div>
+                      <%=res['replies']%>/
+                        <small>
+                          <%=res['clicks']%>
+                        </small>
+                        <a href="/topic/<%=res['id']%>">
+                          <%=res['title']%>
+                        </a>
+                    </div>
+                    <div class="col-2 d-flex  justify-content-between">
+                      <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image">
+                      <small class="align-self-center">
+                        <%=res['lastreplyfromnow']%>
                       </small>
-                      <a href="/topic/<%=res['id']%>">
-                        <%=res['title']%>
-                      </a>
-                  </div>
-                  <div class="col-2 d-flex  justify-content-between">
-                    <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image">
-                    <small class="align-self-center">
-                      <%=res['lastreplyfromnow']%>
-                    </small>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <%})%>
-              <div class="list-group-item list-group-item-action ">
-                <a href="/user/<%=session.name%>/topics">查看更多>></a>
-              </div>
-              <%if(pretopics==null){%>
-                <div class="list-group-item list-group-item-action ">
-                  无话题</div>
+              <%})%>
+
+                <div class="list-group-item list-group-item-action">
+                  <a href="/user/<%=session.name%>/topics">查看更多>></a>
+                </div>
                 <%}%>
+                  <%if(count===0){%>
+                    <div class="list-group-item list-group-item-action ">
+                      无话题</div>
+                    <%}%>
         </div>
       </div>
 
       <div class="card mb-3">
         <div class="card-header">最近参与的话题</div>
         <div>
-          <%preparttopics.forEach(function(res){%>
-            <div class="list-group-item list-group-item-action ">
-              <div class="media">
-                <img class="mr-3 " src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image">
-                <div class="media-body align-self-center d-flex  justify-content-between">
-                  <div>
-                    <%=res['replies']%>/
-                      <small>
-                        <%=res['clicks']%>
+          <%if(partcount!=0){%>
+            <%preparttopics.forEach(function(res){%>
+              <div class="list-group-item list-group-item-action ">
+                <div class="media">
+                  <img class="mr-3 " src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image">
+                  <div class="media-body align-self-center d-flex  justify-content-between">
+                    <div>
+                      <%=res['replies']%>/
+                        <small>
+                          <%=res['clicks']%>
+                        </small>
+                        <a href="/topic/<%=res['id']%>">
+                          <%=res['title']%>
+                        </a>
+                    </div>
+                    <div class="col-2 d-flex  justify-content-between">
+                      <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image">
+                      <small class="align-self-center">
+                        <%=res['lastreplyfromnow']%>
                       </small>
-                      <a href="/topic/<%=res['id']%>">
-                        <%=res['title']%>
-                      </a>
-                  </div>
-                  <div class="col-2 d-flex  justify-content-between">
-                    <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image">
-                    <small class="align-self-center">
-                      <%=res['lastreplyfromnow']%>
-                    </small>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="list-group-item list-group-item-action ">
-              <a href="/user/<%=session.name%>/replies">查看更多>></a>
-            </div>
-            <%})%>
-              <%if(preparttopics==null){%>
+              <%})%>
                 <div class="list-group-item list-group-item-action ">
-                  无话题</div>
+                  <a href="/user/<%=session.name%>/replies">查看更多>></a>
+                </div>
                 <%}%>
+                  <%if(partcount===0){%>
+                    <div class="list-group-item list-group-item-action ">
+                      无话题</div>
+                    <%}%>
         </div>
       </div>
 

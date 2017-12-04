@@ -302,7 +302,7 @@ router.get('/user/:name', async ctx => {
     where: { username: username },
     order: [[sequelize.literal('createdAt DESC')]]
   });
-  var count = result.count;
+  var count = result.count;//用户创建的话题数量
   var topics = result.rows;
 
   var pretopics = [];
@@ -310,11 +310,9 @@ router.get('/user/:name', async ctx => {
     for (var i = 0; i < 5; i++) {
       pretopics.push(topics[i]);
     }
-  } else {
-    for (var i = 0; i < count; i++) {
-      for (var i = 0; i < 5; i++) {
-        pretopics.push(topics[i]);
-      }
+  } else {    
+      for (var i = 0; i < count; i++) {
+        pretopics.push(topics[i]);      
     }
   }
 
@@ -337,7 +335,8 @@ router.get('/user/:name', async ctx => {
   for (var i of reply) {
     var t = await Topic.findOne({ where: { id: i.topicId } });
     parttopics.push(t);
-  }
+  };
+
   // 数组去重
   var hash = {};
   parttopics = parttopics.reduce(function(item, next) {
@@ -359,6 +358,7 @@ router.get('/user/:name', async ctx => {
       preparttopics.push(parttopics[i]);
     }
   }
+  console.log(preparttopics);
   await ctx.render('/spage', {
     session: ctx.session,
     user: user,
