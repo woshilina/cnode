@@ -253,7 +253,7 @@ router.post('/setting', koaBody(), async ctx => {
   };
 
   console.log(ctx.session);
-  
+
   ctx.body = {
     sign: set.sign
   };
@@ -302,7 +302,7 @@ router.get('/user/:name', async ctx => {
     where: { username: username },
     order: [[sequelize.literal('createdAt DESC')]]
   });
-  var count = result.count;//用户创建的话题数量
+  var count = result.count; //用户创建的话题数量
   var topics = result.rows;
 
   var pretopics = [];
@@ -310,9 +310,9 @@ router.get('/user/:name', async ctx => {
     for (var i = 0; i < 5; i++) {
       pretopics.push(topics[i]);
     }
-  } else {    
-      for (var i = 0; i < count; i++) {
-        pretopics.push(topics[i]);      
+  } else {
+    for (var i = 0; i < count; i++) {
+      pretopics.push(topics[i]);
     }
   }
 
@@ -335,7 +335,7 @@ router.get('/user/:name', async ctx => {
   for (var i of reply) {
     var t = await Topic.findOne({ where: { id: i.topicId } });
     parttopics.push(t);
-  };
+  }
 
   // 数组去重
   var hash = {};
@@ -374,6 +374,7 @@ router.get('/user/:name', async ctx => {
 // 个人创建话题页
 router.get('/user/:name/topics', async ctx => {
   var username = ctx.params.name;
+  let user = await User.findOne({ where: { name: username } });
   // 从数据库获取用户创建的话题 并按创建时间排序(时间倒序)
   let result = await Topic.findAndCountAll({
     where: { username: username },
@@ -392,6 +393,7 @@ router.get('/user/:name/topics', async ctx => {
 
   await ctx.render('/spagetopics', {
     session: ctx.session,
+    user: user,
     topics: topics
   });
 });
@@ -400,7 +402,7 @@ router.get('/user/:name/topics', async ctx => {
 
 router.get('/user/:name/replies', async ctx => {
   var username = ctx.params.name;
-
+  let user = await User.findOne({ where: { name: username } });
   // 从数据库获得用户的评论,按时间倒序
   let reply = await Reply.findAll({
     where: { name: username },
@@ -430,6 +432,7 @@ router.get('/user/:name/replies', async ctx => {
 
   await ctx.render('/spagereplies', {
     session: ctx.session,
+    user: user,
     parttopics: parttopics
   });
 });

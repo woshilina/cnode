@@ -1,5 +1,5 @@
 <%- include header%>
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center mt-3">
     <div class="col-8">
       <div class="card mb-3">
         <div class='card-header breadcrumb'>
@@ -92,7 +92,7 @@
               <%})%>
 
                 <div class="list-group-item list-group-item-action">
-                  <a href="/user/<%=session.name%>/topics">查看更多>></a>
+                  <a href="/user/<%=user.name%>/topics">查看更多>></a>
                 </div>
                 <%}%>
                   <%if(count===0){%>
@@ -131,7 +131,7 @@
               </div>
               <%})%>
                 <div class="list-group-item list-group-item-action ">
-                  <a href="/user/<%=session.name%>/replies">查看更多>></a>
+                  <a href="/user/<%=user.name%>/replies">查看更多>></a>
                 </div>
                 <%}%>
                   <%if(partcount===0){%>
@@ -142,20 +142,7 @@
       </div>
 
     </div>
-    <div class="col-2.5">
-      <% if(!session||!session.id){ %>
-        <div class="bg-white pt-3 pl-3 pb-1">
-          <p>CNode：Node.js专业中文社区 </p>
-          <p>
-            <small>您可以
-              <a href="/onload" class="text-muted">登录</a>或
-              <a href="/signin" class="text-muted">注册</a> , 也可以</small>
-            </br>
-            <a class="btn btn-primary" href="#" role="button">通过GitHub登陆</a>
-          </p>
-        </div>
-        <% } %>
-          <% if(session&&session.id){ %>
+    <div class="col-2.5">          
             <div class='card bg-white '>
               <div class='card-header  '>
                 个人信息
@@ -163,31 +150,31 @@
               <div class='card-body'>
                 <div class='user_card'>
                   <div>
-                    <a class='user_avatar' href="/user/<%=session.name%>">
+                    <a class='user_avatar' href="/user/<%=user.name%>">
                       <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image" />
                     </a>
                     <span class='user_name'>
-                      <a class='dark' href="/user/<%=session.name%>">
-                        <%=session.name%>
+                      <a class='dark' href="/user/<%=user.name%>">
+                        <%=user.name%>
                       </a>
                     </span>
 
                     <div class='board clearfix'>
                       <div class='floor'>
                         <span class='big'>积分:
-                          <%=session.integral%>
+                          <%=user.integral%>
                         </span>
                       </div>
                     </div>
                     <div class="space clearfix"></div>
-                    <%if(session.sign==null){%>
+                    <%if(user.sign===null){%>
                       <span class="signature font-italic">
                         “这家伙很懒，什么个性签名都没有留下。”
                       </span>
                       <%}%>
-                        <%if(session.sign!=null){%>
+                        <%if(user.sign!=null){%>
                           <span class="signature font-italic">
-                            <%=session.sign%>
+                            <%=user.sign%>
                           </span>
                           <%}%>
                   </div>
@@ -203,7 +190,7 @@
                 </a>
               </div>
             </div>
-            <% } %>
+         
               <div class="mt-3">
                 <a href="#">
                   <img src="/images/FgQS-GQD" width="350" height="120">
