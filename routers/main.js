@@ -44,6 +44,21 @@ router.get('/home', async ctx => {
     var newcount = news.count;
   }
 
+  // 积分榜
+  var users = await User.findAndCountAll({
+    order: [[sequelize.literal('integral DESC')]]
+  });
+  var rows = users.rows;
+  var usercount = users.count;
+  var tops = [];
+  if (usercount > 10) {
+    for (var i = 0; i < 10; i++) {
+      tops.push(rows[i]);
+    }
+  } else {
+    tops = rows;
+  }
+
   var AllRows = result.rows;
   var AllCount = result.count;
   var AllRow = page(1, AllCount, AllRows);
@@ -51,6 +66,8 @@ router.get('/home', async ctx => {
   await ctx.render('/main', {
     newcount: newcount,
     session: ctx.session,
+    tops: tops,
+    usercount: usercount,
     topics: AllRow
   });
 });
