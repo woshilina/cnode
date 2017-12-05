@@ -10,6 +10,7 @@ const Message = sequelize.define('message', {
   title: { type: Sequelize.STRING, allowNULL: false }, //标题名
   replyId: { type: Sequelize.INTEGER, allowNULL: false }, //评论id
   content: { type: Sequelize.TEXT, allowNULL: false }, //回复内容
+  isat:{type: Sequelize.BOOLEAN, allowNULL: false},//是否为对评论的回复
   hasRead: { type: Sequelize.BOOLEAN, allowNULL: false, defaultValue: false } //是否被读取
 });
 

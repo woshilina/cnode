@@ -1,37 +1,73 @@
-
 <!-- 未读消息页 -->
 
 <%- include header%>
   <div class="d-flex justify-content-center bg-secondary mt-3">
     <div class="col-8">
-      <div class="card mb-3">
-        <div class='card-header breadcrumb'>
-          <li>
-            <a href='/home'>主页</a>
-            <span class='divider'>/</span>
-            <span>新消息</span>
-          </li>
+      <div class="card">
+        <div class='card-header breadcrumb mb-0'>
+          <a href='/home'>主页</a>
+          <span class='divider'>/</span>
+          <span>新消息</span>
         </div>
-        <%if(count!=0){%>
+
+        <%if(newcount!=0){%>
           <%newmsgs.forEach(function(res){%>
-            <div class="list-group-item list-group-item-action "></div>
+            <div class="list-group-item list-group-item-action ">
+              <%if(res['isat']===1){%>
+                <a href="/user/<%=res['replyname']%>">
+                  <%=res['replyname']%>
+                </a>在话题
+                <a href="/topic/<%=res['topicId']%>">
+                  <%=res['title']%>
+                </a>中@了你
+                <%}%>
+                  <%if(res['isat']===0){%>
+                    <a href="/user/<%=res['replyname']%>">
+                      <%=res['replyname']%>
+                    </a>回复了你的话题
+                    <a href="/topic/<%=res['topicId']%>">
+                      <%=res['title']%>
+                    </a>
+                    <%}%>
+            </div>
             <%})%>
               <%}%>
-                <%if(count===0){%>
+                <%if(newcount===0){%>
                   <div class="list-group-item list-group-item-action ">
                     无话题</div>
                   <%}%>
-      </div>
 
+      </div>
       <div class="card my-3">
         <div class="card-header">
           过往信息</div>
         <div>
-          <%oldmsgs.forEach(function(res){%>
-            <div class="list-group-item list-group-item-action ">
-               <%=res['']%>
-            </div>
-            <%})%>
+          <%if(oldcount!=0){%>
+            <%oldmsgs.forEach(function(res){%>
+              <div class="list-group-item list-group-item-action ">
+                <%if(res['isat']===1){%>
+                  <a href="/user/<%=res['replyname']%>">
+                    <%=res['replyname']%>
+                  </a>在话题
+                  <a href="/topic/<%=res['topicId']%>">
+                    <%=res['title']%>
+                  </a>中@了你
+                  <%}%>
+                    <%if(res['isat']===0){%>
+                      <a href="/user/<%=res['replyname']%>">
+                        <%=res['replyname']%>
+                      </a>回复了你的话题
+                      <a href="/topic/<%=res['topicId']%>">
+                        <%=res['title']%>
+                      </a>
+                      <%}%>
+              </div>
+              <%})%>
+                <%}%>
+                  <%if(oldcount===0){%>
+                    <div class="list-group-item list-group-item-action ">
+                      无信息</div>
+                    <%}%>
         </div>
       </div>
 

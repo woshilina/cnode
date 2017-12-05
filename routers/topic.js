@@ -184,6 +184,7 @@ router.post('/topic/:id', koaBody(), async (ctx, next) => {
       replyId: reply.id,
       replierId: ctx.session.id,
       replyname: ctx.session.name,
+      isat:0,
       content: cont
     };
     await Message.create(msg);
@@ -230,6 +231,7 @@ router.post('/topic/:id/reply', koaBody(), async (ctx, next) => {
       replyId: reply.id,
       replierId: ctx.session.id,
       replyname: ctx.session.name,
+      isat:1,
       content: cont
     };
     await Message.create(msg);

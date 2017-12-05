@@ -4,6 +4,7 @@ const User = require('../database/models/user');
 const router = require('koa-router')();
 const Message = require('../database/models/message');
 const koaBody = require('koa-body');
+const sequelize = require('../database/sequelize');
 
 router.get('/onload', async ctx => {
   await ctx.render('./onload', { session: ctx.session });
@@ -53,7 +54,7 @@ router.get('/my/messages', async ctx => {
   });
   var oldmsgs = olds.rows;
   var oldcount = olds.count;
-  await ctx.render('/message', {
+  await ctx.render('./message', {
     session: ctx.session,
     newmsgs: newmsgs,
     newcount: newcount,
@@ -61,4 +62,5 @@ router.get('/my/messages', async ctx => {
     oldmsgs: oldmsgs
   });
 });
+
 module.exports = router;
