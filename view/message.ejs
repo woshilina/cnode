@@ -12,8 +12,8 @@
 
         <%if(newcount!=0){%>
           <%newmsgs.forEach(function(res){%>
-            <div class="list-group-item list-group-item-action ">
-              <%if(res['isat']===1){%>
+            <div class="list-group-item list-group-item-action">
+              <%if(res['isat']){%>
                 <a href="/user/<%=res['replyname']%>">
                   <%=res['replyname']%>
                 </a>在话题
@@ -21,7 +21,7 @@
                   <%=res['title']%>
                 </a>中@了你
                 <%}%>
-                  <%if(res['isat']===0){%>
+                  <%if(!res['isat']){%>
                     <a href="/user/<%=res['replyname']%>">
                       <%=res['replyname']%>
                     </a>回复了你的话题
@@ -42,35 +42,36 @@
         <div class="card-header">
           过往信息</div>
         <div>
-          <%if(oldcount!=0){%>
-            <%oldmsgs.forEach(function(res){%>
-              <div class="list-group-item list-group-item-action ">
-                <%if(res['isat']===1){%>
-                  <a href="/user/<%=res['replyname']%>">
-                    <%=res['replyname']%>
-                  </a>在话题
-                  <a href="/topic/<%=res['topicId']%>">
-                    <%=res['title']%>
-                  </a>中@了你
-                  <%}%>
-                    <%if(res['isat']===0){%>
-                      <a href="/user/<%=res['replyname']%>">
-                        <%=res['replyname']%>
-                      </a>回复了你的话题
-                      <a href="/topic/<%=res['topicId']%>">
-                        <%=res['title']%>
-                      </a>
-                      <%}%>
-              </div>
-              <%})%>
-                <%}%>
-                  <%if(oldcount===0){%>
-                    <div class="list-group-item list-group-item-action ">
-                      无信息</div>
+          <div>
+            <%if(oldcount!=0){%>
+              <%oldmsgs.forEach(function(res){%>
+                <div class="list-group-item list-group-item-action ">
+                  <%if(res['isat']===1){%>
+                    <a href="/user/<%=res['replyname']%>">
+                      <%=res['replyname']%>
+                    </a>在话题
+                    <a href="/topic/<%=res['topicId']%>">
+                      <%=res['title']%>
+                    </a>中@了你
                     <%}%>
+                      <%if(res['isat']===0){%>
+                        <a href="/user/<%=res['replyname']%>">
+                          <%=res['replyname']%>
+                        </a>回复了你的话题
+                        <a href="/topic/<%=res['topicId']%>">
+                          <%=res['title']%>
+                        </a>
+                        <%}%>
+                </div>
+                <%})%>
+                  <%}%>
+                    <%if(oldcount===0){%>
+                      <div class="list-group-item list-group-item-action ">
+                        无信息</div>
+                      <%}%>
+          </div>
         </div>
       </div>
-
     </div>
     <div class="col-2.5">
       <div class='card bg-white '>
