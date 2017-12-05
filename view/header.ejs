@@ -67,25 +67,11 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link  text-white signout">
+            <a class="nav-link  text-white signout" href="/signout">
               <small>退出</small>
             </a>
           </li>
           <%}%>
   </ul>
 </div>
-<script>
-  $('.signout').on('click', function () {
-    $.ajax({
-      url: '/signout',
-      type: 'GET',
-      dataType: 'json',
-      success: function (msg) {
-        location.href = "/home"
-      },
-      error: function () {
-        alert('异常');
-      }
-    })
-  });
-</script>
+ 

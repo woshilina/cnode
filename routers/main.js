@@ -208,9 +208,7 @@ router.get('/home/tab/:tab/page/:page', async ctx => {
 
 router.get('/signout', async ctx => {
   ctx.session = null;
-  ctx.body = {
-    result: 'true'
-  };
+  ctx.redirect("/home")
 });
 
 // 设置页
