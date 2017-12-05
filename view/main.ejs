@@ -118,41 +118,42 @@
                   <img src="/images/FgQS-GQD" width="350" height="120">
                 </a>
               </div>
-              <div class="mt-3">
-                <ul class="list-group">
-                  <li class="list-group-item">无人回复的话题</li>
-                  <%topics.forEach(function(res){%>
-                    <%if(res.replies===0){%>
+              <%if(noreplycount!=0){%>
+                <div class="mt-3">
+                  <ul class="list-group">
+                    <li class="list-group-item">无人回复的话题</li>
+                    <%noreplytopics.forEach(function(res){%>
                       <li class="list-group-item">
                         <a href="/topic/<%=res.id%>" class="text-muted">
                           <%=res.title%>
                         </a>
                       </li>
-                      <%}})%>
-                </ul>
-              </div>
-              <%if(usercount>0){%>
-              <div class="mt-3">
-                <ul class="list-group">
-                  <li class="list-group-item">积分榜&nbsp&nbsp
-                    <%if(usercount>=100){%>
-                      <a href="/user/top100">TOP 100 >></a>
-                      <%}else if(usercount>10){%>
-                        <a href="/user/top<%=usercount%>">TOP
-                          <%=usercount%> >></a>
-                        <%}%>
-                  </li>
-                  <%tops.forEach(function(res){%>
-                    <li class="list-group-item">
-                      <%=res.integral%>&nbsp&nbsp
-                        <a href="/user/<%=res.name%>" class="text-muted">
-                          <%=res.name%>
-                        </a>
-                    </li>
-                    <%})%>
-                </ul>
-              </div>
-              <%}%>
+                      <%})%>
+                  </ul>
+                </div>
+                <%}%>
+                  <%if(usercount>0){%>
+                    <div class="mt-3">
+                      <ul class="list-group">
+                        <li class="list-group-item">积分榜&nbsp&nbsp
+                          <%if(usercount>=100){%>
+                            <a href="/user/top100">TOP 100 >></a>
+                            <%}else if(usercount>10){%>
+                              <a href="/user/top<%=usercount%>">TOP
+                                <%=usercount%> >></a>
+                              <%}%>
+                        </li>
+                        <%tops.forEach(function(res){%>
+                          <li class="list-group-item">
+                            <%=res.integral%>&nbsp&nbsp
+                              <a href="/user/<%=res.name%>" class="text-muted">
+                                <%=res.name%>
+                              </a>
+                          </li>
+                          <%})%>
+                      </ul>
+                    </div>
+                    <%}%>
     </div>
 
   </div>

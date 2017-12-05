@@ -13,8 +13,17 @@ moment.locale('zh-cn');
 //发表文章首页
 
 router.get('/topic/create', async ctx => {
+  //查询未读消息数量
+  if (ctx.session.id) {
+    let news = await Message.findAndCountAll({
+      where: { targetId: ctx.session.id, hasRead: 0 }
+    });
+    var newcount = news.count;
+  }
+
   await ctx.render('./create', {
-    session: ctx.session
+    session: ctx.session,
+    newcount: newcount
   });
 });
 

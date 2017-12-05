@@ -2,13 +2,13 @@
   <div class="d-flex justify-content-center mt-3">
     <div class="col-8">
       <div class="card mb-3">
-        <div class='card-header breadcrumb'>
+        <div class='card-header breadcrumb mb-0'>
           <li>
             <a href='/home'>主页</a>
             <span class='divider'>/</span>
           </li>
         </div>
-        <div class='card-body'>
+        <div class='card-body py-3'>
           <div class='user_card'>
             <div>
               <a class='user_avatar' href="/user/<%=user.name%>">
@@ -55,7 +55,7 @@
                                   </span>
                                   <%}%>
               </div>
-              <p>注册时间
+              <p class="mb-0">注册时间
                 <%=user.signfromnow%>
               </p>
             </div>

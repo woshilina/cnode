@@ -15,6 +15,7 @@ moment.locale('zh-cn');
 
 router.get('/home', async ctx => {
   var tres = await Topic.findAll();
+
   // 全部
   for (var i of tres) {
     var time = i.lastreplytime;
@@ -63,12 +64,26 @@ router.get('/home', async ctx => {
   var AllCount = result.count;
   var AllRow = page(1, AllCount, AllRows);
 
+  // 无人回复的话题
+  var noreplytopics = await Topic.findAndCountAll({ where: { replies: 0 } });
+  var noreplycount = noreplytopics.count;
+  var allnoreplytopics = noreplytopics.rows;
+  var noreplytopics = [];
+  if (noreplycount > 5) {
+    for (var i = 0; i < 5; i++) {
+      noreplytopics.push(allnoreplytopics[i]);
+    }
+  } else {
+    noreplytopics = allnoreplytopics;
+  }
   await ctx.render('/main', {
     newcount: newcount,
     session: ctx.session,
     tops: tops,
     usercount: usercount,
-    topics: AllRow
+    topics: AllRow,
+    noreplytopics: noreplytopics,
+    noreplycount: noreplycount
   });
 });
 
