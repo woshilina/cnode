@@ -2,6 +2,7 @@
 
 const User = require('../database/models/user');
 const router = require('koa-router')();
+const Message = require('../database/models/message');
 const koaBody = require('koa-body');
 
 router.get('/onload', async ctx => {
@@ -34,4 +35,30 @@ router.post('/onload', koaBody(), async ctx => {
   }
 });
 
+// 未读消息页
+router.get('/my/messages', async ctx => {
+  var userid = ctx.session.id;
+
+  //新消息按时间倒序
+  let news = await Message.findAndCountAll({
+    where: { targetId: userid, hasRead: 0 },
+    order: [[sequelize.literal('createdAt DESC')]]
+  });
+  var newmsgs = news.rows;
+  var newcount = news.count;
+  //过往消息按时间倒序
+  let olds = await Message.findAndCountAll({
+    where: { targetId: userid, hasRead: 1 },
+    order: [[sequelize.literal('createdAt DESC')]]
+  });
+  var oldmsgs = olds.rows;
+  var oldcount = olds.count;
+  await ctx.render('/message', {
+    session: ctx.session,
+    newmsgs: newmsgs,
+    newcount: newcount,
+    oldcount: oldcount,
+    oldmsgs: oldmsgs
+  });
+});
 module.exports = router;

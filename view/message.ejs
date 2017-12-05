@@ -1,0 +1,95 @@
+
+<!-- 未读消息页 -->
+
+<%- include header%>
+  <div class="d-flex justify-content-center bg-secondary mt-3">
+    <div class="col-8">
+      <div class="card mb-3">
+        <div class='card-header breadcrumb'>
+          <li>
+            <a href='/home'>主页</a>
+            <span class='divider'>/</span>
+            <span>新消息</span>
+          </li>
+        </div>
+        <%if(count!=0){%>
+          <%newmsgs.forEach(function(res){%>
+            <div class="list-group-item list-group-item-action "></div>
+            <%})%>
+              <%}%>
+                <%if(count===0){%>
+                  <div class="list-group-item list-group-item-action ">
+                    无话题</div>
+                  <%}%>
+      </div>
+
+      <div class="card my-3">
+        <div class="card-header">
+          过往信息</div>
+        <div>
+          <%oldmsgs.forEach(function(res){%>
+            <div class="list-group-item list-group-item-action ">
+               <%=res['']%>
+            </div>
+            <%})%>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-2.5">
+      <div class='card bg-white '>
+        <div class='card-header  '>
+          个人信息
+        </div>
+        <div class='card-body'>
+          <div class='user_card'>
+            <div>
+              <a class='user_avatar' href="/user/<%=session.name%>">
+                <img src="/images/7081645.png" width="40" height="40" alt="Generic placeholder image" />
+              </a>
+              <span class='user_name'>
+                <a class='dark' href="/user/<%=session.name%>">
+                  <%=session.name%>
+                </a>
+              </span>
+
+              <div class='board clearfix'>
+                <div class='floor'>
+                  <span class='big'>积分:
+                    <%=session.integral%>
+                  </span>
+                </div>
+              </div>
+              <div class="space clearfix"></div>
+              <%if(session.sign==null){%>
+                <span class="signature">
+                  “这家伙很懒，什么个性签名都没有留下。”
+                </span>
+                <%}%>
+                  <%if(session.sign!=null){%>
+                    <span class="signature">
+                      <%=session.sign%>
+                    </span>
+                    <%}%>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class='inner bg-white p-3 mt-3'>
+          <a href='/topic/create' id='create_topic_btn'>
+            <button type="button" class="btn btn-success">
+              发布话题
+            </button>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <a href="#">
+          <img src="/images/FgQS-GQD" width="350" height="120">
+        </a>
+      </div>
+    </div>
+  </div>
+  <%- include footer%>

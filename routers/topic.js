@@ -152,35 +152,42 @@ router.post('/topic/:id/edit', koaBody(), async ctx => {
 //发表对文章的回复
 router.post('/topic/:id', koaBody(), async (ctx, next) => {
   console.log(ctx.request.body);
-  var cont = ctx.request.body.content;
+  var cont = ctx.request.body.content; //评论的内容
+
   let date = new Date();
   var res = {
     name: ctx.session.name,
-    userId:ctx.session.id,
+    userId: ctx.session.id,
     content: cont,
     topicId: ctx.params.id,
     replytime: date
   };
   await Reply.create(res);
-  var reply = await Reply.findOne({ where: res });
+  var reply = await Reply.findOne({ where: res }); //新评论
 
-  let topic = await Topic.findById(res.topicId);
+  let topic = await Topic.findById(res.topicId); //被回复的话题
   var re = topic.replies + 1;
 
+  //更新被回复话题的回复数和最后回复时间
   await topic.update({
     replies: re,
     lastreplytime: date
   });
 
-  var msg = {
-    targetId: topic.userid,
-    topicId: ctx.params.id,
-    replyId: reply.id,
-    replierId: ctx.session.id,
-    content: cont
-  };
-
-  await Message.create(msg);
+  // 评论他人的文章message模型创建数据
+  if (ctx.session.id != topic.userid) {
+    var msg = {
+      targetId: topic.userid,
+      targetname: topic.username,
+      topicId: ctx.params.id,
+      title: topic.title,
+      replyId: reply.id,
+      replierId: ctx.session.id,
+      replyname: ctx.session.name,
+      content: cont
+    };
+    await Message.create(msg);
+  }
 
   ctx.body = {
     result: 'success'
@@ -190,40 +197,49 @@ router.post('/topic/:id', koaBody(), async (ctx, next) => {
 //发表对评论的回复
 router.post('/topic/:id/reply', koaBody(), async (ctx, next) => {
   console.log(ctx.request.body);
-  var cont = ctx.request.body.content;
-  var replyId = ctx.request.body.replyId;
+  var cont = ctx.request.body.content; //评论的内容
+  var replyId = ctx.request.body.replyId; //被回复的评论的id
   let date = new Date();
   var res = {
     name: ctx.session.name,
-    userId:ctx.session.id,
+    userId: ctx.session.id,
     content: cont,
     topicId: ctx.params.id,
     replytime: date
   };
   await Reply.create(res);
-  var reply = await Reply.findOne({ where: res });
-  var targetreply = await Reply.findById(replyId);
+  var reply = await Reply.findOne({ where: res }); //新评论
+  var targetreply = await Reply.findById(replyId); //被回复的评论
   console.log(targetreply.userId);
-  var msg = {
-    targetId: targetreply.userId,
-    topicId: ctx.params.id,
-    replyId: reply.id,
-    replierId: ctx.session.id,
-    content: cont
-  };
-  await Message.create(msg);
+
+  // 更新话题评论数及最后评论时间
   let topic = await Topic.findById(res.topicId);
-
   var re = topic.replies + 1;
-
   await topic.update({
     replies: re,
     lastreplytime: date
   });
+
+  // 评论他人的回复时创建数据
+  if (ctx.session.id != targetreply.userId) {
+    var msg = {
+      targetId: targetreply.userId,
+      targetname: targetreply.name,
+      topicId: ctx.params.id,
+      title: topic.title,
+      replyId: reply.id,
+      replierId: ctx.session.id,
+      replyname: ctx.session.name,
+      content: cont
+    };
+    await Message.create(msg);
+  }
+
   ctx.body = {
     result: 'success'
   };
 });
+
 //点赞
 
 router.post('/topic/:id/like', koaBody(), async ctx => {
