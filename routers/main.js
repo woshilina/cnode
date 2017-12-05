@@ -3,6 +3,7 @@
 const Topic = require('../database/models/topic');
 const Reply = require('../database/models/reply');
 const User = require('../database/models/user');
+const Message = require('../database/models/message');
 const router = require('koa-router')();
 const koaBody = require('koa-body');
 const moment = require('moment');
@@ -35,11 +36,20 @@ router.get('/home', async ctx => {
     order: [[sequelize.literal('lastreplytime DESC')]]
   });
 
+  //查询未读消息数量
+  if (ctx.session.id) {
+    let news = await Message.findAndCountAll({
+      where: { targetId: ctx.session.id, hasRead: 0 }
+    });
+    var newcount = news.count;
+  }
+
   var AllRows = result.rows;
   var AllCount = result.count;
   var AllRow = page(1, AllCount, AllRows);
 
   await ctx.render('/main', {
+    newcount: newcount,
     session: ctx.session,
     topics: AllRow
   });
@@ -208,13 +218,21 @@ router.get('/home/tab/:tab/page/:page', async ctx => {
 
 router.get('/signout', async ctx => {
   ctx.session = null;
-  ctx.redirect("/home")
+  ctx.redirect('/home');
 });
 
 // 设置页
 
 router.get('/setting', async ctx => {
+  //查询未读消息数量
+  if (ctx.session.id) {
+    let news = await Message.findAndCountAll({
+      where: { targetId: ctx.session.id, hasRead: 0 }
+    });
+    var newcount = news.count;
+  }
   await ctx.render('/set', {
+    newcount: newcount,
     session: ctx.session
   });
 });
@@ -357,9 +375,19 @@ router.get('/user/:name', async ctx => {
     }
   }
   console.log(preparttopics);
+
+  //查询未读消息数量
+  if (ctx.session.id) {
+    let news = await Message.findAndCountAll({
+      where: { targetId: ctx.session.id, hasRead: 0 }
+    });
+    var newcount = news.count;
+  }
+
   await ctx.render('/spage', {
     session: ctx.session,
     user: user,
+    newcount: newcount,
     pretopics: pretopics,
     topics: topics,
     count: count,
@@ -389,8 +417,17 @@ router.get('/user/:name/topics', async ctx => {
     });
   }
 
+  //查询未读消息数量
+  if (ctx.session.id) {
+    let news = await Message.findAndCountAll({
+      where: { targetId: ctx.session.id, hasRead: 0 }
+    });
+    var newcount = news.count;
+  }
+
   await ctx.render('/spagetopics', {
     session: ctx.session,
+    newcount: newcount,
     user: user,
     topics: topics
   });
@@ -407,7 +444,7 @@ router.get('/user/:name/replies', async ctx => {
     order: [[sequelize.literal('createdAt DESC')]]
   });
 
-  // 根据用户评论获取相关话题   ?如何去重
+  // 根据用户评论获取相关话题
   var parttopics = [];
   for (var i of reply) {
     var t = await Topic.findOne({ where: { id: i.topicId } });
@@ -428,9 +465,18 @@ router.get('/user/:name/replies', async ctx => {
     });
   }
 
+  //查询未读消息数量
+  if (ctx.session.id) {
+    let news = await Message.findAndCountAll({
+      where: { targetId: ctx.session.id, hasRead: 0 }
+    });
+    var newcount = news.count;
+  }
+
   await ctx.render('/spagereplies', {
     session: ctx.session,
     user: user,
+    newcount: newcount,
     parttopics: parttopics
   });
 });

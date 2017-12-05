@@ -94,8 +94,25 @@ router.get('/topic/:id', async (ctx, next) => {
     }
   }
 
+  let msgs = await Message.findAll({
+    where: { topicId: Id, targetname: ctx.session.name }
+  });
+
+  msgs.forEach(function(msg) {
+    msg.update({ hasRead: true });
+  });
+
+  //查询未读消息数量
+  if (ctx.session.id) {
+    let news = await Message.findAndCountAll({
+      where: { targetId: ctx.session.id, hasRead: 0 }
+    });
+    var newcount = news.count;
+  }
+
   await ctx.render('/stopic', {
     session: ctx.session,
+    newcount: newcount,
     topics: topic,
     ttime: [tc_time, tu_time],
     stopics: alltopics,
@@ -127,8 +144,17 @@ router.get('/topic/:id/edit', async (ctx, next) => {
   var Id = ctx.params.id;
   let topic = await Topic.findById(Id);
 
+  //查询未读消息数量
+  if (ctx.session.id) {
+    let news = await Message.findAndCountAll({
+      where: { targetId: ctx.session.id, hasRead: 0 }
+    });
+    var newcount = news.count;
+  }
+
   await ctx.render('/edit', {
     session: ctx.session,
+    newcount: newcount,
     topics: topic
   });
 });
@@ -184,7 +210,7 @@ router.post('/topic/:id', koaBody(), async (ctx, next) => {
       replyId: reply.id,
       replierId: ctx.session.id,
       replyname: ctx.session.name,
-      isat:0,
+      isat: 0,
       content: cont
     };
     await Message.create(msg);
@@ -231,7 +257,7 @@ router.post('/topic/:id/reply', koaBody(), async (ctx, next) => {
       replyId: reply.id,
       replierId: ctx.session.id,
       replyname: ctx.session.name,
-      isat:1,
+      isat: 1,
       content: cont
     };
     await Message.create(msg);

@@ -43,7 +43,11 @@
           </li>
           <li class="nav-item">
             <a class="nav-link  text-white" href="/my/messages">
-              <small>未读消息</small>
+              <small>未读消息
+                <%if(newcount!=0){%>
+                  <%=newcount%>
+                    <%}%>
+              </small>
             </a>
           </li>
           <li class="nav-item">
@@ -74,4 +78,3 @@
           <%}%>
   </ul>
 </div>
- 

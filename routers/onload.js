@@ -47,7 +47,7 @@ router.get('/my/messages', async ctx => {
   });
   var newmsgs = news.rows;
   var newcount = news.count;
- 
+
   //过往消息按时间倒序
   let olds = await Message.findAndCountAll({
     where: { targetId: userid, hasRead: 1 },
@@ -55,7 +55,7 @@ router.get('/my/messages', async ctx => {
   });
   var oldmsgs = olds.rows;
   var oldcount = olds.count;
-  
+
   await ctx.render('./message', {
     session: ctx.session,
     newmsgs: newmsgs,
