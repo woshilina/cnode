@@ -17,16 +17,18 @@
               <img class="mr-3 " src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image">
               <div class="media-body align-self-center d-flex  justify-content-between">
                 <div>
-                  <%=res['replies']%>/
-                    <small>
-                      <%=res['clicks']%>
-                    </small>
-                    <span class="badge badge-secondary">
-                      <%=res['tabValue']%>
-                    </span>
-                    <a href="/topic/<%=res['id']%>">
-                      <%=res['title']%>
-                    </a>
+                  <span data-toggle="tooltip" data-placement="top" title="回复数">
+                    <%=res['replies']%>
+                  </span>/
+                  <small data-toggle="tooltip" data-placement="top" title="点击数">
+                    <%=res['clicks']%>
+                  </small>
+                  <span class="badge badge-secondary">
+                    <%=res['tabValue']%>
+                  </span>
+                  <a href="/topic/<%=res['id']%>">
+                    <%=res['title']%>
+                  </a>
                 </div>
                 <div class="col-2 d-flex  justify-content-between">
                   <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image">
@@ -144,7 +146,7 @@
                               <%}%>
                         </li>
                         <%tops.forEach(function(res){%>
-                          <li class="list-group-item">
+                          <li class="list-group-item py-2">
                             <%=res.integral%>&nbsp&nbsp
                               <a href="/user/<%=res.name%>" class="text-muted">
                                 <%=res.name%>

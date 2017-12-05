@@ -222,7 +222,7 @@ router.post('/topic/:id', koaBody(), async (ctx, next) => {
     replytime: date
   };
   await Reply.create(res);
-  var reply = await Reply.findOne({ where: res }); //新评论
+  let reply = await Reply.findOne({ where: res }); //新评论
 
   let topic = await Topic.findById(res.topicId); //被回复的话题
   var re = topic.replies + 1;
@@ -232,6 +232,11 @@ router.post('/topic/:id', koaBody(), async (ctx, next) => {
     replies: re,
     lastreplytime: date
   });
+
+  // 更新用户的回复数
+  let user = await User.findById(ctx.session.id);
+  user.replies++;
+  await user.update({ replies: user.replies });
 
   // 评论他人的文章message模型创建数据
   if (ctx.session.id != topic.userid) {
@@ -279,6 +284,11 @@ router.post('/topic/:id/reply', koaBody(), async (ctx, next) => {
     replies: re,
     lastreplytime: date
   });
+
+  // 更新用户的回复数
+  let user = await User.findById(ctx.session.id);
+  user.replies++;
+  await user.update({ replies: user.replies });
 
   // 评论他人的回复时创建数据
   if (ctx.session.id != targetreply.userId) {
@@ -383,6 +393,12 @@ router.get('/reply/:id/delete', koaBody(), async ctx => {
   let reply = await Reply.findById(id);
   reply.destroy();
   ctx.body = reply.topicId;
+
+  // 更新用户的回复数
+  let user = await User.findById(ctx.session.id);
+  user.replies--;
+  await user.update({ replies: user.replies });
+
   await Like.destroy({
     where: {
       replyId: id
