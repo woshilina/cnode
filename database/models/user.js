@@ -6,10 +6,11 @@ const Sequelize = require('sequelize');
 const User = sequelize.define('user', {
   name: { type: Sequelize.STRING, allowNULL: false }, //用户名
   password: { type: Sequelize.STRING, allowNULL: true }, //密码
-  //noreadmsgcount:{type: Sequelize.INTEGER, allowNULL: false, defaultValue: 0},//未读消息数
+  replies:{type: Sequelize.INTEGER, allowNULL: false, defaultValue: 0},//评论数
   // HeadPortriait: { type: Sequelize.BLOB, allowNULL: true },//头像
   integral: { type: Sequelize.INTEGER, allowNULL: false, defaultValue: 0 }, //积分
   TopicCloNum: { type: Sequelize.INTEGER, allowNULL: false, defaultValue: 0 }, //话题收藏个数
+  topiccount:{ type: Sequelize.INTEGER, allowNULL: false, defaultValue: 0 },//创建话题数
   Email: { type: Sequelize.STRING, allowNULL: true },
   city: { type: Sequelize.STRING, allowNULL: true },
   sign: { type: Sequelize.STRING, allowNULL: true },

@@ -6,7 +6,7 @@ const Message = require('../database/models/message');
 const router = require('koa-router')();
 const koaBody = require('koa-body');
 const moment = require('moment');
-
+const sequelize = require('../database/sequelize');
 moment().format();
 moment.locale('zh-cn');
 
@@ -41,8 +41,10 @@ router.post('/topic/create', koaBody(), async ctx => {
   };
   let user = await User.findById(ctx.session.id);
   user.integral += 5;
+  user.topics += 1;
   user.update({
-    integral: user.integral
+    integral: user.integral,
+    topics: user.topics
   });
   ctx.session.integral = user.integral;
   await Topic.create(q);
@@ -63,13 +65,25 @@ router.get('/topic/:id', async (ctx, next) => {
     clicks: res_clicks
   });
 
-  // 从数据库查询作者创建的的所有话题
-  var alltopics = await Topic.findAll({
+  // 从数据库查询作者创建的其他所有话题,按创建时间倒序
+  var others = await Topic.findAndCountAll({
     where: {
-      userid: topic.userid
-    }
+      userid: topic.userid,
+      id: { $not: Id }
+    },
+    order: [[sequelize.literal('createdAt DESC')]]
   });
 
+  var othercount = others.count;
+  var othertopics = others.rows;
+  var someothers = [];
+  if (othercount > 5) {
+    for (var i = 0; i < 5; i++) {
+      someothers.push(othertopics[i]);
+    }
+  } else {
+    someothers = othertopics;
+  }
   // 从数据库查询到当前话题所有的评论
   var replies = await Reply.findAll({
     where: {
@@ -123,8 +137,9 @@ router.get('/topic/:id', async (ctx, next) => {
     session: ctx.session,
     newcount: newcount,
     topics: topic,
+    othercount: othercount,
     ttime: [tc_time, tu_time],
-    stopics: alltopics,
+    someothers: someothers,
     replys: reply_res,
     likes: like_res
   });
@@ -137,11 +152,20 @@ router.get('/topic/:id/delete', async (ctx, next) => {
   console.log(i);
   let topic = await Topic.findById(i);
 
+  // 删除此话题的数据
   topic.destroy({
     where: {
       id: i
     }
   });
+
+  // 创建的话题数量减一
+  var user = await User.findById(ctx.session.id);
+  user.topics -= 1;
+  user.update({
+    topics: user.topics
+  });
+
   ctx.body = {
     result: 'success'
   };

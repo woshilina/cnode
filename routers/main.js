@@ -513,4 +513,39 @@ router.get('/user/:name/replies', async ctx => {
   });
 });
 
+//积分榜页
+router.get('/user/top/:top', async ctx => {
+  //查询未读消息数量
+  if (ctx.session.id) {
+    let news = await Message.findAndCountAll({
+      where: { targetId: ctx.session.id, hasRead: 0 }
+    });
+    var newcount = news.count;
+  }
+
+  // 积分榜
+  let users = await User.findAndCountAll({
+    order: [[sequelize.literal('integral DESC')]]
+  });
+  let rows = users.rows;
+  let usercount = users.count;
+  let topcount;
+  let tops = [];
+  if (usercount > 100) {
+    for (var i = 0; i < 100; i++) {
+      tops.push(rows[i]);
+    }
+    topcount = 100;
+  } else {
+    tops = rows;
+    topcount = usercount;
+  };
+
+ await ctx.render('./top', {
+    session: ctx.session,
+    newcount: newcount,
+    topcount: topcount,
+    tops: tops
+  });
+});
 module.exports = router;

@@ -1,4 +1,3 @@
-
 <!-- 单篇文章页 -->
 
 <%-include header%>
@@ -83,24 +82,13 @@
                               </span>
                             </div>
                             <%}%>
-                          <!-- 登陆但与作者不是同一个人 -->
-                          <% if(session.id&&session.name != res['name']){ %>
+                              <!-- 登陆但与作者不是同一个人 -->
+                              <% if(session.id&&session.name != res['name']){ %>
 
-                            <!--如果登陆者对此评论点赞了  -->
-                            <%if(likes[index]!=0){%>
-                              <div class="float-right">
-                                <button id='like' type="button" value="<%=res['id']%>" class="btn btn-success  btn-sm">点赞</button>
-                                <span>
-                                  <%=res['likes']%>
-                                </span>
-                                <button id='sreply' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm" data-toggle="collapse" data-target="#srep<%=res['id']%>"
-                                  aria-expanded="false" aria-controls="srep<%=res['id']%>">回复</button>
-                              </div>
-                              <%}%>
-                              <!-- 如果登陆者没有对此评论点赞 -->
-                                <%if(likes[index]===0){%>
+                                <!--如果登陆者对此评论点赞了  -->
+                                <%if(likes[index]!=0){%>
                                   <div class="float-right">
-                                    <button id='like' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm">点赞</button>
+                                    <button id='like' type="button" value="<%=res['id']%>" class="btn btn-success  btn-sm">点赞</button>
                                     <span>
                                       <%=res['likes']%>
                                     </span>
@@ -108,16 +96,28 @@
                                       aria-expanded="false" aria-controls="srep<%=res['id']%>">回复</button>
                                   </div>
                                   <%}%>
+                                    <!-- 如果登陆者没有对此评论点赞 -->
+                                    <%if(likes[index]===0){%>
+                                      <div class="float-right">
+                                        <button id='like' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm">点赞</button>
+                                        <span>
+                                          <%=res['likes']%>
+                                        </span>
+                                        <button id='sreply' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm" data-toggle="collapse" data-target="#srep<%=res['id']%>"
+                                          aria-expanded="false" aria-controls="srep<%=res['id']%>">回复</button>
+                                      </div>
+                                      <%}%>
 
-                                    <%}%>
-                                      <br/>
-                                      <%= res['content'] %>
-                                        <div class="bg-white collapse" id="srep<%=res['id']%>" value="<%=res['id']%>">
-                                          <textarea class='w-100' id="stext" rows='7'>@<%=res['name']%>                                           
-                                          </textarea>
-                                          <button id='sre' type="button" class="btn btn-info  btn-sm">回复</button>
-                                          <span class="suc"></span>
-                                        </div>
+                                        <%}%>
+                                          <br/>
+                                          <%= res['content'] %>
+                                            <div class="bg-white collapse" id="srep<%=res['id']%>" value="<%=res['id']%>">
+                                              <textarea class='w-100' id="stext" rows='7'>@
+                                                <%=res['name']%>
+                                              </textarea>
+                                              <button id='sre' type="button" class="btn btn-info  btn-sm">回复</button>
+                                              <span class="suc"></span>
+                                            </div>
                   </form>
                 </p>
               </div>
@@ -175,22 +175,25 @@
           </div>
         </div>
       </div>
-      <%if(stopics){%>
-        <div class="mt-3">
-          <ul class="list-group">
-            <li class="list-group-item">作者其他话题</li>
-            <%stopics.forEach(function(res){%>
-              <%if(res['id']!=topics.id){%>
+
+      <div class="mt-3">
+        <ul class="list-group">
+          <li class="list-group-item">作者其他话题</li>
+          <%if(othercount>0){%>
+            <%someothers.forEach(function(res){%>
+              <li class="list-group-item">
+                <a href="/topic/<%=res['id']%>" class="text-muted">
+                  <%=res['title']%>
+                </a>
+              </li>
+              <%})}else{%>
                 <li class="list-group-item">
-                  <a href="/topic/<%=res['id']%>" class="text-muted">
-                    <%=res['title']%>
-                  </a>
+                  无其他话题
                 </li>
                 <%}%>
-                  <%})%>
-          </ul>
-        </div>
-        <%}%>
+        </ul>
+      </div>
+
     </div>
   </div>
   <%-include footer%>
@@ -322,14 +325,14 @@
       $(document).ready(function () {
         $("button[id='sre']").each(function () {
           $(this).on('click', function () {
-            var id=$(this).parent().attr('value');
+            var id = $(this).parent().attr('value');
             var text = $(this).prev().val();
             $.ajax({
-              url: document.URL+'/reply',
+              url: document.URL + '/reply',
               type: "POST",
               cache: false,
               data: {
-                replyId:id,
+                replyId: id,
                 content: text
               },
               dataType: 'json',
