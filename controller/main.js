@@ -78,7 +78,7 @@ const homepage = async ctx => {
   var AllRow = page(1, AllCount, AllRows);
 
   // 无人回复的话题
-  var noreplytopics = await Topic.findAndCountAll({ where: { replies: 0 } });
+  var noreplytopics = await Topic.findAndCountAll({ where: { replies: 0 },order: [[sequelize.literal('createdAt DESC')]] });
   var noreplycount = noreplytopics.count;
   var allnoreplytopics = noreplytopics.rows;
   var noreplytopics = [];

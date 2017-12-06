@@ -60,7 +60,7 @@ const postsignin = async ctx => {
 
 //get注册页函数
 const getsignin = async function(ctx) {
-  await ctx.render('./signin');
+  await ctx.render('./signin',{session:ctx.session});
 };
 
 //退出

@@ -1,33 +1,31 @@
 <%- include header%>
-  <div class="container bg-white mt-3" id="context" style="margin-bottom:212px">
+  <div class="container onload" id="context">
     <form class="col-sm-offset-3 col-sm-6 " role="form" method="post" onsubmit="return false">
       <fieldset>
         <legend></legend>
         <div class="panel panel-default ">
-          <div class="panel-heading">
-            <p class="tc">请先登录</p>
+          <div class="panel-heading text-center mb-3">
+            <h3 class="tc text-primary font-weight-bold">登录</h3>
           </div>
-          <div class="panel-body m15">
+          <div class="panel-body m15 bg-white p-5 rounded">
             <div class="form-group row">
-              <label for="inputusername" class="col-2 col-form-label">用户名</label>
-              <div class="col-sm-7">
+              <label for="inputusername" class="col-3 col-form-label text-right">用户名</label>
+              <div class="col-8">
                 <input type="text" class="form-control" id="username" placeholder="请输入用户名">
               </div>
             </div>
             <div class="form-group row">
-              <label for="inputpassword" class="col-2 col-form-label">密码</label>
-              <div class="col-7">
+              <label for="inputpassword" class="col-3 col-form-label text-right">密码</label>
+              <div class="col-8">
                 <input type="password" class="form-control" id="password" placeholder="请输入密码">
               </div>
             </div>
-            <div class=" form-group row ">
-              <label class="col-2 col-form-label"></label>
-              <button type="submit" class="btn btn-primary btn-block mx-2 col-2" id="onload0">登录</button>
-              <button type="button" class="btn btn-info col-4 " id="onload1">通过 GitHub 登陆</button>
-            </div>
-            <div id="text">你好！
-              <span id="name"></span>
-            </div>
+            <div class="form-group row ">
+              <label class="col-3 col-form-label"></label>
+              <div class="col-8">
+                <button type="submit" class="btn btn-primary btn-block" id="onload0">登录</button>
+              </div>
+            </div>          
           </div>
         </div>
       </fieldset>
@@ -40,7 +38,10 @@
         // $('#text').load('/demo')
         var username = $("#username").val();
         var password = $("#password").val();
-        var data = { uname: username, upwd: password };
+        var data = {
+          uname: username,
+          upwd: password
+        };
         $.ajax({
           url: '/onload',
           type: 'post',

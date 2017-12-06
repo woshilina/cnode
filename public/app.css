@@ -1,11 +1,22 @@
-html,
 body {
   margin: 0;
   padding: 0;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color:#aaa
 }
-
+.container {
+  flex: 1;
+}
+.onload,
+.signin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 #footer {
   width: 100%;
   height: 206px;
-  margin: 0 auto;
+  top:20px
 }
