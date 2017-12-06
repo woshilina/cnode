@@ -144,31 +144,31 @@
         <div class='card-body'>
           <div class='user_card'>
             <div>
-              <a class='user_avatar' href="/user/<%=topics.username%>">
+              <a class='user_avatar' href="/user/<%=user.name%>">
                 <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image" />
               </a>
-              <span class='user_'>
-                <a class='dark' href="/user/<%=topics.username%>">
-                  <%= topics.username %>
+              <span class='user_name'>
+                <a class='dark' href="/user/<%= user.name%>">
+                  <%= user.name %>
                 </a>
               </span>
 
               <div class='board clearfix'>
                 <div class='floor'>
                   <span class='big'>积分:
-                    <%=session.integral%>
+                    <%=user.integral%>
                   </span>
                 </div>
               </div>
               <div class="space clearfix"></div>
-              <%if(session.sign==null){%>
+              <%if(user.sign==null){%>
                 <span class="signature font-italic">
                   “这家伙很懒，什么个性签名都没有留下。”
                 </span>
                 <%}%>
-                  <%if(session.sign!=null){%>
+                  <%if(user.sign!=null){%>
                     <span class="signature font-italic">
-                      <%=session.sign%>
+                      <%=user.sign%>
                     </span>
                     <%}%>
             </div>

@@ -1,11 +1,11 @@
-const message=require('../controller/message');
+ 
 const userset=require('../controller/userset');
 const userpage=require('../controller/userpage');
 const router = require('koa-router')();
 const koaBody = require('koa-body');
 
 // 未读消息页
-router.get('/my/messages',message);
+router.get('/my/messages',userpage.mymessage);
 
 // 设置页
 router.get('/setting', userset.set);

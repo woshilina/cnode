@@ -51,6 +51,7 @@ const postcreate = async ctx => {
 //单篇文章页
 const singletopic = async (ctx, next) => {
   var Id = ctx.params.id;
+
   //从数据库查询到当前话题
   var topic = await Topic.findById(Id);
   var tc_time = moment(topic.createdAt).fromNow(); //话题创建时间
@@ -60,6 +61,9 @@ const singletopic = async (ctx, next) => {
   await topic.update({
     clicks: res_clicks
   });
+
+  // 从数据库查询作者信息
+  let user=await User.findById(topic.userid);
 
   // 从数据库查询作者创建的其他所有话题,按创建时间倒序
   var others = await Topic.findAndCountAll({
@@ -133,6 +137,7 @@ const singletopic = async (ctx, next) => {
     session: ctx.session,
     newcount: newcount,
     topics: topic,
+    user:user,
     othercount: othercount,
     ttime: [tc_time, tu_time],
     someothers: someothers,
