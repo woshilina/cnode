@@ -29,8 +29,8 @@ app.use(session(CONFIG, app));
 
 app.use(serve('public'));
 
-app.use(require('./routers/onload').routes());
-app.use(require('./routers/signin').routes());
+app.use(require('./routers/user').routes());
+app.use(require('./routers/sign').routes());
 app.use(require('./routers/main').routes());
 app.use(require('./routers/topic').routes());
  
