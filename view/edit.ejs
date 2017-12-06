@@ -15,16 +15,17 @@
         <form id='create_topic_form ' action="/topic/create" method="post">
           <fieldset class="pl-3 py-3">
             <span class="tab-selector">选择版块：</span>
-            <select name="tab" id="tab-value">
+            <select name="tab" id="tab-value"class="col-3 rounded">
               <option value="">请选择</option>
               <option value="share">分享</option>
               <option value="ask">问答</option>
               <option value="job">招聘</option>
               <option value="dev">客户端测试</option>
             </select>
+          
             <span id="topic_create_warn"></span>
             </br>
-            <textarea autofocus class='col-11' id='title' name='title' rows='1' placeholder="<%=topics.title%>"></textarea>
+            <textarea autofocus class='col-11 mt-3' id='title' name='title' rows='1' placeholder="<%=topics.title%>"></textarea>
             <textarea class='col-11' id="text" name='t_content' rows='20' placeholder='<%=topics.text%>'></textarea>
             <br>
             <input type="button" class='span-primary submit_btn' data-loading-text="提交中" value="提交">
