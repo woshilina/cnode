@@ -6,6 +6,7 @@ const serve = require('koa-static');
 const config = require('./database/config');
 const app = new Koa();
 
+
 app.keys = ['some secret hurr'];
 
 renders(app, {
@@ -33,5 +34,7 @@ app.use(require('./routers/user').routes());
 app.use(require('./routers/sign').routes());
 app.use(require('./routers/main').routes());
 app.use(require('./routers/topic').routes());
+
+
 
 app.listen(process.env.PORT || 3000);
