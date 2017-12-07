@@ -1,14 +1,14 @@
 {
-  "name": "cnode",
+  "name": "lina-blog",
   "version": "1.0.0",
-  "description": "",
+  "description": "imitate cnode",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server"
+    "start": "node app.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["koa2", "mysql"],
+  "author": "lina",
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^4.0.0-beta.2",
