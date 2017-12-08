@@ -1,8 +1,8 @@
 //引入数据库的模板
-const Topic = require('../database/models/topic');
-const Reply = require('../database/models/reply');
-const User = require('../database/models/user');
-const Message = require('../database/models/message');
+const Topic = require('../database/models/lina-topic');
+const Reply = require('../database/models/lina-reply');
+const User = require('../database/models/lina-user');
+const Message = require('../database/models/lina-message');
 const moment = require('moment');
 const sequelize = require('../database/sequelize');
 moment().format();

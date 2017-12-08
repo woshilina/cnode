@@ -35,6 +35,4 @@ app.use(require('./routers/sign').routes());
 app.use(require('./routers/main').routes());
 app.use(require('./routers/topic').routes());
 
-
-
 app.listen(process.env.PORT || 3000);

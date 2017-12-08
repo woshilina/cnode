@@ -1,9 +1,9 @@
 var config = {
-  database: 'sql12209561',
-  username: 'sql12209561',
-  password: 'vcCXDZknRD',
-  host: 'sql12.freesqldatabase.com',
-  port:3306
+  database: 'tjh59715fmtecsiz',
+  username: 'i5r80f0zmki4rl6p',
+  password: 'vkv4iq37wa1qy5yi',
+  host: 'ipobfcpvprjpmdo9.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+  port: 3306
 };
 
 module.exports = config;

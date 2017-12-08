@@ -1,6 +1,6 @@
 //导入数据库模型
-const User = require('../database/models/user');
-const Message = require('../database/models/message');
+const User = require('../database/models/lina-user');
+const Message = require('../database/models/lina-message');
 
 const sequelize = require('../database/sequelize');
 
