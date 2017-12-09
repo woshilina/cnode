@@ -165,7 +165,7 @@
       // 设置首页分页按钮
 
       $.ajax({
-        url: '/home/all',
+        url: '/all',
         type: "GET",
         cache: false,
         dataType: 'json',
@@ -192,7 +192,7 @@
           $(this).attr('class', 'btn btn-success tab');
           var page = 1;
           $.ajax({
-            url: '/home/tab/' + value + '/page/' + page,
+            url: '/tab/' + value + '/page/' + page,
             type: "GET",
             cache: false,
             dataType: 'json',
@@ -356,7 +356,7 @@
 
       function getpagetext(value, page) {
         $.ajax({
-          url: '/home/tab/' + value + '/page/' + page,
+          url: '/tab/' + value + '/page/' + page,
           type: "GET",
           cache: false,
           dataType: 'json',

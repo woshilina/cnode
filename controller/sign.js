@@ -66,7 +66,7 @@ const getsignin = async function(ctx) {
 //退出
 const signout = async ctx => {
   ctx.session = null;
-  ctx.redirect('/home');
+  ctx.redirect('/');
 };
 
 module.exports = { postonload, getonload, postsignin, signout, getsignin };
