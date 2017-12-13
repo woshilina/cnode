@@ -5,6 +5,10 @@ const User = require('../database/models/lina-user');
 const Message = require('../database/models/lina-message');
 const moment = require('moment');
 const sequelize = require('../database/sequelize');
+var fs = require('fs');
+var formidable = require('formidable');
+var http = require('http');
+var util = require('util');
 moment().format();
 moment.locale('zh-cn');
 
@@ -219,4 +223,23 @@ const mymessage = async ctx => {
   });
 };
 
-module.exports={userpage,createtopic,replytopic, mymessage}
+// 上传个人头像
+const inputimage = async ctx => {
+  var cacheFolder = 'public/upload/';
+  var path = require('path');
+  var userDirPath = cacheFolder;
+  if (!fs.existsSync(userDirPath)) {
+    fs.mkdirSync(userDirPath);
+  }
+  var form = new formidable.IncomingForm(); //创建上传表单
+  form.encoding = 'utf-8'; //设置编辑
+  form.uploadDir = userDirPath; //设置上传目录
+  form.keepExtensions = true; //保留后缀
+  form.maxFieldsSize = 2 * 1024 * 1024; //文件大小
+  form.type = true;
+  var displayUrl;
+  form.parse(ctx.req, function(err, fields, files) {
+    ctx.res.end(util.inspect({ fields: fields, files: files }));
+  });
+};
+module.exports = { userpage, createtopic, replytopic, mymessage, inputimage };

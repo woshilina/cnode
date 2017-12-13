@@ -1,7 +1,7 @@
 <!-- 个人设置页 -->
 <%-include header%>
   <div class="container d-flex justify-content-center   mt-3">
-    <div class="col-8">
+    <div class="col-10">
       <div class="bg-white  card">
         <div class="card-header breadcrumb">
           <span>
@@ -10,7 +10,7 @@
           </span>
           <span class="active">设置</span>
         </div>
-        <div class="card-body  pl-5">
+        <div class="card-body">
           <div class="alert alert-success set" role="alert" style="display:none">
             保存成功！
           </div>
@@ -20,57 +20,69 @@
           <div class="alert alert-success passright" role="alert" style="display:none">
             更改密码成功！请重新登录！
           </div>
-          <form>
-            <div class="form-group row">
-              <label class="col-2 col-form-label">用户名</label>
-              <div class="col-4">
-                <input type="text" class="form-control" id="Name" placeholder="<%=session.name%>">
+          <div class="d-flex">
+            <div class="col-8 pl-4">
+              <form>
+                <div class="form-group row">
+                  <label class="col-3 col-form-label">用户名</label>
+                  <div class="col-6">
+                    <input type="text" class="form-control" id="Name" placeholder="<%=session.name%>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-3 col-form-label">电子邮箱</label>
+                  <div class="col-6">
+                    <input type="text" class="form-control" id="Email" placeholder="<%=session.Email%>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-3 col-form-label">个人网站</label>
+                  <div class="col-6">
+                    <input type="text" class="form-control" id="web" placeholder="<%=session.web%>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-3 col-form-label">所在地点</label>
+                  <div class="col-6">
+                    <input type="text" class="form-control" id="city" placeholder="<%=session.city%>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-3 col-form-label">微博</label>
+                  <div class="col-6">
+                    <input type="text" class="form-control" id="weibo" placeholder="<%=session.weibo%>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-3 col-form-label">GitHub</label>
+                  <div class="col-6">
+                    <input type="text" class="form-control" id="GitHub" placeholder="<%=session.GitHub%>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-3 col-form-label">个性签名</label>
+                  <div class="col-6">
+                    <input type="text" class="form-control" id="sign" placeholder="<%=session.sign%>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col-4">
+                    <button type="button" class="btn btn-primary form-control" id="inputset">保存设置</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-3 container" style="width:200px;height:200px">
+              <img src="/images/timg.jpg" style="width:150px;height:150px">
+              <input type="file" id="inpicture">
+              <button type="button" class="btn btn-primary mt-3" id="inimg">上传头像</button>
+              <div id="dialog" title="裁剪你的头像照片">
+                <div class="cut-container p-auto">
+                </div>
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-2 col-form-label">电子邮箱</label>
-              <div class="col-4">
-                <input type="text" class="form-control" id="Email" placeholder="<%=session.Email%>">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-2 col-form-label">个人网站</label>
-              <div class="col-4">
-                <input type="text" class="form-control" id="web" placeholder="<%=session.web%>">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-2 col-form-label">所在地点</label>
-              <div class="col-4">
-                <input type="text" class="form-control" id="city" placeholder="<%=session.city%>">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-2 col-form-label">微博</label>
-              <div class="col-4">
-                <input type="text" class="form-control" id="weibo" placeholder="<%=session.weibo%>">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-2 col-form-label">GitHub</label>
-              <div class="col-4">
-                <input type="text" class="form-control" id="GitHub" placeholder="<%=session.GitHub%>">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-2 col-form-label">个性签名</label>
-              <div class="col-4">
-                <input type="text" class="form-control" id="sign" placeholder="<%=session.sign%>">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-2 col-form-label"></label>
-              <div class="col-3">
-                <button type="button" class="btn btn-primary form-control" id="inputset">保存设置</button>
-              </div>
-            </div>
-          </form>
-
+          </div>
         </div>
       </div>
       <div class="card bg-white  mt-3 ">
@@ -109,13 +121,13 @@
     $(document).ready(function () {
       // 设置
       $("#inputset").click(function () {
-        var name = $("#Name").val()==''?$('#Name').attr('placeholder'):$("#Name").val();
-        var Email = $("#Email").val()==''?$('#Email').attr('placeholder'):$("#Email").val();
-        var weibo = $("#weibo").val()==''?$('#weibo').attr('placeholder'):$("#weibo").val();
-        var web = $("#web").val()==''?$('#web').attr('placeholder'):$("#web").val();
-        var city = $("#city").val()==''?$('#city').attr('placeholder'):$("#city").val();
-        var GitHub = $("#GitHub").val()==''?$('#GitHub').attr('placeholder'):$("#GitHub").val();
-        var sign = $("#sign").val()==''?$('#sign').attr('placeholder'):$("#sign").val();
+        var name = $("#Name").val() == '' ? $('#Name').attr('placeholder') : $("#Name").val();
+        var Email = $("#Email").val() == '' ? $('#Email').attr('placeholder') : $("#Email").val();
+        var weibo = $("#weibo").val() == '' ? $('#weibo').attr('placeholder') : $("#weibo").val();
+        var web = $("#web").val() == '' ? $('#web').attr('placeholder') : $("#web").val();
+        var city = $("#city").val() == '' ? $('#city').attr('placeholder') : $("#city").val();
+        var GitHub = $("#GitHub").val() == '' ? $('#GitHub').attr('placeholder') : $("#GitHub").val();
+        var sign = $("#sign").val() == '' ? $('#sign').attr('placeholder') : $("#sign").val();
         var dat = {
           name: name,
           Email: Email,
@@ -138,7 +150,6 @@
         });
       });
     });
-
 
     //  更改密码
     $("#inputpass").click(function () {
@@ -166,7 +177,66 @@
 
         },
       });
+    });
+
+    // 读取本地头像并剪裁上传
+    $("#dialog").dialog({
+      autoOpen: false,
+      width: 510,
+      height: 610,
+      buttons: {
+        "确定": function () {
+          var data = $('.cut-container>img').cropper('getCroppedCanvas', {
+            width: 150,
+            height: 150
+          });
+          // $('.container>img').empty().replaceWith(data);?为什么再次替换就不能了？
+          $(".container>img").attr("src", data.toDataURL());
+          $(this).dialog("close");
+        },
+        "取消": function () {
+          $(this).dialog("close");
+        }
+      }
+    });
+
+    //选择图片后打开裁剪对话框
+    $("#inpicture").change(function () {
+       file = this.files[0];
+      var reader = new FileReader();
+      if (/image+/.test(file.type)) {
+        reader.onload = function () {
+          $("#dialog").dialog("open");
+          $(".cut-container").empty();
+          $(".cut-container").append('<img src="' + this.result +
+            '" style="max-width:500px;max-height:500px"/>');
+          $('.cut-container>img').cropper({
+            aspectRatio: 1 / 1,
+            viewMode: 1,
+            background: true
+          });
+
+        }
+        reader.readAsDataURL(file)
+      };
     })
+
+    // 上传头像
+    $('#inimg').click(function () {
+      $('.cut-container>img').cropper("getCroppedCanvas").toBlob(function (blob) {
+        //   var name = $('a[class="dark"]').text().replace(/(^\s*)|(\s*$)/g, "");
+        var formData = new FormData();
+        formData.append('files', blob,file.name);
+        $.ajax({
+          type: "post",
+          url: '/upload', //用于文件上传的服务器端请求地址
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (result) {}
+        });
+      })
+    });
   </script>
 
   <%-include footer%>

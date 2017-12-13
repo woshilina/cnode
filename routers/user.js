@@ -1,11 +1,10 @@
- 
-const userset=require('../controller/userset');
-const userpage=require('../controller/userpage');
+const userset = require('../controller/userset');
+const userpage = require('../controller/userpage');
 const router = require('koa-router')();
 const koaBody = require('koa-body');
 
 // 未读消息页
-router.get('/my/messages',userpage.mymessage);
+router.get('/my/messages', userpage.mymessage);
 
 // 设置页
 router.get('/setting', userset.set);
@@ -25,5 +24,7 @@ router.get('/user/:name/topics', userpage.createtopic);
 // 个人参与话题页
 router.get('/user/:name/replies', userpage.replytopic);
 
+//上传个人头像
+router.post('/upload', userpage.inputimage);
 
 module.exports = router;

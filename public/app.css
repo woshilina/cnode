@@ -20,3 +20,6 @@ body {
   height: 206px;
   top:20px
 }
+#image{
+  max-width: 100%;
+}
