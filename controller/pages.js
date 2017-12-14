@@ -17,16 +17,26 @@ const userpage = async ctx => {
   var username = ctx.params.name;
 
   // 从数据库获取用户信息
-  let user = await User.findOne({ where: { name: username } });
+  let user = await User.findOne({
+    where: {
+      name: username
+    }
+  });
   var signtime = user.createdAt;
 
   // 更新用户注册时间
-  await user.update({ signfromnow: moment(signtime).fromNow() });
+  await user.update({
+    signfromnow: moment(signtime).fromNow()
+  });
 
   // 从数据库获取用户创建的话题 并按创建时间排序(时间倒序)
   let result = await Topic.findAndCountAll({
-    where: { username: username },
-    order: [[sequelize.literal('createdAt DESC')]]
+    where: {
+      username: username
+    },
+    order: [
+      [sequelize.literal('createdAt DESC')]
+    ]
   });
   var count = result.count; //用户创建的话题数量
   var topics = result.rows;
@@ -52,20 +62,28 @@ const userpage = async ctx => {
 
   // 从数据库获得用户的评论,按时间倒序
   let reply = await Reply.findAll({
-    where: { name: username },
-    order: [[sequelize.literal('createdAt DESC')]]
+    where: {
+      name: username
+    },
+    order: [
+      [sequelize.literal('createdAt DESC')]
+    ]
   });
 
   // 根据用户评论获取相关话题
   var parttopics = [];
   for (var i of reply) {
-    var t = await Topic.findOne({ where: { id: i.topicId } });
+    var t = await Topic.findOne({
+      where: {
+        id: i.topicId
+      }
+    });
     parttopics.push(t);
   }
 
   // 数组去重
   var hash = {};
-  parttopics = parttopics.reduce(function(item, next) {
+  parttopics = parttopics.reduce(function (item, next) {
     hash[next.id] ? '' : (hash[next.id] = true && item.push(next));
     return item;
   }, []);
@@ -89,7 +107,10 @@ const userpage = async ctx => {
   //查询未读消息数量
   if (ctx.session.id) {
     let news = await Message.findAndCountAll({
-      where: { targetId: ctx.session.id, hasRead: 0 }
+      where: {
+        targetId: ctx.session.id,
+        hasRead: 0
+      }
     });
     var newcount = news.count;
   }
@@ -110,11 +131,19 @@ const userpage = async ctx => {
 // 个人创建话题页函数
 const createtopic = async ctx => {
   var username = ctx.params.name;
-  let user = await User.findOne({ where: { name: username } });
+  let user = await User.findOne({
+    where: {
+      name: username
+    }
+  });
   // 从数据库获取用户创建的话题 并按创建时间排序(时间倒序)
   let result = await Topic.findAndCountAll({
-    where: { username: username },
-    order: [[sequelize.literal('createdAt DESC')]]
+    where: {
+      username: username
+    },
+    order: [
+      [sequelize.literal('createdAt DESC')]
+    ]
   });
   var count = result.count;
   var topics = result.rows;
@@ -130,7 +159,10 @@ const createtopic = async ctx => {
   //查询未读消息数量
   if (ctx.session.id) {
     let news = await Message.findAndCountAll({
-      where: { targetId: ctx.session.id, hasRead: 0 }
+      where: {
+        targetId: ctx.session.id,
+        hasRead: 0
+      }
     });
     var newcount = news.count;
   }
@@ -146,22 +178,34 @@ const createtopic = async ctx => {
 // 个人参与话题页函数
 const replytopic = async ctx => {
   var username = ctx.params.name;
-  let user = await User.findOne({ where: { name: username } });
+  let user = await User.findOne({
+    where: {
+      name: username
+    }
+  });
   // 从数据库获得用户的评论,按时间倒序
   let reply = await Reply.findAll({
-    where: { name: username },
-    order: [[sequelize.literal('createdAt DESC')]]
+    where: {
+      name: username
+    },
+    order: [
+      [sequelize.literal('createdAt DESC')]
+    ]
   });
 
   // 根据用户评论获取相关话题
   var parttopics = [];
   for (var i of reply) {
-    var t = await Topic.findOne({ where: { id: i.topicId } });
+    var t = await Topic.findOne({
+      where: {
+        id: i.topicId
+      }
+    });
     parttopics.push(t);
   }
   // 数组去重
   var hash = {};
-  parttopics = parttopics.reduce(function(item, next) {
+  parttopics = parttopics.reduce(function (item, next) {
     hash[next.id] ? '' : (hash[next.id] = true && item.push(next));
     return item;
   }, []);
@@ -177,7 +221,10 @@ const replytopic = async ctx => {
   //查询未读消息数量
   if (ctx.session.id) {
     let news = await Message.findAndCountAll({
-      where: { targetId: ctx.session.id, hasRead: 0 }
+      where: {
+        targetId: ctx.session.id,
+        hasRead: 0
+      }
     });
     var newcount = news.count;
   }
@@ -199,16 +246,26 @@ const mymessage = async ctx => {
 
   //新消息按时间倒序
   let news = await Message.findAndCountAll({
-    where: { targetId: userid, hasRead: 0 },
-    order: [[sequelize.literal('createdAt DESC')]]
+    where: {
+      targetId: userid,
+      hasRead: 0
+    },
+    order: [
+      [sequelize.literal('createdAt DESC')]
+    ]
   });
   var newmsgs = news.rows;
   var newcount = news.count;
 
   //过往消息按时间倒序
   let olds = await Message.findAndCountAll({
-    where: { targetId: userid, hasRead: 1 },
-    order: [[sequelize.literal('createdAt DESC')]]
+    where: {
+      targetId: userid,
+      hasRead: 1
+    },
+    order: [
+      [sequelize.literal('createdAt DESC')]
+    ]
   });
   var oldmsgs = olds.rows;
   var oldcount = olds.count;
@@ -224,10 +281,12 @@ const mymessage = async ctx => {
 };
 
 // 上传个人头像
-const inputimage = async ctx => {
+const inputimage = async(ctx) => {
   var cacheFolder = 'public/upload/';
   var path = require('path');
   var userDirPath = cacheFolder;
+  var username = ctx.params.name;
+  console.log(username);
   if (!fs.existsSync(userDirPath)) {
     fs.mkdirSync(userDirPath);
   }
@@ -238,8 +297,58 @@ const inputimage = async ctx => {
   form.maxFieldsSize = 2 * 1024 * 1024; //文件大小
   form.type = true;
   var displayUrl;
-  form.parse(ctx.req, function(err, fields, files) {
-    ctx.res.end(util.inspect({ fields: fields, files: files }));
+  form.parse(ctx.req, function (err, fields, files) {
+    console.log(files);
+    var filesName = files.files.name;
+    console.log(filesName);
+    var filesType = files.files.type;
+    console.log(filesType);
+    var patt = new RegExp(/(gif|jpg|jpeg|bmp|png)$/, "i");
+    console.log(patt.exec(filesName));
+    if (patt.exec(filesName)) {
+      var exName = patt.exec(filesName)[0];
+      console.log(exName);
+    }
+    // let photoname = username + '.' + exName;
+    // console.log(photoname);
+    // let newPath = userDirPath + photoname;
+    // console.log(newPath);
+    var oldPath = files.files.path;
+    var reg = new RegExp(/^public\\/);
+    displayUrl = oldPath.replace(reg, "");
+    console.log(displayUrl);
+
+    // if(!fs.existsSync(newPath)){
+    //   fs.mkdirSync(newPath);
+    // }else{
+    //   fs.unlink(newPath);
+    //   fs.mkdirSync(newPath);
+    // }
+
+    console.log(util.inspect({
+      fields: fields,
+      files: files
+    }));
+    ctx.res.end(util.inspect({
+      fields: fields,
+      files: files
+    }));
+  });
+
+  //更新该用户数据库记载的的头像url
+  var user = await User.findOne({
+    where: {
+      name: username
+    }
+  });
+  user.update({
+    headImgURL: displayUrl
   });
 };
-module.exports = { userpage, createtopic, replytopic, mymessage, inputimage };
+module.exports = {
+  userpage,
+  createtopic,
+  replytopic,
+  mymessage,
+  inputimage
+};

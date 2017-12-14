@@ -202,7 +202,7 @@
 
     //选择图片后打开裁剪对话框
     $("#inpicture").change(function () {
-       file = this.files[0];
+      file = this.files[0];
       var reader = new FileReader();
       if (/image+/.test(file.type)) {
         reader.onload = function () {
@@ -224,12 +224,13 @@
     // 上传头像
     $('#inimg').click(function () {
       $('.cut-container>img').cropper("getCroppedCanvas").toBlob(function (blob) {
-        //   var name = $('a[class="dark"]').text().replace(/(^\s*)|(\s*$)/g, "");
+       var name = $('a[class="dark"]').text().replace(/(^\s*)|(\s*$)/g, "");
         var formData = new FormData();
-        formData.append('files', blob,file.name);
+        formData.append('files', blob, file.name);
+        console.log(formData.get('files'));
         $.ajax({
           type: "post",
-          url: '/upload', //用于文件上传的服务器端请求地址
+          url: '/user/'+name+'/upload', //用于文件上传的服务器端请求地址
           data: formData,
           processData: false,
           contentType: false,
