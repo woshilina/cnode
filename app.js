@@ -5,7 +5,7 @@ const session = require('koa-session');
 const serve = require('koa-static');
 const config = require('./database/config');
 const app = new Koa();
-
+const koaBody = require('koa-body');
 
 app.keys = ['some secret hurr'];
 
@@ -29,6 +29,16 @@ const CONFIG = {
 app.use(session(CONFIG, app));
 
 app.use(serve('public'));
+
+app.use(koaBody({
+  multipart: true,
+  formLimit: 15,
+  formidable: {
+    // uploadDir: __dirname + '/public/upload',
+    uploadDir: 'public/upload',
+    keepExtensions: true
+  }
+})); 
 
 app.use(require('./routers/user').routes());
 app.use(require('./routers/sign').routes());

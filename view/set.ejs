@@ -81,6 +81,7 @@
                 <div class="cut-container p-auto">
                 </div>
               </div>
+              <div class="iterminfo"></div>
             </div>
           </div>
         </div>
@@ -182,8 +183,8 @@
     // 读取本地头像并剪裁上传
     $("#dialog").dialog({
       autoOpen: false,
-      width: 510,
-      height: 610,
+      width: 410,
+      height: 510,
       buttons: {
         "确定": function () {
           var data = $('.cut-container>img').cropper('getCroppedCanvas', {
@@ -224,17 +225,30 @@
     // 上传头像
     $('#inimg').click(function () {
       $('.cut-container>img').cropper("getCroppedCanvas").toBlob(function (blob) {
-       var name = $('a[class="dark"]').text().replace(/(^\s*)|(\s*$)/g, "");
+        console.log(blob.size);
+        if ((blob.size / 1024) > 1024) {
+          alert('图片文件过大!请选择小于1M的头像');
+          return;
+        }
         var formData = new FormData();
         formData.append('files', blob, file.name);
         console.log(formData.get('files'));
         $.ajax({
           type: "post",
-          url: '/user/'+name+'/upload', //用于文件上传的服务器端请求地址
+          url: '/upload', //用于文件上传的服务器端请求地址
           data: formData,
           processData: false,
           contentType: false,
-          success: function (result) {}
+          success: function (result) {
+            if (result.result = false) {
+              $('.iterminfo').text("您上传的文件没有成功，请重新上传");
+              setTimeout($('.iterminfo').empty(), 10000);
+            } else {
+              $('.iterminfo').text("您的文件上传成功!");
+              $('.user_avatar>img').attr('src', result.imageUrl)
+              setTimeout($('.iterminfo').empty(), 10000);
+            }
+          }
         });
       })
     });

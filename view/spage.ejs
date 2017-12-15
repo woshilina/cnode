@@ -12,7 +12,7 @@
           <div class='user_card'>
             <div>
               <a class='user_avatar' href="/user/<%=user.name%>">
-                <img src="/<%=user.headImgURL%>" width="30" height="30" alt="Generic placeholder image" />
+                <img src="<%=user.headImgURL%>" width="30" height="30" alt="Generic placeholder image" />
               </a>
               <span class='user_name'>
                 <%=user.name %>
@@ -69,7 +69,7 @@
             <%pretopics.forEach(function(res){%>
               <div class="list-group-item list-group-item-action ">
                 <div class="media">
-                  <img class="mr-3 " src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image">
+                  <img class="mr-3 " src="<%=res['headImgURL']%>" width="40" height="40" alt="Generic placeholder image">
                   <div class="media-body align-self-center d-flex  justify-content-between">
                     <div>
                       <%=res['replies']%>/
@@ -109,7 +109,7 @@
             <%preparttopics.forEach(function(res){%>
               <div class="list-group-item list-group-item-action ">
                 <div class="media">
-                  <img class="mr-3 " src="/images/2081487.jpg" width="40" height="40" alt="Generic placeholder image">
+                  <img class="mr-3 " src="<%=res['headImgURL']%>" width="40" height="40" alt="Generic placeholder image">
                   <div class="media-body align-self-center d-flex  justify-content-between">
                     <div>
                       <%=res['replies']%>/

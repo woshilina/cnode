@@ -20,7 +20,8 @@ const postonload = async ctx => {
       city: user.city,
       weibo: user.weibo,
       GitHub: user.GitHub,
-      web: user.web
+      web: user.web,
+      headImgURL: user.headImgURL
     };
     console.log('session', ctx.session);
     console.log('登录成功');

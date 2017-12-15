@@ -10,6 +10,11 @@ const Reply = sequelize.define('reply', {
     allowNull: false,
     defaultValue: Sequelize.now
   }, //回复时间
+  headImgURL: {
+    type: Sequelize.STRING,
+    allowNULL: false,
+    defaultValue: "/images/2081487.jpg"
+  },//回复人头像
   replyfromnow: { type: Sequelize.STRING, allowNull: true }, //回复距离现在的时间
   content: { type: Sequelize.TEXT, allowNULL: false }, //回复内容
   likes: { type: Sequelize.INTEGER, allowNULL: false, defaultValue: 0 } //点赞数

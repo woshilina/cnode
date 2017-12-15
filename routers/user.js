@@ -25,6 +25,6 @@ router.get('/user/:name/topics', pages.createtopic);
 router.get('/user/:name/replies', pages.replytopic);
 
 //上传个人头像
-router.post('/user/:name/upload', pages.inputimage);
+router.post('/upload', pages.inputimage);
 
 module.exports = router;

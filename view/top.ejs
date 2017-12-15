@@ -29,7 +29,7 @@
                 </th>
                 <td class="py-1">
                   <a href="/user/<%=top['name']%>">
-                    <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image" />
+                    <img src="<%=top['headImgURL']%>" width="30" height="30" alt="Generic placeholder image" />
                     <%=top['name']%>
                   </a>
                 </td>
@@ -71,7 +71,7 @@
                 <div class='user_card'>
                   <div>
                     <a class='user_avatar' href="/user/<%=session.name%>">
-                      <img src="/images/7081645.png" width="40" height="40" alt="Generic placeholder image" />
+                      <img src="<%=session.headImgURL%>" width="40" height="40" alt="Generic placeholder image" />
                     </a>
                     <span class='user_name'>
                       <a class='dark' href="/user/<%=session.name%>">

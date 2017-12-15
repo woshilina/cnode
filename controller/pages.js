@@ -6,9 +6,7 @@ const Message = require('../database/models/lina-message');
 const moment = require('moment');
 const sequelize = require('../database/sequelize');
 var fs = require('fs');
-var formidable = require('formidable');
-var http = require('http');
-var util = require('util');
+const uptoqiniu = require('./uptoqiniu')
 moment().format();
 moment.locale('zh-cn');
 
@@ -282,68 +280,69 @@ const mymessage = async ctx => {
 
 // 上传个人头像
 const inputimage = async(ctx) => {
-  var cacheFolder = 'public/upload/';
-  var path = require('path');
-  var userDirPath = cacheFolder;
-  var username = ctx.params.name;
-  console.log(username);
-  if (!fs.existsSync(userDirPath)) {
-    fs.mkdirSync(userDirPath);
+  console.log(ctx.request.body);
+  var file = ctx.request.body.files.files;
+  console.log(file.path);
+  console.log(file.name);
+
+  var displayUrl = file.path;
+  let message = {};
+  message.result = false;
+  try {
+    let upresult = await uptoqiniu.upload(displayUrl);
+    fs.unlink(displayUrl, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+    console.log(upresult);
+    var qiniuUrl = "http://p0zgrt85b.bkt.clouddn.com/" + upresult.key;
+    message.imageUrl = qiniuUrl;
+    message.result = true;
+    var username = ctx.session.name;
+    var user = await User.findOne({
+      where: {
+        name: username
+      }
+    });
+    user.update({
+      headImgURL: qiniuUrl
+    });
+    var topics = await Topic.findAll({
+      where: {
+        username: username
+      }
+    });
+    console.log(topics);
+    if (topics != []) {
+      topics.forEach(function (t) {
+        t.update({
+          headImgURL: qiniuUrl
+        });
+      })
+    };
+
+    var replies = await Reply.findAll({
+      where: {
+        name: username
+      }
+    });
+    if (replies != []) {
+      replies.forEach(function (r) {
+        r.update({
+          headImgURL: qiniuUrl
+        });
+      })
+    }
+
+    ctx.session.headImgURL = qiniuUrl;
+
+  } catch (error) {
+    console.log(error);
+    message.result = false;
   }
-  var form = new formidable.IncomingForm(); //创建上传表单
-  form.encoding = 'utf-8'; //设置编辑
-  form.uploadDir = userDirPath; //设置上传目录
-  form.keepExtensions = true; //保留后缀
-  form.maxFieldsSize = 2 * 1024 * 1024; //文件大小
-  form.type = true;
-  var displayUrl;
-  form.parse(ctx.req, function (err, fields, files) {
-    console.log(files);
-    var filesName = files.files.name;
-    console.log(filesName);
-    var filesType = files.files.type;
-    console.log(filesType);
-    var patt = new RegExp(/(gif|jpg|jpeg|bmp|png)$/, "i");
-    console.log(patt.exec(filesName));
-    if (patt.exec(filesName)) {
-      var exName = patt.exec(filesName)[0];
-      console.log(exName);
-    }
-    // let photoname = username + '.' + exName;
-    // console.log(photoname);
-    // let newPath = userDirPath + photoname;
-    // console.log(newPath);
-    var oldPath = files.files.path;
-    var reg = new RegExp(/^public\\/);
-    displayUrl = oldPath.replace(reg, "");
-    console.log(displayUrl);
-
-    // if(!fs.existsSync(newPath)){
-    //   fs.mkdirSync(newPath);
-    // }else{
-    //   fs.unlink(newPath);
-    //   fs.mkdirSync(newPath);
-    // }
-
-    console.log(util.inspect({
-      fields: fields,
-      files: files
-    }));
-    ctx.res.end(util.inspect({
-      fields: fields,
-      files: files
-    }));
-  });
-
-  //更新该用户数据库记载的的头像url
-  var user = await User.findOne({
-    where: {
-      name: username
-    }
-  });
-  user.update({
-    headImgURL: displayUrl
-  });
+  ctx.body = message;
+  console.log(ctx.body)
 };
 module.exports = {
   userpage,
