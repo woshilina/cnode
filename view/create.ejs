@@ -1,6 +1,6 @@
 <%-include header%>
-<link rel="stylesheet" href=" /css/mditor.min.css" />
-<script src="/js/mditor.min.js"></script>
+  <link rel="stylesheet" href=" /css/mditor.min.css" />
+  <script src="/js/mditor.min.js"></script>
   <div class="container d-flex justify-content-center mt-3">
     <div class="col-9 pl-2">
       <div class='header'>
@@ -77,11 +77,10 @@
     $(document).ready(function () {
       var mditor = Mditor.fromTextarea(document.getElementById('editor'));
       mditor.split = false;
-      // console.log(mditor.value);
+      console.log(mditor.value);
       $(".submit_btn").click(function () {
         var tabValue = $("#tab-value option:selected").text();
-        var title = $("#title").val();
-        console.log(tabValue);
+        var title = $("#title").val(); 
         var text = mditor.value;
         var data = {
           tabValue: tabValue,
@@ -101,7 +100,7 @@
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function (data, status) {
-              if (status == 'success') {
+              if (data) {
                 $("#topic_create").html("提交成功");
                 setTimeout(() => {
                   window.location.href = "/topic/" + data;
@@ -110,7 +109,7 @@
             },
             error: function (data, status) {
               if (status == 'error') {
-                $("#topic_create").html("内容不能为空");
+                $("#topic_create").html("提交失败，请重新提交");
               }
             }
           });

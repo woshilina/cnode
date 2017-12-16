@@ -16,12 +16,17 @@
         <form id='create_topic_form ' action="/topic/create" method="post">
           <fieldset class="p-3">
             <span class="tab-selector">选择版块：</span>
+            <span style="display:none" class="tabValue">
+              <%=topics.tabValue%>
+            </span>
             <select name="tab" id="tab-value" class="col-3 rounded">
               <option value="">请选择</option>
-              <option value="share">分享</option>
-              <option value="ask">问答</option>
-              <option value="job">招聘</option>
-              <option value="dev">客户端测试</option>
+
+              <option class="share" value="share">分享</option>
+              <option class="ask" value="ask">问答</option>
+              <option class="job" value="job">招聘</option>
+              <option class="dev" value="dev">客户端测试</option>
+
             </select>
             <span id="topic_create_warn"></span>
             </br>
@@ -45,6 +50,35 @@
 
   <script>
     (function () {
+      //设置模块默认选择
+      var tabValue = $(".tabValue").text().replace(/(^\s*)|(\s*$)/g, "");
+      var options = $("#tab-value option");
+      for (var i = 0; i < options.length; i++) {
+        if (options[i].innerText == tabValue) {
+          options[i].setAttribute("selected", "true");
+          break;
+        }
+      }
+      //$("#tab-value").find('option:contains(tabValue)').attr("selected", true);不成功
+      // $("#tab-value option:contains(tabValue)").attr("selected", true);不成功
+
+      //原生js方法
+      // switch (tabValue) {
+      //   case $('.share').text():
+      //     $('.share').attr("selected", true);
+      //     break;
+      //   case $('.ask').text():
+      //     $('.ask').attr("selected", true);
+      //     break;
+      //   case $('.job').text():
+      //     $('.job').attr("selected", true);
+      //     break;
+      //   case $('.dev').text():
+      //     $('.dev').attr("selected", true);
+      //     break;
+      // }
+
+
       // 版块选择的检查，必须选择
       $('#create_topic_form').on('submit', function (e) {
         var tabValue = $("#tab-value option:selected").text();
@@ -101,10 +135,12 @@
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function (data, status) {
-              $("#topic_create").html("提交成功");
-              setTimeout(() => {
-                window.location.href = "/topic/" + data;
-              }, 1000)
+              if (data) {
+                $("#topic_create").html("提交成功");
+                setTimeout(() => {
+                  window.location.href = "/topic/" + data;
+                }, 1000)
+              }
             },
             error: function (data, status) {
               if (status == 'error') {

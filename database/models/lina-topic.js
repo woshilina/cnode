@@ -35,7 +35,7 @@ const Topic = sequelize.define('topic', {
     allowNULL: false
   }, //标签（置顶？精华？问答？...）
   text: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNULL: false
   }, //正文
   clicks: {

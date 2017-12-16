@@ -16,7 +16,10 @@ const createtopic = async ctx => {
   //查询未读消息数量
   if (ctx.session.id) {
     let news = await Message.findAndCountAll({
-      where: { targetId: ctx.session.id, hasRead: 0 }
+      where: {
+        targetId: ctx.session.id,
+        hasRead: 0
+      }
     });
     var newcount = news.count;
   }
@@ -30,13 +33,11 @@ const createtopic = async ctx => {
 //发表文章post
 const postcreate = async ctx => {
   let date = new Date();
-  var html = parser.parse(ctx.request.body.text);
-  console.log(html);
-  console.log(ctx.request.body.tabValue);
+
   var q = {
     tabValue: ctx.request.body.tabValue,
     title: ctx.request.body.title,
-    text:html,
+    text: ctx.request.body.text,
     userid: ctx.session.id,
     username: ctx.session.name,
     lastreplytime: date
@@ -55,11 +56,12 @@ const postcreate = async ctx => {
 };
 
 //单篇文章页
-const singletopic = async (ctx, next) => {
+const singletopic = async(ctx, next) => {
   var Id = ctx.params.id;
 
   //从数据库查询到当前话题
   var topic = await Topic.findById(Id);
+  var html = parser.parse(topic.text);
   var tc_time = moment(topic.createdAt).fromNow(); //话题创建时间
   var tu_time = moment(topic.updatedAt).fromNow(); //话题更新时间
   var res_clicks = topic.clicks;
@@ -69,15 +71,19 @@ const singletopic = async (ctx, next) => {
   });
 
   // 从数据库查询作者信息
-  let user=await User.findById(topic.userid);
+  let user = await User.findById(topic.userid);
 
   // 从数据库查询作者创建的其他所有话题,按创建时间倒序
   var others = await Topic.findAndCountAll({
     where: {
       userid: topic.userid,
-      id: { $not: Id }
+      id: {
+        $not: Id
+      }
     },
-    order: [[sequelize.literal('createdAt DESC')]]
+    order: [
+      [sequelize.literal('createdAt DESC')]
+    ]
   });
 
   var othercount = others.count;
@@ -124,17 +130,25 @@ const singletopic = async (ctx, next) => {
   }
 
   let msgs = await Message.findAll({
-    where: { topicId: Id, targetname: ctx.session.name }
+    where: {
+      topicId: Id,
+      targetname: ctx.session.name
+    }
   });
 
-  msgs.forEach(function(msg) {
-    msg.update({ hasRead: true });
+  msgs.forEach(function (msg) {
+    msg.update({
+      hasRead: true
+    });
   });
 
   //查询未读消息数量
   if (ctx.session.id) {
     let news = await Message.findAndCountAll({
-      where: { targetId: ctx.session.id, hasRead: 0 }
+      where: {
+        targetId: ctx.session.id,
+        hasRead: 0
+      }
     });
     var newcount = news.count;
   }
@@ -143,7 +157,8 @@ const singletopic = async (ctx, next) => {
     session: ctx.session,
     newcount: newcount,
     topics: topic,
-    user:user,
+    text: html,
+    user: user,
     othercount: othercount,
     ttime: [tc_time, tu_time],
     someothers: someothers,
@@ -153,7 +168,7 @@ const singletopic = async (ctx, next) => {
 };
 
 //删除单篇文章页
-const deletetopic = async (ctx, next) => {
+const deletetopic = async(ctx, next) => {
   var i = ctx.params.id;
   console.log(i);
   let topic = await Topic.findById(i);
@@ -178,14 +193,17 @@ const deletetopic = async (ctx, next) => {
 };
 
 //get编辑单篇文章页面
-const getedit = async (ctx, next) => {
+const getedit = async(ctx, next) => {
   var Id = ctx.params.id;
   let topic = await Topic.findById(Id);
 
   //查询未读消息数量
   if (ctx.session.id) {
     let news = await Message.findAndCountAll({
-      where: { targetId: ctx.session.id, hasRead: 0 }
+      where: {
+        targetId: ctx.session.id,
+        hasRead: 0
+      }
     });
     var newcount = news.count;
   }
@@ -201,11 +219,11 @@ const getedit = async (ctx, next) => {
 const postedit = async ctx => {
   var Id = ctx.params.id;
   let date = new Date();
-  var html = parser.parse(ctx.request.body.text);
+
   var q = {
     tabValue: ctx.request.body.tabValue,
     title: ctx.request.body.title,
-    text: html,
+    text: ctx.request.body.text,
     lastreplytime: date
   };
   let topic = await Topic.findById(Id);
@@ -214,7 +232,7 @@ const postedit = async ctx => {
 };
 
 // 发表对文章的回复
-const replytopic = async (ctx, next) => {
+const replytopic = async(ctx, next) => {
   console.log(ctx.request.body);
   var cont = ctx.request.body.content; //评论的内容
 
@@ -227,7 +245,9 @@ const replytopic = async (ctx, next) => {
     replytime: date
   };
   await Reply.create(res);
-  let reply = await Reply.findOne({ where: res }); //新评论
+  let reply = await Reply.findOne({
+    where: res
+  }); //新评论
 
   let topic = await Topic.findById(res.topicId); //被回复的话题
   var re = topic.replies + 1;
@@ -241,7 +261,9 @@ const replytopic = async (ctx, next) => {
   // 更新用户的回复数
   let user = await User.findById(ctx.session.id);
   user.replies++;
-  await user.update({ replies: user.replies });
+  await user.update({
+    replies: user.replies
+  });
 
   // 评论他人的文章message模型创建数据
   if (ctx.session.id != topic.userid) {
@@ -265,7 +287,7 @@ const replytopic = async (ctx, next) => {
 };
 
 //发表对评论的回复
-const repler = async (ctx, next) => {
+const repler = async(ctx, next) => {
   console.log(ctx.request.body);
   var cont = ctx.request.body.content; //评论的内容
   var replyId = ctx.request.body.replyId; //被回复的评论的id
@@ -278,7 +300,9 @@ const repler = async (ctx, next) => {
     replytime: date
   };
   await Reply.create(res);
-  var reply = await Reply.findOne({ where: res }); //新评论
+  var reply = await Reply.findOne({
+    where: res
+  }); //新评论
   var targetreply = await Reply.findById(replyId); //被回复的评论
   console.log(targetreply.userId);
 
@@ -293,7 +317,9 @@ const repler = async (ctx, next) => {
   // 更新用户的回复数
   let user = await User.findById(ctx.session.id);
   user.replies++;
-  await user.update({ replies: user.replies });
+  await user.update({
+    replies: user.replies
+  });
 
   // 评论他人的回复时创建数据
   if (ctx.session.id != targetreply.userId) {
@@ -397,7 +423,9 @@ const deletereply = async ctx => {
   // 更新用户的回复数
   let user = await User.findById(ctx.session.id);
   user.replies--;
-  await user.update({ replies: user.replies });
+  await user.update({
+    replies: user.replies
+  });
 
   await Like.destroy({
     where: {
