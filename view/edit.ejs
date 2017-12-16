@@ -1,6 +1,6 @@
 <%-include header%>
-<link rel="stylesheet" href="https://unpkg.com/mditor@1.0.5/dist/css/mditor.min.css" />
-<script src="https://unpkg.com/mditor@1.0.5/dist/js/mditor.min.js"></script>
+  <link rel="stylesheet" href=" /css/mditor.min.css" />
+  <script src="/js/mditor.min.js"></script>
   <div class="container d-flex justify-content-center   mt-3">
     <div class="col-9 pl-2">
       <div class='header'>
@@ -23,12 +23,12 @@
               <option value="job">招聘</option>
               <option value="dev">客户端测试</option>
             </select>
-
             <span id="topic_create_warn"></span>
             </br>
-            <input autofocus class='col-12 my-2' id='title' type="text" name='title' placeholder="<%=topics.title%>"></input>
-            <textarea name="editor" id="editor" rows='20' placeholder='<%=topics.text%>'></textarea>
-
+            <input autofocus class='col-12 my-2' id='title' type="text" name='title' value="<%=topics.title%>"></input>
+            <textarea name="editor" id="editor" rows='20'>
+              <%=topics.text%>
+            </textarea>
             <br>
             <input type="button" class='span-primary submit_btn' data-loading-text="提交中" value="提交">
             <span id="topic_create"></span>
@@ -76,11 +76,11 @@
   </script>
   <script>
     $(document).ready(function () {
-      var mditor =new Mditor.fromTextarea(document.getElementById('editor'));
+      var mditor = new Mditor.fromTextarea(document.getElementById('editor'));
       mditor.split = false;
       //编辑提交
       $(".submit_btn").click(function () {
-        var tabValue = $("#tab-value").val();
+        var tabValue = $("#tab-value option:selected").text();
         var title = $("#title").val();
         var text = mditor.value;
         var data = {

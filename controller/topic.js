@@ -6,7 +6,7 @@ const Message = require('../database/models/lina-message');
 const moment = require('moment');
 const sequelize = require('../database/sequelize');
 var mditor = require("mditor");
-var parser = mditor.Parser();
+var parser = new mditor.Parser();
 
 moment().format();
 moment.locale('zh-cn');
@@ -31,10 +31,12 @@ const createtopic = async ctx => {
 const postcreate = async ctx => {
   let date = new Date();
   var html = parser.parse(ctx.request.body.text);
+  console.log(html);
+  console.log(ctx.request.body.tabValue);
   var q = {
     tabValue: ctx.request.body.tabValue,
     title: ctx.request.body.title,
-    text: html,
+    text:html,
     userid: ctx.session.id,
     username: ctx.session.name,
     lastreplytime: date
@@ -199,10 +201,11 @@ const getedit = async (ctx, next) => {
 const postedit = async ctx => {
   var Id = ctx.params.id;
   let date = new Date();
+  var html = parser.parse(ctx.request.body.text);
   var q = {
     tabValue: ctx.request.body.tabValue,
     title: ctx.request.body.title,
-    text: ctx.request.body.text,
+    text: html,
     lastreplytime: date
   };
   let topic = await Topic.findById(Id);

@@ -1,6 +1,6 @@
 <%-include header%>
-  <link rel="stylesheet" href="https://unpkg.com/mditor@1.0.5/dist/css/mditor.min.css" />
-  <script src="https://unpkg.com/mditor@1.0.5/dist/js/mditor.min.js"></script>
+<link rel="stylesheet" href=" /css/mditor.min.css" />
+<script src="/js/mditor.min.js"></script>
   <div class="container d-flex justify-content-center mt-3">
     <div class="col-9 pl-2">
       <div class='header'>
@@ -81,7 +81,7 @@
       $(".submit_btn").click(function () {
         var tabValue = $("#tab-value option:selected").text();
         var title = $("#title").val();
-        console.log(mditor.value);
+        console.log(tabValue);
         var text = mditor.value;
         var data = {
           tabValue: tabValue,
