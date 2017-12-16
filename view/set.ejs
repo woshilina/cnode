@@ -20,6 +20,12 @@
           <div class="alert alert-success passright" role="alert" style="display:none">
             更改密码成功！请重新登录！
           </div>
+          <div class="alert alert-success success" role="alert" style="display:none">
+            您的文件头像成功!
+          </div>
+          <div class="alert alert-danger error" role="alert" style="display:none">
+            您上传的文件没有成功，请重新上传
+          </div>
           <div class="d-flex">
             <div class="col-8 pl-4">
               <form>
@@ -73,20 +79,21 @@
                 </div>
               </form>
             </div>
-            <div class="col-3 container" style="width:200px;height:200px">
-              <img src="/images/timg.jpg" style="width:150px;height:150px">
-              <input type="file" id="inpicture">
-              <button type="button" class="btn btn-primary mt-3" id="inimg">上传头像</button>
+            <div class="col-3 container" style="width:200px;height:300px">
+              <img src="<%=session.headImgURL%>" style="width:150px;height:150px">
+              <input type="file" id="inpicture" style="display: none">
+              <button type="button" class="file btn btn-primary  mt-3 btn-block" id="inpicture-i" onclick="inpicture.click()">
+                选择文件
+              </button>
               <div id="dialog" title="裁剪你的头像照片">
                 <div class="cut-container p-auto">
                 </div>
               </div>
-              <div class="iterminfo"></div>
             </div>
           </div>
         </div>
       </div>
-      <div class="card bg-white  mt-3 ">
+      <div class="card bg-white  my-3">
         <div class="card-header">设置密码</div>
         <div class="card-body pl-5">
           <form>
@@ -110,10 +117,6 @@
             </div>
           </form>
         </div>
-      </div>
-      <div class="card bg-white  my-3">
-        <div class="card-header">Access Token</div>
-        <div class="card-body  pl-4">字符串： c9069108-630a-4670-8c20-7adc6c3fa9ec</div>
       </div>
     </div>
     <%-include usermsg%>
@@ -180,22 +183,25 @@
       });
     });
 
+    //将input type=file读取本地文件的按钮值关联到button按钮
+    function change() {
+      document.getElementById("inpicture-i").value = document.getElementById("inpicture").value;
+    };
+
     // 读取本地头像并剪裁上传
     $("#dialog").dialog({
       autoOpen: false,
       width: 410,
       height: 510,
       buttons: {
-        "确定": function () {
+        "确定上传头像": function () {
           var data = $('.cut-container>img').cropper('getCroppedCanvas', {
             width: 150,
             height: 150
           });
           // $('.container>img').empty().replaceWith(data);?为什么再次替换就不能了？
           $(".container>img").attr("src", data.toDataURL());
-          $(this).dialog("close");
-        },
-        "取消": function () {
+          upload();
           $(this).dialog("close");
         }
       }
@@ -219,11 +225,13 @@
 
         }
         reader.readAsDataURL(file)
-      };
+      }else{
+        alert("请选择图片！");
+      }
     })
 
     // 上传头像
-    $('#inimg').click(function () {
+    function upload() {
       $('.cut-container>img').cropper("getCroppedCanvas").toBlob(function (blob) {
         console.log(blob.size);
         if ((blob.size / 1024) > 1024) {
@@ -241,17 +249,17 @@
           contentType: false,
           success: function (result) {
             if (result.result = false) {
-              $('.iterminfo').text("您上传的文件没有成功，请重新上传");
-              setTimeout($('.iterminfo').empty(), 10000);
+              $('.error').show();
+              setTimeout(()=>{$('.error').hide()}, 5000);
             } else {
-              $('.iterminfo').text("您的文件上传成功!");
+              $('.success').show();
               $('.user_avatar>img').attr('src', result.imageUrl)
-              setTimeout($('.iterminfo').empty(), 10000);
+              setTimeout(()=>{$('.success').hide()}, 5000);
             }
           }
         });
-      })
-    });
+      });
+    }
   </script>
 
   <%-include footer%>

@@ -15,14 +15,14 @@
         <form id='create_topic_form ' action="/topic/create" method="post">
           <fieldset class="pl-3 py-3">
             <span class="tab-selector">选择版块：</span>
-            <select name="tab" id="tab-value"class="col-3 rounded">
+            <select name="tab" id="tab-value" class="col-3 rounded">
               <option value="">请选择</option>
               <option value="share">分享</option>
               <option value="ask">问答</option>
               <option value="job">招聘</option>
               <option value="dev">客户端测试</option>
             </select>
-          
+
             <span id="topic_create_warn"></span>
             </br>
             <textarea autofocus class='col-11 mt-3' id='title' name='title' rows='1' placeholder="<%=topics.title%>"></textarea>
@@ -76,12 +76,15 @@
     })();
   </script>
   <script>
+    var simplemde = new SimpleMDE({
+      element: $("#text")
+    });
     $(document).ready(function () {
       //编辑提交
       $(".submit_btn").click(function () {
         var tabValue = $("#tab-value").val();
         var title = $("#title").val();
-        var text = $("#text").val();
+        var text = simplemde.val();
         var data = {
           tabValue: tabValue,
           title: title,
@@ -104,7 +107,7 @@
               setTimeout(() => {
                 window.location.href = "/topic/" + data;
               }, 1000)
-          },
+            },
             error: function (data, status) {
               if (status == 'error') {
                 $("#topic_create").html("内容不能为空");

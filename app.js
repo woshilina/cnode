@@ -30,16 +30,6 @@ app.use(session(CONFIG, app));
 
 app.use(serve('public'));
 
-app.use(koaBody({
-  multipart: true,
-  formLimit: 15,
-  formidable: {
-    // uploadDir: __dirname + '/public/upload',
-    uploadDir: 'public/upload',
-    keepExtensions: true
-  }
-})); 
-
 app.use(require('./routers/user').routes());
 app.use(require('./routers/sign').routes());
 app.use(require('./routers/main').routes());

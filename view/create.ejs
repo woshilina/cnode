@@ -74,11 +74,14 @@
     })();
   </script>
   <script>
+    var simplemde = new SimpleMDE({
+      element: $("#text")
+    });
     $(document).ready(function () {
       $(".submit_btn").click(function () {
         var tabValue = $("#tab-value option:selected").text();
         var title = $("#title").val();
-        var text = $("#text").val();
+        var text = simplemde.val();
         var data = {
           tabValue: tabValue,
           title: title,
@@ -91,26 +94,26 @@
         } else if (!text) {
           alert("请输入内容")
         } else {
-        $.ajax({
-          url: '/topic/create',
-          type: 'post',
-          contentType: "application/json",
-          data: JSON.stringify(data),
-          success: function (data, status) {
-            if (status == 'success') {
-              $("#topic_create").html("提交成功");
-              setTimeout(() => {
-                window.location.href = "/topic/"+data;
-              }, 1000)
+          $.ajax({
+            url: '/topic/create',
+            type: 'post',
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (data, status) {
+              if (status == 'success') {
+                $("#topic_create").html("提交成功");
+                setTimeout(() => {
+                  window.location.href = "/topic/" + data;
+                }, 1000)
+              }
+            },
+            error: function (data, status) {
+              if (status == 'error') {
+                $("#topic_create").html("内容不能为空");
+              }
             }
-          },
-          error: function (data, status) {
-            if (status == 'error') {
-              $("#topic_create").html("内容不能为空");
-            }
-          }
-        });
-      }
+          });
+        }
       });
     });
   </script>

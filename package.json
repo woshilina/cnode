@@ -30,7 +30,8 @@
     "mysql2": "^1.4.2",
     "popper.js": "^1.12.3",
     "qiniu": "^7.1.1",
-    "sequelize": "^4.19.0"
+    "sequelize": "^4.19.0",
+    "simplemde": "^1.11.2"
   },
   "devDependencies": {},
   "repository": {

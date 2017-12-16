@@ -8,10 +8,21 @@ const sequelize = require('../database/sequelize');
 const postonload = async ctx => {
   var uname = ctx.request.body.uname;
   var pass = ctx.request.body.upwd;
-  let user = await User.findOne({ where: { name: uname, password: pass } });
-
-  if (uname === user.name && pass === user.password) {
-    ctx.body = { result: 'true' };
+  let user = await User.findOne({
+    where: {
+      name: uname,
+      password: pass
+    }
+  });
+  console.log(user);
+  if (!user) {
+    ctx.body = {
+      result: 'false'
+    };
+  } else if (uname === user.name && pass === user.password) {
+    ctx.body = {
+      result: 'true'
+    };
     ctx.session = {
       name: uname,
       id: user.id,
@@ -26,15 +37,19 @@ const postonload = async ctx => {
     console.log('session', ctx.session);
     console.log('登录成功');
   } else {
+    ctx.body = {
+      result: 'false'
+    };
     console.log(ctx.body);
     console.log('用户名或密码错误!');
-    ctx.redirect('/onload');
   }
 };
 
 //get登陆页
 const getonload = async ctx => {
-  await ctx.render('./onload', { session: ctx.session });
+  await ctx.render('./onload', {
+    session: ctx.session
+  });
 };
 //验证注册信息
 const postsignin = async ctx => {
@@ -44,24 +59,39 @@ const postsignin = async ctx => {
     repass: ctx.request.body.reupwd
   };
   console.log(nuser);
-  let user = await User.findOne({ where: { name: nuser.name } });
+  let user = await User.findOne({
+    where: {
+      name: nuser.name
+    }
+  });
 
   if (user) {
-    ctx.body = { result: '用户存在' };
+    ctx.body = {
+      result: '用户存在'
+    };
     console.log('用户存在');
   } else if (nuser.pass !== nuser.repass || nuser.pass == '') {
-    ctx.body = { result: '密码不一致' };
+    ctx.body = {
+      result: '密码不一致'
+    };
     console.log('密码不一致');
   } else {
-    ctx.body = { result: 'success' };
+    ctx.body = {
+      result: 'success'
+    };
     console.log('注册成功');
-    User.create({ name: nuser.name, password: nuser.pass });
+    User.create({
+      name: nuser.name,
+      password: nuser.pass
+    });
   }
 };
 
 //get注册页函数
-const getsignin = async function(ctx) {
-  await ctx.render('./signin',{session:ctx.session});
+const getsignin = async function (ctx) {
+  await ctx.render('./signin', {
+    session: ctx.session
+  });
 };
 
 //退出
@@ -70,4 +100,10 @@ const signout = async ctx => {
   ctx.redirect('/');
 };
 
-module.exports = { postonload, getonload, postsignin, signout, getsignin };
+module.exports = {
+  postonload,
+  getonload,
+  postsignin,
+  signout,
+  getsignin
+};

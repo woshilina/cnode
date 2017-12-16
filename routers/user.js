@@ -25,6 +25,14 @@ router.get('/user/:name/topics', pages.createtopic);
 router.get('/user/:name/replies', pages.replytopic);
 
 //上传个人头像
-router.post('/upload', pages.inputimage);
+router.post('/upload', koaBody({
+  multipart: true,
+  formLimit: 15,
+  formidable: {
+    // uploadDir: __dirname + '/public/upload',
+    uploadDir: 'public/upload',
+    keepExtensions: true
+  }
+}), pages.inputimage);
 
 module.exports = router;
