@@ -1,4 +1,6 @@
 <%-include header%>
+  <link rel="stylesheet" href="https://unpkg.com/mditor@1.0.5/dist/css/mditor.min.css" />
+  <script src="https://unpkg.com/mditor@1.0.5/dist/js/mditor.min.js"></script>
   <div class="container d-flex justify-content-center mt-3">
     <div class="col-9 pl-2">
       <div class='header'>
@@ -11,25 +13,22 @@
         </ol>
       </div>
       <div class='inner bg-white my-3'>
-        <form id='create_topic_form ' action="/topic/create" method="post">
-          <fieldset class="pl-3 py-3">
-            <span class="tab-selector">选择版块：</span>
-            <select name="tab" id="tab-value">
-              <option value="">请选择</option>
-              <option value="share">分享</option>
-              <option value="ask">问答</option>
-              <option value="job">招聘</option>
-              <option value="dev">客户端测试</option>
-            </select>
-            <span id="topic_create_warn"></span>
-            </br>
-            <textarea autofocus class='col-11' id='title' name='title' rows='1' placeholder="标题字数 10 字以上"></textarea>
-            <textarea class='col-11' id="text" name='t_content' rows='20' placeholder='文章支持 Markdown 语法, 请注意标记代码'></textarea>
-            <br>
-            <input type="button" class='span-primary submit_btn' data-loading-text="提交中" value="提交">
-            <span id="topic_create"></span>
-
-          </fieldset>
+        <form id='create_topic_form' class="p-3" action="/topic/create" method="post">
+          <span class="tab-selector">选择版块：</span>
+          <select name="tab" id="tab-value">
+            <option value="">请选择</option>
+            <option value="share">分享</option>
+            <option value="ask">问答</option>
+            <option value="job">招聘</option>
+            <option value="dev">客户端测试</option>
+          </select>
+          <span id="topic_create_warn"></span>
+          </br>
+          <input autofocus class='col-12 my-2' id='title' type="text" name='title' placeholder="标题字数 10 字以上"></input>
+          <textarea name="editor" id="editor" rows='20' placeholder='文章支持 Markdown 语法, 请注意标记代码'></textarea>
+          <br>
+          <input type="button" class='span-primary submit_btn' data-loading-text="提交中" value="提交">
+          <span id="topic_create"></span>
         </form>
       </div>
 
@@ -38,11 +37,12 @@
   </div>
   <!-- markdown editor -->
 
-
   <script>
     (function () {
       // var editor = new Editor();
       // editor.render($('.editor')[0]);
+
+
 
       // 版块选择的检查，必须选择
       $('#create_topic_form').on('submit', function (e) {
@@ -74,14 +74,15 @@
     })();
   </script>
   <script>
-    var simplemde = new SimpleMDE({
-      element: $("#text")
-    });
     $(document).ready(function () {
+      var mditor = Mditor.fromTextarea(document.getElementById('editor'));
+      mditor.split = false;
+      // console.log(mditor.value);
       $(".submit_btn").click(function () {
         var tabValue = $("#tab-value option:selected").text();
         var title = $("#title").val();
-        var text = simplemde.val();
+        console.log(mditor.value);
+        var text = mditor.value;
         var data = {
           tabValue: tabValue,
           title: title,

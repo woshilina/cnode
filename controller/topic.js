@@ -5,6 +5,9 @@ const User = require('../database/models/lina-user');
 const Message = require('../database/models/lina-message');
 const moment = require('moment');
 const sequelize = require('../database/sequelize');
+var mditor = require("mditor");
+var parser = mditor.Parser();
+
 moment().format();
 moment.locale('zh-cn');
 
@@ -27,10 +30,11 @@ const createtopic = async ctx => {
 //发表文章post
 const postcreate = async ctx => {
   let date = new Date();
+  var html = parser.parse(ctx.request.body.text);
   var q = {
     tabValue: ctx.request.body.tabValue,
     title: ctx.request.body.title,
-    text: ctx.request.body.text,
+    text: html,
     userid: ctx.session.id,
     username: ctx.session.name,
     lastreplytime: date

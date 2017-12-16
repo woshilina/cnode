@@ -1,6 +1,7 @@
 <%-include header%>
+<link rel="stylesheet" href="https://unpkg.com/mditor@1.0.5/dist/css/mditor.min.css" />
+<script src="https://unpkg.com/mditor@1.0.5/dist/js/mditor.min.js"></script>
   <div class="container d-flex justify-content-center   mt-3">
-
     <div class="col-9 pl-2">
       <div class='header'>
         <ol class='breadcrumb'>
@@ -13,7 +14,7 @@
       </div>
       <div class='inner bg-white my-3'>
         <form id='create_topic_form ' action="/topic/create" method="post">
-          <fieldset class="pl-3 py-3">
+          <fieldset class="p-3">
             <span class="tab-selector">选择版块：</span>
             <select name="tab" id="tab-value" class="col-3 rounded">
               <option value="">请选择</option>
@@ -25,8 +26,9 @@
 
             <span id="topic_create_warn"></span>
             </br>
-            <textarea autofocus class='col-11 mt-3' id='title' name='title' rows='1' placeholder="<%=topics.title%>"></textarea>
-            <textarea class='col-11' id="text" name='t_content' rows='20' placeholder='<%=topics.text%>'></textarea>
+            <input autofocus class='col-12 my-2' id='title' type="text" name='title' placeholder="<%=topics.title%>"></input>
+            <textarea name="editor" id="editor" rows='20' placeholder='<%=topics.text%>'></textarea>
+
             <br>
             <input type="button" class='span-primary submit_btn' data-loading-text="提交中" value="提交">
             <span id="topic_create"></span>
@@ -43,9 +45,6 @@
 
   <script>
     (function () {
-      // var editor = new Editor();
-      // editor.render($('.editor')[0]);
-
       // 版块选择的检查，必须选择
       $('#create_topic_form').on('submit', function (e) {
         var tabValue = $("#tab-value option:selected").text();
@@ -76,15 +75,14 @@
     })();
   </script>
   <script>
-    var simplemde = new SimpleMDE({
-      element: $("#text")
-    });
     $(document).ready(function () {
+      var mditor =new Mditor.fromTextarea(document.getElementById('editor'));
+      mditor.split = false;
       //编辑提交
       $(".submit_btn").click(function () {
         var tabValue = $("#tab-value").val();
         var title = $("#title").val();
-        var text = simplemde.val();
+        var text = mditor.value;
         var data = {
           tabValue: tabValue,
           title: title,
