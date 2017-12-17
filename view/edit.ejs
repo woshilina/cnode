@@ -1,7 +1,7 @@
 <%-include header%>
   <link rel="stylesheet" href=" /css/mditor.min.css" />
   <script src="/js/mditor.min.js"></script>
-  <div class="container d-flex justify-content-center   mt-3">
+  <div class="container d-flex justify-content-center mt-3">
     <div class="col-9 pl-2">
       <div class='header'>
         <ol class='breadcrumb'>
@@ -16,28 +16,20 @@
         <form id='create_topic_form ' action="/topic/create" method="post">
           <fieldset class="p-3">
             <span class="tab-selector">选择版块：</span>
-            <span style="display:none" class="tabValue">
-              <%=topics.tabValue%>
-            </span>
             <select name="tab" id="tab-value" class="col-3 rounded">
               <option value="">请选择</option>
-
               <option class="share" value="share">分享</option>
               <option class="ask" value="ask">问答</option>
               <option class="job" value="job">招聘</option>
               <option class="dev" value="dev">客户端测试</option>
-
             </select>
             <span id="topic_create_warn"></span>
             </br>
             <input autofocus class='col-12 my-2' id='title' type="text" name='title' value="<%=topics.title%>"></input>
-            <textarea name="editor" id="editor" rows='20'>
-              <%=topics.text%>
-            </textarea>
+            <textarea name="editor" id="editor" rows='20'><%=topics.text%></textarea>
             <br>
             <input type="button" class='span-primary submit_btn' data-loading-text="提交中" value="提交">
             <span id="topic_create"></span>
-
           </fieldset>
         </form>
       </div>
@@ -50,35 +42,9 @@
 
   <script>
     (function () {
-      //设置模块默认选择
-      var tabValue = $(".tabValue").text().replace(/(^\s*)|(\s*$)/g, "");
-      var options = $("#tab-value option");
-      for (var i = 0; i < options.length; i++) {
-        if (options[i].innerText == tabValue) {
-          options[i].setAttribute("selected", "true");
-          break;
-        }
-      }
-      //$("#tab-value").find('option:contains(tabValue)').attr("selected", true);不成功
-      // $("#tab-value option:contains(tabValue)").attr("selected", true);不成功
-
-      //原生js方法
-      // switch (tabValue) {
-      //   case $('.share').text():
-      //     $('.share').attr("selected", true);
-      //     break;
-      //   case $('.ask').text():
-      //     $('.ask').attr("selected", true);
-      //     break;
-      //   case $('.job').text():
-      //     $('.job').attr("selected", true);
-      //     break;
-      //   case $('.dev').text():
-      //     $('.dev').attr("selected", true);
-      //     break;
-      // }
-
-
+      //设置模块默认选择 
+      var tabValue = "<%=topics.tabValue%>";
+      $("#tab-value").find('option:contains(' + tabValue + ")").attr("selected", true);
       // 版块选择的检查，必须选择
       $('#create_topic_form').on('submit', function (e) {
         var tabValue = $("#tab-value option:selected").text();
@@ -89,7 +55,6 @@
           return false;
         }
       });
-      // END 版块选择的检查，必须选择
 
       // 选择招聘版块时，给出提示
       $('#tab-value').on('change', function () {

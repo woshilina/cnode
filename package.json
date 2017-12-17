@@ -29,6 +29,7 @@
     "mditor": "^1.3.3",
     "moment": "^2.19.2",
     "mysql2": "^1.4.2",
+    "octicons": "^7.0.1",
     "popper.js": "^1.12.3",
     "qiniu": "^7.1.1",
     "sequelize": "^4.19.0"

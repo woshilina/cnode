@@ -1,13 +1,39 @@
 <%- include header%>
   <div class="container onload" id="context">
-    <form class="col-sm-offset-3 col-sm-6 " role="form" method="post" onsubmit="return false">
+    <form class="col-sm-offset-3 col-sm-4 " role="form" method="post" onsubmit="return false">
       <fieldset>
         <legend></legend>
         <div class="panel panel-default ">
           <div class="panel-heading text-center mb-3">
             <h3 class="tc text-primary font-weight-bold">登录</h3>
           </div>
-          <div class="panel-body m15 bg-white p-5 rounded">
+          <div class="panel-body m15">
+              <div class="form-group">
+                  <div class="input-group">
+                      <span class="input-group-addon">
+                          <%-octicons.person.toSVG()%>    
+                      </span>
+                      <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" required>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="input-group">
+                      <span class="input-group-addon">
+                              <%-octicons.key.toSVG()%>
+                      </span>
+                      <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" required>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary btn-block mb-3" id="onload0">登录</button>
+                  <div class="alert alert-success success" role="alert" style="display:none">
+                      登陆成功！
+                    </div>
+                    <div class="alert alert-danger error" role="alert" style="display:none">
+                      用户名或密码不正确!
+                    </div>
+              </div>    
+<!-- 
             <div class="form-group row">
               <label for="inputusername" class="col-3 col-form-label text-right">用户名</label>
               <div class="col-8">
@@ -20,7 +46,8 @@
                 <input type="password" class="form-control" id="password" placeholder="请输入密码">
               </div>
             </div>
-            <div class="form-group row ">
+             -->
+            <!-- <div class="form-group row ">
               <label class="col-3 col-form-label"></label>
               <div class="col-8">
                 <button type="submit" class="btn btn-primary btn-block  mb-3" id="onload0">登录</button>
@@ -31,7 +58,7 @@
                   用户名或密码不正确!
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </fieldset>

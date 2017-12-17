@@ -5,13 +5,13 @@
             <legend></legend>
             <div class="panel panel-default">
                 <div class="panel-heading text-center">
-                    <h3 class="tc text-primary font-weight-bold mb-4">注册信息</h3>
+                    <h3 class="tc text-primary font-weight-bold mb-4">注册</h3>
                 </div>
                 <div class="panel-body m15">
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <span class="oi oi-icon-person" title="icon person" aria-hidden="true"></span>
+                                <%-octicons.person.toSVG()%>    
                             </span>
                             <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" required>
                         </div>
@@ -19,7 +19,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <span class="oi oi-icon-person" title="icon person" aria-hidden="true"></span>
+                                    <%-octicons.key.toSVG()%>
                             </span>
                             <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" required>
                         </div>
@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-lock"></span>
+                                    <%-octicons.key.toSVG()%>
                             </span>
                             <input type="password" class="form-control" id="password1" name="password1" placeholder="请再次输入密码" required>
                         </div>

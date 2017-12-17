@@ -5,13 +5,13 @@
   <div class="container d-flex justify-content-center mt-3">
     <div class="col-9 my-2">
       <div class="bg-white card">
-        <div class="p-2 card-body ">
+        <div class="p-3 card-body ">
           <h3 class="title">
             <%= topics.title%>
           </h3>
           <div>
             <div>
-              <small class="ml-1">
+              <small>
                 <sapn class="mx-1">
                   发布于
                   <%=ttime[0]%>&nbsp|
@@ -31,10 +31,16 @@
               <button class="btn btn-success float-right" id="collect">收藏</button>
             </div>
             <%if(session&&topics.username==session.name){%>
-              <a href="<%=topics.id%>/edit">
-                <button class="edit btn btn-primary btn-sm"> 编辑 </button>
-              </a>
-              <button class="btn btn-danger btn-sm" class="delete ">删除</button>
+              <div class="mt-2">
+                <button type="button" class="btn btn-link topicedit pr-0 pb-0">
+                  <a href="/topic/<%=topics.id%>/edit">
+                    <%-octicons.pencil.toSVG()%>
+                  </a>
+                </button>
+                <button type="button" class="btn btn-link delete pb-0">
+                  <%-octicons.trashcan.toSVG()%>
+                </button>
+              </div>
               <%}%>
           </div>
         </div>
@@ -200,23 +206,26 @@
     <script>
       // 删除文章
       $('.delete').click(() => {
-        $.ajax({
-          url: '/topic/<%=topics.id%>/delete',
-          type: "GET",
-          cache: false,
-          dataType: 'json',
-          success: function (msg) {
-            if (msg) {
-              $('.success').text('删除成功');
-              setTimeout(() => {
-                window.location.href = "/"
-              }, 1000)
+        var r = confirm("确定要删除此回复吗？");
+        if (r == true) {
+          $.ajax({
+            url: '/topic/<%=topics.id%>/delete',
+            type: "GET",
+            cache: false,
+            dataType: 'json',
+            success: function (msg) {
+              if (msg) {
+                $('.success').text('删除成功');
+                setTimeout(() => {
+                  window.location.href = "/"
+                }, 1000)
+              }
+            },
+            error: function () {
+              alert('异常');
             }
-          },
-          error: function () {
-            alert('异常');
-          }
-        })
+          })
+        }
       });
 
       // 添加评论/回复

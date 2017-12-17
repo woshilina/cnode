@@ -7,6 +7,7 @@ const moment = require('moment');
 const sequelize = require('../database/sequelize');
 var mditor = require("mditor");
 var parser = new mditor.Parser();
+var octicons = require("octicons");
 
 moment().format();
 moment.locale('zh-cn');
@@ -163,7 +164,8 @@ const singletopic = async(ctx, next) => {
     ttime: [tc_time, tu_time],
     someothers: someothers,
     replys: reply_res,
-    likes: like_res
+    likes: like_res,
+    octicons: octicons
   });
 };
 
@@ -190,6 +192,7 @@ const deletetopic = async(ctx, next) => {
   ctx.body = {
     result: 'success'
   };
+ 
 };
 
 //get编辑单篇文章页面

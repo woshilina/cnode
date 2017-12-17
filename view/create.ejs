@@ -77,7 +77,6 @@
     $(document).ready(function () {
       var mditor = Mditor.fromTextarea(document.getElementById('editor'));
       mditor.split = false;
-      console.log(mditor.value);
       $(".submit_btn").click(function () {
         var tabValue = $("#tab-value option:selected").text();
         var title = $("#title").val(); 

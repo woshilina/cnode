@@ -1,8 +1,8 @@
 //导入数据库模型
 const User = require('../database/models/lina-user');
 const Message = require('../database/models/lina-message');
-
 const sequelize = require('../database/sequelize');
+var octicons = require("octicons");
 
 //验证登陆信息
 const postonload = async ctx => {
@@ -48,7 +48,8 @@ const postonload = async ctx => {
 //get登陆页
 const getonload = async ctx => {
   await ctx.render('./onload', {
-    session: ctx.session
+    session: ctx.session,
+    octicons: octicons
   });
 };
 //验证注册信息
@@ -90,7 +91,8 @@ const postsignin = async ctx => {
 //get注册页函数
 const getsignin = async function (ctx) {
   await ctx.render('./signin', {
-    session: ctx.session
+    session: ctx.session,
+    octicons: octicons
   });
 };
 
