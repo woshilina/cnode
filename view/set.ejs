@@ -188,28 +188,9 @@
       document.getElementById("inpicture-i").value = document.getElementById("inpicture").value;
     };
 
-    // 读取本地头像并剪裁上传
-    $("#dialog").dialog({
-      autoOpen: false,
-      width: 410,
-      height: 510,
-      buttons: {
-        "确定上传头像": function () {
-          var data = $('.cut-container>img').cropper('getCroppedCanvas', {
-            width: 150,
-            height: 150
-          });
-          // $('.container>img').empty().replaceWith(data);?为什么再次替换就不能了？
-          $(".container>img").attr("src", data.toDataURL());
-          upload();
-          $(this).dialog("close");
-        }
-      }
-    });
-
     //选择图片后打开裁剪对话框
     $("#inpicture").change(function () {
-      file = this.files[0];
+      var file = this.files[0];
       var reader = new FileReader();
       if (/image+/.test(file.type)) {
         reader.onload = function () {
@@ -225,39 +206,64 @@
 
         }
         reader.readAsDataURL(file)
-      }else{
+      } else {
         alert("请选择图片！");
       }
     })
 
+    // 读取本地头像并剪裁上传
+    $("#dialog").dialog({
+      autoOpen: false,
+      width: 410,
+      height: 510,
+      buttons: {
+        "确定上传头像": function () {
+          var data = $('.cut-container>img').cropper('getCroppedCanvas', {
+            width: 150,
+            height: 150
+          });
+          // $('.container>img').empty().replaceWith(data);?为什么再次替换就不能了？
+          // $(".container>img").attr("src", data.toDataURL());//将原头像替换成要上传的图片
+          upload(data);
+          $(this).dialog("close");
+        }
+      }
+    });
+
     // 上传头像
-    function upload() {
-      $('.cut-container>img').cropper("getCroppedCanvas").toBlob(function (blob) {
+    function upload(data) {
+      data.toBlob(function (blob) {
         console.log(blob.size);
         if ((blob.size / 1024) > 1024) {
           alert('图片文件过大!请选择小于1M的头像');
           return;
-        }
-        var formData = new FormData();
-        formData.append('files', blob, file.name);
-        console.log(formData.get('files'));
-        $.ajax({
-          type: "post",
-          url: '/upload', //用于文件上传的服务器端请求地址
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function (result) {
-            if (result.result = false) {
-              $('.error').show();
-              setTimeout(()=>{$('.error').hide()}, 5000);
-            } else {
-              $('.success').show();
-              $('.user_avatar>img').attr('src', result.imageUrl)
-              setTimeout(()=>{$('.success').hide()}, 5000);
+        } else {
+          var formData = new FormData();
+          formData.append('files', blob);
+          console.log(formData.get('files'));
+          $.ajax({
+            type: "post",
+            url: '/upload', //用于文件上传的服务器端请求地址
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+              if (result.result = false) {
+                $('.error').show();
+                setTimeout(() => {
+                  $('.error').hide()
+                }, 5000);
+              } else {
+                $('.success').show();
+                $(".container>img").attr("src", result.imageUrl);
+                $('.user_avatar>img').attr('src', result.imageUrl);
+                setTimeout(() => {
+                  $('.success').hide()
+                }, 5000);
+              }
             }
-          }
-        });
+          });
+        }
       });
     }
   </script>

@@ -23,7 +23,6 @@ exports.upload = async(displayUrl) => {
 
     // 文件上传
     var filePath = displayUrl;
-    var key = '';
     var localFile = displayUrl;
     var formUploader = new qiniu.form_up.FormUploader(config);
     console.log(formUploader);
