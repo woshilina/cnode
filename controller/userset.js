@@ -12,19 +12,22 @@ moment.locale('zh-cn');
 const set = async ctx => {
 
   //从数据库获取用户信息
-let user=await User.findById(ctx.session.id);
+  let user = await User.findById(ctx.session.id);
 
   //查询未读消息数量
 
   let news = await Message.findAndCountAll({
-    where: { targetId: ctx.session.id, hasRead: 0 }
+    where: {
+      targetId: ctx.session.id,
+      hasRead: 0
+    }
   });
   var newcount = news.count;
 
   await ctx.render('/set', {
     newcount: newcount,
     session: ctx.session,
-    user:user
+    user: user
   });
 };
 
@@ -91,4 +94,8 @@ const setpass = async ctx => {
   });
 };
 
-module.exports = { set, postset, setpass };
+module.exports = {
+  set,
+  postset,
+  setpass
+};

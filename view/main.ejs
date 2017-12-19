@@ -30,18 +30,20 @@
                     <%=res['title']%>
                   </a>
                 </div>
-                <div class="col-2 d-flex  justify-content-between">
-                  <img src="/images/7081645.png" width="30" height="30" alt="Generic placeholder image">
-                  <small class="align-self-center">
+                <%if(res['replies']!=0){%>
+                <div class="col-2.5 d-flex  justify-content-between">
+                  <img src="<%=res['lastreplyURL']%>" width="30" height="30" alt="Generic placeholder image">
+                  <small class="align-self-center ml-2">
                     <%=res['lastreplyfromnow']%>
                   </small>
                 </div>
+                <%}%>
               </div>
             </div>
           </div>
           <%})%>
       </div>
-      <div class="mt-auto">
+      <div class="mt-auto ml-3">
         <nav aria-label="Page navigation example">
           <ul class="pagination">
           </ul>

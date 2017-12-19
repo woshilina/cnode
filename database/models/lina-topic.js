@@ -21,6 +21,10 @@ const Topic = sequelize.define('topic', {
     defaultValue: "/images/2081487.jpg"
   }, //头像
   //releasetime: { type: Sequelize.DateONLY, allowNull: false },//发布时间
+  lastreplyURL:{
+    type: Sequelize.STRING,
+    allowNULL: true,
+  },//最后回复人的头像url
   lastreplytime: {
     type: Sequelize.DATE,
     allowNull: false,

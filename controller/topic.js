@@ -2,6 +2,7 @@
 const Topic = require('../database/models/lina-topic');
 const Reply = require('../database/models/lina-reply');
 const User = require('../database/models/lina-user');
+const Like = require('../database/models/lina-like');
 const Message = require('../database/models/lina-message');
 const moment = require('moment');
 const sequelize = require('../database/sequelize');
@@ -41,7 +42,8 @@ const postcreate = async ctx => {
     text: ctx.request.body.text,
     userid: ctx.session.id,
     username: ctx.session.name,
-    lastreplytime: date
+    lastreplytime: date,
+    headImgURL:ctx.session.headImgURL
   };
   let user = await User.findById(ctx.session.id);
   user.integral += 5;
@@ -258,7 +260,8 @@ const replytopic = async(ctx, next) => {
   //更新被回复话题的回复数和最后回复时间
   await topic.update({
     replies: re,
-    lastreplytime: date
+    lastreplytime: date,
+    lastreplyURL:ctx.session.headImgURL
   });
 
   // 更新用户的回复数
@@ -429,7 +432,7 @@ const deletereply = async ctx => {
   await user.update({
     replies: user.replies
   });
-
+ 
   await Like.destroy({
     where: {
       replyId: id
