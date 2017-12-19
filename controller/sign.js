@@ -48,6 +48,7 @@ const postonload = async ctx => {
 //get登陆页
 const getonload = async ctx => {
   await ctx.render('./onload', {
+    title:"登陆",
     session: ctx.session,
     octicons: octicons
   });
@@ -91,6 +92,7 @@ const postsignin = async ctx => {
 //get注册页函数
 const getsignin = async function (ctx) {
   await ctx.render('./signin', {
+    title:"注册",
     session: ctx.session,
     octicons: octicons
   });

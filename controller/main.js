@@ -38,8 +38,7 @@ const homepage = async ctx => {
   }
   var result = await Topic.findAndCountAll({
     where: {
-      $or: [
-        {
+      $or: [{
           tabValue: '分享'
         },
         {
@@ -47,20 +46,27 @@ const homepage = async ctx => {
         }
       ]
     },
-    order: [[sequelize.literal('lastreplytime DESC')]]
+    order: [
+      [sequelize.literal('lastreplytime DESC')]
+    ]
   });
 
   //查询未读消息数量
   if (ctx.session.id) {
     let news = await Message.findAndCountAll({
-      where: { targetId: ctx.session.id, hasRead: 0 }
+      where: {
+        targetId: ctx.session.id,
+        hasRead: 0
+      }
     });
     var newcount = news.count;
   }
 
   // 积分榜
   var users = await User.findAndCountAll({
-    order: [[sequelize.literal('integral DESC')]]
+    order: [
+      [sequelize.literal('integral DESC')]
+    ]
   });
   var rows = users.rows;
   var usercount = users.count;
@@ -78,7 +84,14 @@ const homepage = async ctx => {
   var AllRow = page(1, AllCount, AllRows);
 
   // 无人回复的话题
-  var noreplytopics = await Topic.findAndCountAll({ where: { replies: 0 },order: [[sequelize.literal('createdAt DESC')]] });
+  var noreplytopics = await Topic.findAndCountAll({
+    where: {
+      replies: 0
+    },
+    order: [
+      [sequelize.literal('createdAt DESC')]
+    ]
+  });
   var noreplycount = noreplytopics.count;
   var allnoreplytopics = noreplytopics.rows;
   var noreplytopics = [];
@@ -90,6 +103,7 @@ const homepage = async ctx => {
     noreplytopics = allnoreplytopics;
   }
   await ctx.render('/main', {
+    title: "首页",
     newcount: newcount,
     session: ctx.session,
     tops: tops,
@@ -113,8 +127,7 @@ const homeallpage = async ctx => {
   }
   var result = await Topic.findAndCountAll({
     where: {
-      $or: [
-        {
+      $or: [{
           tabValue: '分享'
         },
         {
@@ -122,7 +135,9 @@ const homeallpage = async ctx => {
         }
       ]
     },
-    order: [[sequelize.literal('lastreplytime DESC')]]
+    order: [
+      [sequelize.literal('lastreplytime DESC')]
+    ]
   });
   var AllRow = result.rows;
   var AllCount = result.count;
@@ -155,8 +170,7 @@ const hometabpage = async ctx => {
   if (ctx.params.tab == 'all') {
     let result = await Topic.findAndCountAll({
       where: {
-        $or: [
-          {
+        $or: [{
             tabValue: '分享'
           },
           {
@@ -164,11 +178,14 @@ const hometabpage = async ctx => {
           }
         ]
       },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
     AllRows = result.rows;
     AllCount = result.count;
     AllRow = page(p, AllCount, AllRows);
+    title = "首页"
   } else if (ctx.params.tab == 'essence') {
     // 点击精华时的显示
 
@@ -178,11 +195,14 @@ const hometabpage = async ctx => {
           $gte: 50
         }
       },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
     AllRows = result.rows;
     AllCount = result.count;
     AllRow = page(p, AllCount, AllRows);
+    title = "精华板块"
   } else if (ctx.params.tab == 'share') {
     // 点击分享时的显示
 
@@ -190,11 +210,14 @@ const hometabpage = async ctx => {
       where: {
         tabValue: '分享'
       },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
     AllRows = result.rows;
     AllCount = result.count;
     AllRow = page(p, AllCount, AllRows);
+    title = "分享板块"
   } else if (ctx.params.tab == 'ask') {
     // 点击问答时的显示
 
@@ -202,11 +225,14 @@ const hometabpage = async ctx => {
       where: {
         tabValue: '问答'
       },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
     AllRows = result.rows;
     AllCount = result.count;
     AllRow = page(p, AllCount, AllRows);
+    title = "问答板块"
   } else if (ctx.params.tab == 'job') {
     // 点击招聘时的显示
 
@@ -214,29 +240,36 @@ const hometabpage = async ctx => {
       where: {
         tabValue: '招聘'
       },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
     AllRows = result.rows;
     AllCount = result.count;
     AllRow = page(p, AllCount, AllRows);
+    title = "招聘板块"
   } else if (ctx.params.tab == 'dev') {
     // 点击客户端测试时的显示
 
     let result = await Topic.findAndCountAll({
       where: {
-        tabValue: '客户端测试'
+        tabValue: '客户端测试板块'
       },
-      order: [[sequelize.literal('lastreplytime DESC')]]
+      order: [
+        [sequelize.literal('lastreplytime DESC')]
+      ]
     });
     AllRows = result.rows;
     AllCount = result.count;
     AllRow = page(p, AllCount, AllRows);
+    title = "客户端测试"
   }
   var totalpage =
     AllCount % one == 0 ? AllCount / one : Math.ceil(AllCount / one);
   ctx.body = {
     total: totalpage,
-    topics: AllRow
+    topics: AllRow,
+    title: title
   };
 };
 
@@ -245,14 +278,19 @@ const usertop = async ctx => {
   //查询未读消息数量
   if (ctx.session.id) {
     let news = await Message.findAndCountAll({
-      where: { targetId: ctx.session.id, hasRead: 0 }
+      where: {
+        targetId: ctx.session.id,
+        hasRead: 0
+      }
     });
     var newcount = news.count;
   }
 
   // 积分榜
   let users = await User.findAndCountAll({
-    order: [[sequelize.literal('integral DESC')]]
+    order: [
+      [sequelize.literal('integral DESC')]
+    ]
   });
   let rows = users.rows;
   let usercount = users.count;
@@ -269,6 +307,7 @@ const usertop = async ctx => {
   }
 
   await ctx.render('./top', {
+    title: "Top" + topcount,
     session: ctx.session,
     newcount: newcount,
     topcount: topcount,

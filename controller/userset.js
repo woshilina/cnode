@@ -25,6 +25,7 @@ const set = async ctx => {
   var newcount = news.count;
 
   await ctx.render('/set', {
+    title:"设置",
     newcount: newcount,
     session: ctx.session,
     user: user

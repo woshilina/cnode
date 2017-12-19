@@ -27,6 +27,7 @@ const createtopic = async ctx => {
   }
 
   await ctx.render('./create', {
+    title:"发布话题",
     session: ctx.session,
     newcount: newcount
   });
@@ -157,6 +158,7 @@ const singletopic = async(ctx, next) => {
   }
 
   await ctx.render('/stopic', {
+    title:topic.title,
     session: ctx.session,
     newcount: newcount,
     topics: topic,
@@ -214,6 +216,7 @@ const getedit = async(ctx, next) => {
   }
 
   await ctx.render('/edit', {
+    title:"编辑话题",
     session: ctx.session,
     newcount: newcount,
     topics: topic
@@ -397,6 +400,7 @@ const editreply = async ctx => {
   let reply = await Reply.findById(Id);
 
   await ctx.render('/replyedit', {
+    title:"编辑回复",
     session: ctx.session,
     replies: reply
   });

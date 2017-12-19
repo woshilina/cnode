@@ -114,6 +114,7 @@ const userpage = async ctx => {
   }
 
   await ctx.render('/spage', {
+    title: "@" + username + "的个人主页",
     session: ctx.session,
     user: user,
     newcount: newcount,
@@ -166,6 +167,7 @@ const createtopic = async ctx => {
   }
 
   await ctx.render('/spagetopics', {
+    title: ctx.session.name+"创建的话题",
     session: ctx.session,
     newcount: newcount,
     user: user,
@@ -228,6 +230,7 @@ const replytopic = async ctx => {
   }
 
   await ctx.render('/spagereplies', {
+    title: ctx.session.name + "参与的话题",
     session: ctx.session,
     user: user,
     newcount: newcount,
@@ -269,6 +272,7 @@ const mymessage = async ctx => {
   var oldcount = olds.count;
 
   await ctx.render('./message', {
+    title:ctx.session.name+"的未读消息",
     session: ctx.session,
     user: user,
     newmsgs: newmsgs,

@@ -199,6 +199,7 @@
             cache: false,
             dataType: 'json',
             success: function (msg) {
+              $('title').text(msg.title);
               var totalpage = msg.total;
               var tabname = $('.tabname').text(value);
               $('.totalpage').text(totalpage);
