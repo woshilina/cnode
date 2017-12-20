@@ -82,7 +82,7 @@
             <div class="col-3 container" style="width:200px;height:300px">
               <img src="<%=session.headImgURL%>" style="width:150px;height:150px">
               <input type="file" id="inpicture" style="display: none">
-              <button type="button" class="file btn btn-primary  mt-3 btn-block" id="inpicture-i" onclick="inpicture.click()">
+              <button type="button" class="file btn btn-primary  mt-3" style="width:150px;" id="inpicture-i" onclick="inpicture.click()">
                 选择文件
               </button>
               <div id="dialog" title="裁剪你的头像照片">
@@ -92,6 +92,7 @@
             </div>
           </div>
         </div>
+      
       </div>
       <div class="card bg-white  my-3">
         <div class="card-header">设置密码</div>
@@ -183,11 +184,6 @@
       });
     });
 
-    //将input type=file读取本地文件的按钮值关联到button按钮
-    function change() {
-      document.getElementById("inpicture-i").value = document.getElementById("inpicture").value;
-    };
-
     //选择图片后打开裁剪对话框
     $("#inpicture").change(function () {
       var file = this.files[0];
@@ -218,12 +214,7 @@
       height: 510,
       buttons: {
         "确定上传头像": function () {
-          var data = $('.cut-container>img').cropper('getCroppedCanvas', {
-            width: 150,
-            height: 150
-          });
-          // $('.container>img').empty().replaceWith(data);?为什么再次替换就不能了？
-          // $(".container>img").attr("src", data.toDataURL());//将原头像替换成要上传的图片
+          var data = $('.cut-container>img').cropper('getCroppedCanvas');
           upload(data);
           $(this).dialog("close");
         }

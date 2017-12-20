@@ -285,22 +285,22 @@ const mymessage = async ctx => {
 // 上传个人头像
 const inputimage = async(ctx) => {
   console.log(ctx.request.body);
-  var file = ctx.request.body.files.files;
+  var file = ctx.request.body.files.files;//获取上传的图片文件
   console.log(file.path);
   console.log(file.name);
 
-  var displayUrl = file.path;
+  var displayUrl = file.path;//获取上传的图片文件本地路径
   let message = {};
   message.result = false;
   try {
-    let upresult = await uptoqiniu.upload(displayUrl);
+    let upresult = await uptoqiniu.upload(displayUrl);//将文件上传到七牛云
     fs.unlink(displayUrl, (err) => {
       if (err) {
         console.error(err);
       }
-    });
+    });//将存到本地的图片文件删除
     console.log(upresult);
-    var qiniuUrl = "http://p0zgrt85b.bkt.clouddn.com/" + upresult.key;
+    var qiniuUrl = "http://p0zgrt85b.bkt.clouddn.com/" + upresult.key;//图片文件在七牛云的链接
     message.imageUrl = qiniuUrl;
     message.result = true;
     var username = ctx.session.name;
@@ -311,7 +311,7 @@ const inputimage = async(ctx) => {
     });
     user.update({
       headImgURL: qiniuUrl
-    });
+    });//更新用户的头像链接
     var topics = await Topic.findAll({
       where: {
         username: username
@@ -324,7 +324,7 @@ const inputimage = async(ctx) => {
           headImgURL: qiniuUrl
         });
       })
-    };
+    };//更新用户创建话题的头像链接
 
     var replies = await Reply.findAll({
       where: {
@@ -337,9 +337,9 @@ const inputimage = async(ctx) => {
           headImgURL: qiniuUrl
         });
       })
-    }
+    }//更新用户回复的头像链接
 
-    ctx.session.headImgURL = qiniuUrl;
+    ctx.session.headImgURL = qiniuUrl;//更新session
 
   } catch (error) {
     console.log(error);

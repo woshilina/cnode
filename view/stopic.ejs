@@ -67,22 +67,22 @@
                       <!-- 登陆且与评论者为同一人 -->
                       <% if(session && session.name == res['name']){ %>
                         <div class="float-right">
-                          <button id='slike' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm"> 点赞</button>
+                          <button id='slike' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm"> <%-octicons.thumbsup.toSVG()%></button>
                           <span>
                             <%=res['likes']%>
                           </span>
                           <button id='sedit' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm">
-                            <a href="/reply/<%=res['id']%>/edit">编辑</a>
+                            <a href="/reply/<%=res['id']%>/edit"> <%-octicons.pencil.toSVG()%></a>
                           </button>
-                          <button id='sdelete' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm">删除</button>
+                          <button id='sdelete' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm"><%-octicons.trashcan.toSVG()%></button>
                           <button id='sreply' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm" data-toggle="collapse" data-target="#srep<%=res['id']%>"
-                            aria-expanded="false" aria-controls="srep<%=res['id']%>">回复</button>
+                            aria-expanded="false" aria-controls="srep<%=res['id']%>"><%-octicons.reply.toSVG()%></button>
                         </div>
                         <%}%>
                           <!-- 如果没登陆 -->
                           <%if(!session.id){%>
                             <div class="float-right">
-                              <button id='nlike' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm">点赞</button>
+                              <button id='nlike' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm"><%-octicons.thumbsup.toSVG()%></button>
                               <span>
                                 <%=res['likes']%>
                               </span>
@@ -94,23 +94,23 @@
                                 <!--如果登陆者对此评论点赞了  -->
                                 <%if(likes[index]!=0){%>
                                   <div class="float-right">
-                                    <button id='like' type="button" value="<%=res['id']%>" class="btn btn-success  btn-sm">点赞</button>
+                                    <button id='like' type="button" value="<%=res['id']%>" class="btn btn-success  btn-sm"><%-octicons.thumbsup.toSVG()%></button>
                                     <span>
                                       <%=res['likes']%>
                                     </span>
                                     <button id='sreply' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm" data-toggle="collapse" data-target="#srep<%=res['id']%>"
-                                      aria-expanded="false" aria-controls="srep<%=res['id']%>">回复</button>
+                                      aria-expanded="false" aria-controls="srep<%=res['id']%>"><%-octicons.reply.toSVG()%></button>
                                   </div>
                                   <%}%>
                                     <!-- 如果登陆者没有对此评论点赞 -->
                                     <%if(likes[index]===0){%>
                                       <div class="float-right">
-                                        <button id='like' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm">点赞</button>
+                                        <button id='like' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm"><%-octicons.thumbsup.toSVG()%></button>
                                         <span>
                                           <%=res['likes']%>
                                         </span>
                                         <button id='sreply' type="button" value="<%=res['id']%>" class="btn btn-info  btn-sm" data-toggle="collapse" data-target="#srep<%=res['id']%>"
-                                          aria-expanded="false" aria-controls="srep<%=res['id']%>">回复</button>
+                                          aria-expanded="false" aria-controls="srep<%=res['id']%>"><%-octicons.reply.toSVG()%></button>
                                       </div>
                                       <%}%>
 
@@ -118,8 +118,7 @@
                                           <br/>
                                           <%= res['content'] %>
                                             <div class="bg-white collapse" id="srep<%=res['id']%>" value="<%=res['id']%>">
-                                              <textarea class='w-100' id="stext" rows='7'>@
-                                                <%=res['name']%>
+                                              <textarea class='w-100' id="stext" rows='7'>@<%=res['name']%>
                                               </textarea>
                                               <button id='sre' type="button" class="btn btn-info  btn-sm">回复</button>
                                               <span class="suc"></span>
