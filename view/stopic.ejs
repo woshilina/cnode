@@ -6,7 +6,7 @@
   <div class="container d-flex justify-content-center mt-3">
     <div class="col-10 my-2">
       <div class="bg-white card">
-        <div class="p-3 card-body ">
+        <div class="p-3 pb-0 card-body ">
           <h3 class="title">
             <%= topics.title%>
           </h3>
@@ -29,7 +29,7 @@
                       <%= topics.tabValue%>
                     </span>
               </small>
-              <button class="btn btn-success float-right" id="collect">收藏</button>
+
             </div>
             <%if(session&&topics.username==session.name){%>
               <div class="mt-2">
