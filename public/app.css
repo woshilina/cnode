@@ -23,3 +23,11 @@ body {
 #image{
   max-width: 100%;
 }
+/* 元素默认是隐藏的 */
+#slike-0, .lika-0{
+  display:none; 
+}
+
+.father:hover #slike-0 .like-0{
+  display:inline-block;
+}

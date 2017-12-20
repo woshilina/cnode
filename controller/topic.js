@@ -27,7 +27,7 @@ const createtopic = async ctx => {
   }
 
   await ctx.render('./create', {
-    title:"发布话题",
+    title: "发布话题",
     session: ctx.session,
     newcount: newcount
   });
@@ -44,7 +44,7 @@ const postcreate = async ctx => {
     userid: ctx.session.id,
     username: ctx.session.name,
     lastreplytime: date,
-    headImgURL:ctx.session.headImgURL
+    headImgURL: ctx.session.headImgURL
   };
   let user = await User.findById(ctx.session.id);
   user.integral += 5;
@@ -158,7 +158,7 @@ const singletopic = async(ctx, next) => {
   }
 
   await ctx.render('/stopic', {
-    title:topic.title,
+    title: topic.title,
     session: ctx.session,
     newcount: newcount,
     topics: topic,
@@ -196,7 +196,7 @@ const deletetopic = async(ctx, next) => {
   ctx.body = {
     result: 'success'
   };
- 
+
 };
 
 //get编辑单篇文章页面
@@ -216,7 +216,7 @@ const getedit = async(ctx, next) => {
   }
 
   await ctx.render('/edit', {
-    title:"编辑话题",
+    title: "编辑话题",
     session: ctx.session,
     newcount: newcount,
     topics: topic
@@ -264,7 +264,7 @@ const replytopic = async(ctx, next) => {
   await topic.update({
     replies: re,
     lastreplytime: date,
-    lastreplyURL:ctx.session.headImgURL
+    lastreplyURL: ctx.session.headImgURL
   });
 
   // 更新用户的回复数
@@ -399,8 +399,19 @@ const editreply = async ctx => {
   var Id = ctx.params.id;
   let reply = await Reply.findById(Id);
 
+  //查询未读消息数量
+  if (ctx.session.id) {
+    let news = await Message.findAndCountAll({
+      where: {
+        targetId: ctx.session.id,
+        hasRead: 0
+      }
+    });
+    var newcount = news.count;
+  }
   await ctx.render('/replyedit', {
-    title:"编辑回复",
+    title: "编辑回复",
+    newcount: newcount,
     session: ctx.session,
     replies: reply
   });
@@ -436,7 +447,7 @@ const deletereply = async ctx => {
   await user.update({
     replies: user.replies
   });
- 
+
   await Like.destroy({
     where: {
       replyId: id

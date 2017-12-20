@@ -1,6 +1,7 @@
 <%-include header%>
+<link rel="stylesheet" href=" /css/mditor.min.css" />
+<script src="/js/mditor.min.js"></script>
   <div class="container d-flex justify-content-center  mt-3">
-
     <div class="col-9 pl-2">
       <div class='header'>
         <ol class='breadcrumb'>
@@ -13,9 +14,9 @@
       </div>
       <div class='inner bg-white my-3'>
         <form id='create_topic_form ' action="/reply/<%=replies.id%>/edit" method="post">
-          <fieldset class="pl-3 py-3">
-
-            <textarea class='col-11' id="text" name='t_content' rows='20' placeholder="<%=replies.content%>"></textarea>
+          <fieldset class="p-3">
+            <textarea name="editor" id="editor" rows='20'><%=replies.content%></textarea>
+            <!-- <textarea class='col-11' id="text" name='t_content' rows='20' placeholder="<%=replies.content%>"></textarea> -->
             <br>
             <input type="button" class='span-primary submit_btn' data-loading-text="提交中" value="提交">
             <span id="reply_edit"></span>
@@ -30,9 +31,11 @@
 
   <script>
     $(document).ready(function () {
+      var mditor = new Mditor.fromTextarea(document.getElementById('editor'));
+      mditor.split = false;
       $(".submit_btn").click(function () {
-        var te = $("#text").val();
-        if (!text) {
+        var te = $("#editor").val();
+        if (!te) {
           alert("请输入内容")
         } else {
           $.ajax({
