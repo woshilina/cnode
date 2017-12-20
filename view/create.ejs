@@ -24,7 +24,7 @@
           </select>
           <span id="topic_create_warn"></span>
           </br>
-          <input autofocus class='col-12 my-2' id='title' type="text" name='title' placeholder="标题字数 10 字以上"></input>
+          <input autofocus class='col-12 my-2' id='title' type="text" name='title'></input>
           <textarea name="editor" id="editor" rows='20' placeholder='文章支持 Markdown 语法, 请注意标记代码'></textarea>
           <br>
           <input type="button" class='span-primary submit_btn' data-loading-text="提交中" value="提交">
@@ -39,11 +39,7 @@
 
   <script>
     (function () {
-      // var editor = new Editor();
-      // editor.render($('.editor')[0]);
-
-
-
+  
       // 版块选择的检查，必须选择
       $('#create_topic_form').on('submit', function (e) {
         var tabValue = $('#tab-value').val();

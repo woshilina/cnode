@@ -6,9 +6,9 @@ const Like = require('../database/models/lina-like');
 const Message = require('../database/models/lina-message');
 const moment = require('moment');
 const sequelize = require('../database/sequelize');
-var mditor = require("mditor");
+var mditor = require('mditor');
 var parser = new mditor.Parser();
-var octicons = require("octicons");
+var octicons = require('octicons');
 
 moment().format();
 moment.locale('zh-cn');
@@ -27,7 +27,7 @@ const createtopic = async ctx => {
   }
 
   await ctx.render('./create', {
-    title: "发布话题",
+    title: '发布话题',
     session: ctx.session,
     newcount: newcount
   });
@@ -60,7 +60,7 @@ const postcreate = async ctx => {
 };
 
 //单篇文章页
-const singletopic = async(ctx, next) => {
+const singletopic = async (ctx, next) => {
   var Id = ctx.params.id;
 
   //从数据库查询到当前话题
@@ -85,9 +85,7 @@ const singletopic = async(ctx, next) => {
         $not: Id
       }
     },
-    order: [
-      [sequelize.literal('createdAt DESC')]
-    ]
+    order: [[sequelize.literal('createdAt DESC')]]
   });
 
   var othercount = others.count;
@@ -140,7 +138,7 @@ const singletopic = async(ctx, next) => {
     }
   });
 
-  msgs.forEach(function (msg) {
+  msgs.forEach(function(msg) {
     msg.update({
       hasRead: true
     });
@@ -174,7 +172,7 @@ const singletopic = async(ctx, next) => {
 };
 
 //删除单篇文章页
-const deletetopic = async(ctx, next) => {
+const deletetopic = async (ctx, next) => {
   var i = ctx.params.id;
   console.log(i);
   let topic = await Topic.findById(i);
@@ -196,11 +194,10 @@ const deletetopic = async(ctx, next) => {
   ctx.body = {
     result: 'success'
   };
-
 };
 
 //get编辑单篇文章页面
-const getedit = async(ctx, next) => {
+const getedit = async (ctx, next) => {
   var Id = ctx.params.id;
   let topic = await Topic.findById(Id);
 
@@ -216,7 +213,7 @@ const getedit = async(ctx, next) => {
   }
 
   await ctx.render('/edit', {
-    title: "编辑话题",
+    title: '编辑话题',
     session: ctx.session,
     newcount: newcount,
     topics: topic
@@ -240,7 +237,7 @@ const postedit = async ctx => {
 };
 
 // 发表对文章的回复
-const replytopic = async(ctx, next) => {
+const replytopic = async (ctx, next) => {
   console.log(ctx.request.body);
   var cont = ctx.request.body.content; //评论的内容
 
@@ -296,7 +293,7 @@ const replytopic = async(ctx, next) => {
 };
 
 //发表对评论的回复
-const repler = async(ctx, next) => {
+const repler = async (ctx, next) => {
   console.log(ctx.request.body);
   var cont = ctx.request.body.content; //评论的内容
   var replyId = ctx.request.body.replyId; //被回复的评论的id
@@ -410,7 +407,7 @@ const editreply = async ctx => {
     var newcount = news.count;
   }
   await ctx.render('/replyedit', {
-    title: "编辑回复",
+    title: '编辑回复',
     newcount: newcount,
     session: ctx.session,
     replies: reply
@@ -438,8 +435,7 @@ const deletereply = async ctx => {
   var id = ctx.params.id;
   console.log(ctx.params);
   let reply = await Reply.findById(id);
-  reply.destroy();
-  ctx.body = reply.topicId;
+    
 
   // 更新用户的回复数
   let user = await User.findById(ctx.session.id);
@@ -448,11 +444,21 @@ const deletereply = async ctx => {
     replies: user.replies
   });
 
+  //更新话题的回复数
+  let topic = await Topic.findById(reply.topicId);
+  topic.replies--;
+  console.log(topic.replies);
+  await topic.update({
+    replies: topic.replies
+  });
+
   await Like.destroy({
     where: {
       replyId: id
     }
   });
+  await reply.destroy();
+  ctx.body = reply.topicId;
 };
 
 module.exports = {

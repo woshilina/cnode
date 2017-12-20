@@ -2,8 +2,9 @@
 
 <%-include header%>
   <link rel="stylesheet" href="/css/mditor.min.css" />
+  <script src="/js/mditor.min.js"></script>
   <div class="container d-flex justify-content-center mt-3">
-    <div class="col-9 my-2">
+    <div class="col-10 my-2">
       <div class="bg-white card">
         <div class="p-3 card-body ">
           <h3 class="title">
@@ -55,104 +56,29 @@
           <p class="card-header">回复</p>
           <div class="list-group card-body p-0">
             <% replys.forEach(function(res,index){ %>
-              <div class="list-group-item py-0 father">                 
-                  <form class="rep_name m-2" action="/topic/<%=topics.id%>/like" method="post">
-                    <%= res['name'] %>
-                      <small class="text-primary">
-                        <%=index+1%>楼</small>
-                      <small class="text-primary">
-                        <%=res['replyfromnow']%>
-                      </small>
-                      <!-- 登陆且与评论者为同一人 -->
-                      <% if(session && session.name == res['name']){ %>                      
-                        <div class="float-right">
-                            <%if(res['likes']===0){%>
-                          <button id='slike-0' type="button" value="<%=res['id']%>" class="btn btn-link  btn-sm">
-                            <%-octicons.thumbsup.toSVG()%>
-                          </button>
-                          <%}%>
-                          <%if(res['likes']!=0){%>
-                            <button id='slike-1' type="button" value="<%=res['id']%>" class="btn btn-link  btn-sm">
-                                <%-octicons.thumbsup.toSVG()%>
-                              </button>
-                            <span>
-                              <%=res['likes']%>
-                            </span>
-                            <%}%>
-                              <button id='sedit' type="button" value="<%=res['id']%>" class="btn btn-link  btn-sm">
-                                <a href="/reply/<%=res['id']%>/edit">
-                                  <%-octicons.pencil.toSVG()%>
-                                </a>
-                              </button>
-                              <button id='sdelete' type="button" value="<%=res['id']%>" class="btn btn-link  btn-sm">
-                                <%-octicons.trashcan.toSVG()%>
-                              </button>
-                              <button id='sreply' type="button" value="<%=res['id']%>" class="btn btn-link  btn-sm" data-toggle="collapse" data-target="#srep<%=res['id']%>"
-                                aria-expanded="false" aria-controls="srep<%=res['id']%>">
-                                <%-octicons.reply.toSVG()%>
-                              </button>
-                        </div>
-                        <%}%>
-                          <!-- 如果没登陆 -->
-                          <%if(!session.id){%>
-                            <div class="float-right">
-                                <%if(res['likes']!=0){%>
-                              <button id='nlike' type="button" value="<%=res['id']%>" class="btn btn-link  btn-sm">
-                                <%-octicons.thumbsup.toSVG()%>
-                              </button>
-                              <span>
-                                <%=res['likes']%>
-                              </span>
-                              <%}%>
-                            </div>
-                            <%}%>
-                              <!-- 登陆但与作者不是同一个人 -->
-                              <% if(session.id&&session.name != res['name']){ %>
-
-                                <!--如果登陆者对此评论点赞了  -->
-                                <%if(likes[index]!=0){%>
-                                  <div class="float-right">
-                                    <button id='like' type="button" value="<%=res['id']%>" class="btn btn-link btn-sm like-1">
-                                      <%-octicons.thumbsup.toSVG()%>
-                                    </button>
-                                    <span>
-                                      <%=res['likes']%>
-                                    </span>
-                                    <button id='sreply' type="button" value="<%=res['id']%>" class="btn btn-link  btn-sm" data-toggle="collapse" data-target="#srep<%=res['id']%>"
-                                      aria-expanded="false" aria-controls="srep<%=res['id']%>">
-                                      <%-octicons.reply.toSVG()%>
-                                    </button>
-                                  </div>
-                                  <%}%>
-                                    <!-- 如果登陆者没有对此评论点赞 -->
-                                    <%if(likes[index]===0){%>
-                                      <div class="float-right">
-                                        <button id='like' type="button"  value="<%=res['id']%>" class="btn btn-link  btn-sm like-0">
-                                          <%-octicons.thumbsup.toSVG()%>
-                                        </button>
-                                         
-                                          <span>
-                                            <%=res['likes']%>
-                                          </span>
-                                        
-                                            <button id='sreply' type="button" value="<%=res['id']%>" class="btn btn-link  btn-sm" data-toggle="collapse" data-target="#srep<%=res['id']%>"
-                                              aria-expanded="false" aria-controls="srep<%=res['id']%>">
-                                              <%-octicons.reply.toSVG()%>
-                                            </button>
-                                      </div>
-                                      <%}%>
-
-                                        <%}%>
-                                          <br/>
-                                          <%= res['content'] %>
-                                            <div class="bg-white collapse" id="srep<%=res['id']%>" value="<%=res['id']%>">
-                                              <textarea class='w-100' id="stext" rows='7'>@
-                                                <%=res['name']%>
-                                              </textarea>
-                                              <button id='sre' type="button" class="btn btn-info  btn-sm">回复</button>
-                                              <span class="suc"></span>
-                                            </div>
-                  </form>              
+              <div class="list-group-item py-0 father">
+                <form class="rep_name m-2" action="/topic/<%=topics.id%>/like" method="post">
+                  <div class="media">
+                    <img class="mr-3" src="<%=res['headImgURL']%>" width="30" height="30" alt="Generic placeholder image">
+                    <div class="media-body">
+                      <%= res['name'] %>
+                        <small class="text-primary">
+                          <%=index+1%>楼</small>
+                        <small class="text-primary">
+                          <%=res['replyfromnow']%>
+                        </small>
+                        <%-include buttons%>
+                          <div class="mt-2">
+                            <%= res['content'] %>
+                          </div>
+                          <div class="bg-white collapse" id="srep<%=res['id']%>" value="<%=res['id']%>">
+                            <textarea name="editor" id="editor1" class='w-100'> @<%=res['name']%> </textarea>
+                            <button id='sre' type="button" class="btn btn-info  btn-sm">回复</button>
+                            <span class="suc"></span>
+                          </div>
+                    </div>
+                  </div>
+                </form>
               </div>
               <%})%>
           </div>
@@ -162,14 +88,14 @@
             <div class="bg-white mt-2 card">
               <p class="card-header">添加回复</p>
               <div class="card-body p-0">
-                <textarea class="w-100 reply border-0 p-0"></textarea>
+                <textarea name="editor" id="editor2" class="w-100 reply border-0 p-0" ></textarea>
                 <button class="btn btn-primary ml-3 mb-3" id="reply">回复</button>
                 <span class="succ"></span>
               </div>
             </div>
             <%}%>
     </div>
-    <div class="col-2.5 my-2">
+    <div class="col-3 my-2">
       <div class='card bg-white  mb-3'>
         <div class='card-header'>
           作者
@@ -231,8 +157,6 @@
   </div>
   <%-include footer%>
     <script>
-      
-
       // 删除文章
       $('.delete').click(() => {
         var r = confirm("确定要删除此回复吗？");
@@ -257,9 +181,11 @@
         }
       });
 
-      // 添加评论/回复
+      // 添加评论/回复        
+      var mditor2 = Mditor.fromTextarea(document.getElementById('editor2'));
+      mditor2.split = false;
       $('#reply').click(function () {
-        var cont = $('.reply').val();
+        var cont = mditor2.value;
         if (cont) {
           $.ajax({
             url: document.url,
@@ -365,11 +291,13 @@
       });
 
       //回复评论
+      var mditor1 = Mditor.fromTextarea(document.getElementById('editor1'));
+      mditor1.split = false;
       $(document).ready(function () {
         $("button[id='sre']").each(function () {
           $(this).on('click', function () {
             var id = $(this).parent().attr('value');
-            var text = $(this).prev().val();
+            var text = mditor1.value;
             $.ajax({
               url: document.URL + '/reply',
               type: "POST",
