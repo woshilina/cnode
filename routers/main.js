@@ -1,6 +1,5 @@
 const router = require('koa-router')();
 const koaBody = require('koa-body');
-var cool = require('cool-ascii-faces');
 
 const main = require('../controller/main');
 
@@ -16,8 +15,6 @@ router.get('/tab/:tab/page/:page', main.hometabpage);
 //积分榜页
 router.get('/user/top/:top', main.usertop);
 
-router.get('/cool', function(request, response) {
-  response.send(cool());
-});
+ 
 
 module.exports = router;
