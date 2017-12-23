@@ -300,7 +300,7 @@ const inputimage = async(ctx) => {
       }
     });//将存到本地的图片文件删除
     console.log(upresult);
-    var qiniuUrl = "http://p0zgrt85b.bkt.clouddn.com/" + upresult.key;//图片文件在七牛云的链接
+    var qiniuUrl = "p0zgrt85b.bkt.clouddn.com/" + upresult.key;//图片文件在七牛云的链接
     message.imageUrl = qiniuUrl;
     message.result = true;
     var username = ctx.session.name;
