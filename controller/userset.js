@@ -10,7 +10,6 @@ moment.locale('zh-cn');
 
 // get设置页函数
 const set = async ctx => {
-
   //从数据库获取用户信息
   let user = await User.findById(ctx.session.id);
 
@@ -25,7 +24,7 @@ const set = async ctx => {
   var newcount = news.count;
 
   await ctx.render('/set', {
-    title:"设置",
+    title: '设置',
     newcount: newcount,
     session: ctx.session,
     user: user
@@ -76,23 +75,22 @@ const setpass = async ctx => {
     newpass: ctx.request.body.newpass
   };
   var Id = ctx.session.id;
-  await User.findById(Id).then(user => {
-    console.log(user.password);
-    if (user.password === pass.oldpass) {
-      user.update({
-        password: pass.newpass
-      });
-      ctx.body = {
-        result: 'right'
-      };
-      console.log(ctx.body);
-    } else if (user.password != pass.oldpass) {
-      ctx.body = {
-        result: 'error'
-      };
-      console.log(ctx.body);
-    }
-  });
+  var user = await User.findById(Id);
+  if (user.password === pass.oldpass) {
+    user.update({
+      password: pass.newpass
+    });
+    ctx.session=null;
+    ctx.body = {
+      result: 'right'
+    };
+    console.log(ctx.body);
+  } else if (user.password != pass.oldpass) {
+    ctx.body = {
+      result: 'error'
+    };
+    console.log(ctx.body);
+  }
 };
 
 module.exports = {

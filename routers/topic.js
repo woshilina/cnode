@@ -3,16 +3,16 @@ const koaBody = require('koa-body');
 const topic = require('../controller/topic');
 
 //发表文章首页
-router.get('/topic/create', topic.createtopic);
+router.get('/topic/creation', topic.createtopic);
 
 //发表文章
-router.post('/topic/create', koaBody(), topic.postcreate);
+router.post('/topic/creation', koaBody(), topic.postcreate);
 
 //单篇文章页
 router.get('/topic/:id', topic.singletopic);
 
 //删除单篇文章页
-router.get('/topic/:id/delete', topic.deletetopic);
+router.get('/topic/:id/deletion', topic.deletetopic);
 
 //编辑单篇文章页面
 router.get('/topic/:id/edit', topic.getedit);
@@ -39,6 +39,6 @@ router.get('/reply/:id/edit', koaBody(), topic.editreply);
 router.post('/reply/:id/edit', koaBody(), topic.postreply);
 
 // 删除评论
-router.get('/reply/:id/delete', koaBody(), topic.deletereply);
+router.get('/reply/:id/deletion', koaBody(), topic.deletereply);
 
 module.exports = router;

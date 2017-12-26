@@ -1,82 +1,93 @@
 <%- include header%>
-<div class="container signin">
-    <form class="form-horizontal col-4" role="form" method="post" onsubmit="return false">
-        <fieldset>
-            <legend></legend>
-            <div class="panel panel-default">
-                <div class="panel-heading text-center">
-                    <h3 class="tc text-primary font-weight-bold mb-4">注册</h3>
-                </div>
-                <div class="panel-body m15">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <%-octicons.person.toSVG()%>    
-                            </span>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" required>
-                        </div>
+    <div class="container signin">
+        <form class="form-horizontal col-4" role="form" method="post" onsubmit="return false">
+            <fieldset>
+                <legend></legend>
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        <h3 class="tc text-primary font-weight-bold mb-4">注册</h3>
                     </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
+                    <div class="panel-body m15">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <%-octicons.person.toSVG()%>
+                                </span>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
                                     <%-octicons.key.toSVG()%>
-                            </span>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" required>
+                                </span>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
                                     <%-octicons.key.toSVG()%>
-                            </span>
-                            <input type="password" class="form-control" id="password1" name="password1" placeholder="请再次输入密码" required>
+                                </span>
+                                <input type="password" class="form-control" id="password1" name="password1" placeholder="请再次输入密码" required>
+                            </div>
                         </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block" id="signin">注册</button>
+                        </div>
+                        <span class="passwdtip"></span>
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block" id="signin">注册</button>
-                    </div>                    
-                </div>
-               
-            </div>
-        </fieldset>
-    </form>
-</div>
- 
-<script>
-    $(document).ready(function () {
-        $("#signin").click(function () {
-            var username = $("#username").val();
-            var password = $("#password").val();
-            var password1 = $("#password1").val();
-            if (password !== password1) {
-                $("#password").css("border", "1px solid red");
-                $("#password1").css("border", "1px solid red");
-            } else if (password === password1) {
-                var data = {
-                    "uname": username,
-                    "upwd": password,
-                    "reupwd": password1
-                };
-                $.ajax({
-                    url: '/signin',
-                    type: 'post',
-                    data: data,
-                    success: function (data, status) {
-                        if (data.result == '用户存在') {
-                            alert("用户名已存在");
-                        } else if (data.result == '密码不一致') {
-                            alert("密码不一致");
-                        } else {
-                            location.href = 'onload';
-                        }
 
-                    },
-                    error: function (data, err) {
-                        location.href = 'signin';
-                    }
-                });
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // 校验密码
+            function isPasswd(s) {
+                var patrn = /^(\w){6,20}$/;
+                if (!patrn.exec(s)) return false
+                return true
             }
+            $("#signin").click(function () {
+                var username = $("#username").val();
+                var password = $("#password").val();
+                var password1 = $("#password1").val();
+                var ispasswd = isPasswd(password);
+                if (!ispasswd) {
+                    $('.passwdtip').text('只能输入6-20个字母、数字、下划线');
+                } else {
+                    if (password !== password1) {
+                        $("#password").css("border", "1px solid red");
+                        $("#password1").css("border", "1px solid red");
+                    } else if (password === password1) {
+                        var data = {
+                            "uname": username,
+                            "upwd": password,
+                            "reupwd": password1
+                        };
+                        $.ajax({
+                            url: '/signin',
+                            type: 'post',
+                            data: data,
+                            success: function (data, status) {
+                                if (data.result == '用户存在') {
+                                    alert("用户名已存在");
+                                } else if (data.result == '密码不一致') {
+                                    alert("密码不一致");
+                                } else {
+                                    location.href = 'onload';
+                                }
+
+                            },
+                            error: function (data, err) {
+                                location.href = 'signin';
+                            }
+                        });
+                    }
+                }
+            });
         });
-    });
-</script>
- 
+    </script>

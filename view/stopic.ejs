@@ -89,7 +89,7 @@
               <p class="card-header">添加回复</p>
               <div class="card-body p-0">
                 <textarea name="editor" id="editor2" class="w-100 reply border-0 p-0" ></textarea>
-                <button class="btn btn-primary ml-3 mb-3" id="reply">回复</button>
+                <button class="btn btn-primary m-2" id="reply">回复</button>
                 <span class="succ"></span>
               </div>
             </div>
@@ -162,7 +162,7 @@
         var r = confirm("确定要删除此回复吗？");
         if (r == true) {
           $.ajax({
-            url: '/topic/<%=topics.id%>/delete',
+            url: '/topic/<%=topics.id%>/deletion',
             type: "GET",
             cache: false,
             dataType: 'json',
@@ -274,7 +274,7 @@
             if (r == true) {
               var at = $(this).attr("value");
               $.ajax({
-                url: '/reply/' + at + '/delete',
+                url: '/reply/' + at + '/deletion',
                 type: "GET",
                 cache: false,
                 dataType: 'json',

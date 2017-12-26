@@ -20,7 +20,7 @@ const User = sequelize.define('user', {
   headImgURL: {
     type: Sequelize.STRING,
     allowNULL: false,
-    defaultValue: "/images/2081487.jpg"
+    defaultValue: "/images/timg.jpg"
   }, //头像
   integral: {
     type: Sequelize.INTEGER,

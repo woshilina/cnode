@@ -13,7 +13,7 @@
         </ol>
       </div>
       <div class='inner bg-white my-3'>
-        <form id='create_topic_form' class="p-3" action="/topic/create" method="post">
+        <form id='create_topic_form' class="p-3" action="/topic/creation" method="post">
           <span class="tab-selector">选择版块：</span>
           <select name="tab" id="tab-value">
             <option value="">请选择</option>
@@ -90,7 +90,7 @@
           alert("请输入内容")
         } else {
           $.ajax({
-            url: '/topic/create',
+            url: '/topic/creation',
             type: 'post',
             contentType: "application/json",
             data: JSON.stringify(data),
